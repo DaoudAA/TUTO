@@ -47,15 +47,18 @@ Date::Date(int d, int m, int y){
 }
 
 Date::Date(string ch){
-    dd =stoi(ch.substr(0, ch.find('/')));
-    ch.erase(0, ch.find('/') + 1);
-    mm =stoi(ch.substr(0, ch.find('/'))); 
-    ch.erase(0, ch.find('/') + 1);
-    yy =stoi(ch);
+    string ch1,ch2,ch3;
+    ch1=ch.substr(0, ch.find('/'));
+    dd = atoi(ch1.c_str());
+    ch2=ch.erase(0, ch.find('/') + 1);
+    ch2=ch.substr(0, ch.find('/'));
+    mm= atoi(ch2.c_str());
+    ch3=ch.erase(0, ch.find('/') + 1);
+    yy = atoi(ch3.c_str());
     if (dd <= 0 || mm <= 0 || mm > 12) {
         dd = -1;
         mm = -1;
-    } 
+    }
     else if (mm == 2) {
         if (yy % 4 == 0 ) {
             if (dd > 29) {
