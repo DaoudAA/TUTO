@@ -15,11 +15,16 @@ public:
     int getJour()const{return jour;}
     int getMois()const{return mois;}
     int getAnnee()const{return annee;}
-    void IncrementerDate();
+    void incrementerDate();
+    bool anneeBissextile();
+    int nbJourDuMois();
     friend ostream& operator<<(ostream& flux , const Date& D){
         flux<< D.jour << "/" << D.mois << "/" << D.annee <<endl;
         return flux;
     }
+    ostream& operator>>(ostream& flux);
+    
+
 };
 
 Date::Date(int d, int m, int y){
@@ -126,50 +131,35 @@ Date::Date(string ch){
 		else jour++;
 	}
 }*/
-void Date::IncrementerDate()
+void Date::incrementerDate()
 {
-	//test1
-    if(((mois==1)||(mois==3)||(mois==5)||(mois==7)||(mois==8)||(mois==10))&&(jour==31))
-    {
-        jour=1;
-        mois++;
-    }
-    //test2
-    else if(((mois==4)||(mois==6)||(mois==9)||(mois==11))&&(jour==30))
-    {
-        jour=1;
-        mois++;
-    }
-    //test3
-    else if ((mois==12)&&(jour==31))
-    {
-        jour=1;
-        mois=1;
-       annee++;
-    }
-
-    else if (mois==2)
-    {   //test4
-		if((annee%4==0)&&(jour==29))
-        {
+    if(jour==nbJourDuMois()){
+        if (mois ==12){
+            annee++;
+            mois=1;
             jour=1;
-            mois++;
         }
-        //test5
-        else if((annee%4!=0)&&(jour==28))
-        {
-            jour=1;
-            mois++;
-        }
-		else
-			jour++;
+        else {mois++;jour=1;}
     }
-    //test6
-    else
-        jour++;
-
-
+    else jour++;
 }
+bool Date::anneeBissextile(){
+    if (annee%4==0) return true; 
+    return false;
+};
+int Date::nbJourDuMois(){
+    if ((mois==1)||(mois==3)||(mois==5)||(mois==7)||(mois==8)||(mois==10)||(mois==12)){
+        return 31;}
+    if (((mois==4)||(mois==6)||(mois==9)||(mois==11))){
+        return 30;}
+    else if (anneeBissextile()) return 29;
+    else return 28;
+}
+/*Class Test{
+    public:
+        Verif(DateG,DateAttente,Flag)
+};
+Test::Verif{}*/
 
 int main(){
 Date d1("31/4/2015");
@@ -215,39 +205,39 @@ cout<<"Test Date"<<endl;
 //test2
 //test1
     cout<<"test 1";
-    date1.IncrementerDate();
-    date2.IncrementerDate();
-    date3.IncrementerDate();
+    date1.incrementerDate();
+    date2.incrementerDate();
+    date3.incrementerDate();
     if ( ((date1.getJour()==01)&&(date1.getMois()==02))&&((date2.getJour()==01)&&(date2.getMois()==04))&&((date3.getJour()==01)&&(date3.getMois()==06)))
         cout<<"\tSuccee"<<endl;
     else
         cout<<"\tEchec"<<endl;
 //test2
     cout<<"test 2";
-    date4.IncrementerDate();
-    date5.IncrementerDate();
+    date4.incrementerDate();
+    date5.incrementerDate();
     if ( ((date4.getJour()==01)&&(date4.getMois()==05))&&((date5.getJour()==01)&&(date5.getMois()==07)))
         cout<<"\tSuccee"<<endl;
     else
         cout<<"\tEchec"<<endl;
 //test3
     cout<<"test 3";
-    date6.IncrementerDate();
+    date6.incrementerDate();
     if ( ((date6.getJour()==01)&&(date6.getMois()==01)&&(date6.getAnnee()==2011)))
         cout<<"\tSuccee"<<endl;
     else
         cout<<"\tEchec"<<endl;
 //test4
     cout<<"test 4";
-    date7.IncrementerDate();
+    date7.incrementerDate();
     if ( ((date7.getJour()==01)&&(date7.getMois()==03)))
         cout<<"\tSuccee"<<endl;
     else
         cout<<"\tEchec"<<endl;
 //test5
     cout<<"test 5";
-    date8.IncrementerDate();
-    date9.IncrementerDate();
+    date8.incrementerDate();
+    date9.incrementerDate();
     if ( ((date8.getJour()==29)&&(date8.getMois()==02))&&((date9.getJour()==01)&&(date9.getMois()==03)))
         cout<<"\tSuccee"<<endl;
     else
@@ -256,7 +246,7 @@ cout<<"Test Date"<<endl;
     //cout<<"Date 9 :" <<date9.getJour()<<"/"<<date9.getMois()<<"/"<<date9.getAnnee()<<endl;
 //test6
     cout<<"test 6";
-    date10.IncrementerDate();
+    date10.incrementerDate();
     if ( ((date10.getJour()==13)&&(date10.getMois()==03)&&(date10.getAnnee()==2001)))
         cout<<"\tSuccee"<<endl;
     else
