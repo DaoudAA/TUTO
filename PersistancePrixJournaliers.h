@@ -3,10 +3,10 @@
 
 #include<vector>
 #include<fstream>
-#include "PrixJournalier.h"
+//#include "PrixJournalier.h"
 using namespace std;
 
-class PersistancePrixJournaliers
+/*class PersistancePrixJournaliers
 {
     public:
         static vector<PrixJournalier> lirePrixJournaliersDUnFichier(string chemin){
@@ -25,6 +25,6 @@ class PersistancePrixJournaliers
             }
             return historique;
         }
-};
+};*/
 
 #endif // PERSISTANCEPRIXJOURNALIERS_H
