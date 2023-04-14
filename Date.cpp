@@ -123,7 +123,7 @@ int Date::nbJourDuMois(){
     else return 28;
 }
 
-bool operator<(const Date& d1)const {
+bool Date::operator<(const Date& d1)const {
     if (this.annee < d1.annee)return true;
     else if ((this.annee=d1.annee)&&(this.mois<d1.mois)){
         return true;
@@ -135,7 +135,7 @@ bool operator<(const Date& d1)const {
     
     
 }
-bool operator==(const Date& d1)const{
+bool Date::operator==(const Date& d1)const{
     if ((this.annee=d1.annee)&&(this.mois=d1.mois)&(this.jour=d1.jour)){
         return true;
     }
