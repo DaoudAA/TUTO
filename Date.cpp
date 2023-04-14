@@ -23,7 +23,8 @@ public:
         return flux;
     }
     ostream& operator>>(ostream& flux);
-    
+    bool operator<(const Date& d1)const;
+    bool operator==(const Date& d1)const;
 
 };
 
@@ -96,41 +97,7 @@ Date::Date(string ch){
     }
 }
 
-/*void Date::IncrementerDate(){
-	if( mois==4 || mois==6 || mois==9 || mois==11 ){
-		if (jour==30) {
-			jour=1 ;
-			mois++;
-		}
-		else jour++;
-	}
-	if (mois==12){
-		if (jour==31){
-			jour=1;
-			mois=1;
-			annee++;
-		}
-		else jour++;
-	}
-	if (mois==1||mois==3||mois==5||mois==7||mois==8||mois==10){
-		if (jour==31){
-			jour=1;
-			mois++;
-		}
-		else jour++;
-	}
-	if (mois==2 ){
-		if (jour==29 && annee%4==0){
-			jour=1;
-			mois++;
-		}
-		if (jour==28 && annee%4!=0){
-			jour=1;
-			mois++;
-		}
-		else jour++;
-	}
-}*/
+
 void Date::incrementerDate()
 {
     if(jour==nbJourDuMois()){
@@ -155,6 +122,27 @@ int Date::nbJourDuMois(){
     else if (anneeBissextile()) return 29;
     else return 28;
 }
+
+bool operator<(const Date& d1)const {
+    if (this.annee < d1.annee)return true;
+    else if ((this.annee=d1.annee)&&(this.mois<d1.mois)){
+        return true;
+    }
+    else if ((this.annee=d1.annee)&&(this.mois=d1.mois)&(this.jour<d1.jour)){
+        return true;
+    }
+    else return false ;
+    
+    
+}
+bool operator==(const Date& d1)const{
+    if ((this.annee=d1.annee)&&(this.mois=d1.mois)&(this.jour=d1.jour)){
+        return true;
+    }
+    else return false;
+}
+
+
 /*Class Test{
     public:
         Verif(DateG,DateAttente,Flag)
