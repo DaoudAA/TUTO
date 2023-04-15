@@ -8,50 +8,6 @@ using namespace std;
 //void Test::verif(Date dateDonnee, Date dateJuste,string message )
 
 
-<<<<<<< HEAD
-//operateurs de surcharge
- bool operator==(Date const&d1, Date const&d2)
- {
-     bool test=false;
-     if (d1.getJour()==d2.getJour())
-        if(d1.getMois()==d2.getMois())
-            if(d1.getAnnee()==d2.getAnnee())
-                test=true ;
-     return test;
- }
-
- bool operator <(Date const& date1, Date const& date2)
-{
-    if(date1.getAnnee()<date2.getAnnee())
-        return true;
-    else if(date1.getAnnee()==date2.getAnnee()){
-            if(date1.getMois()<date2.getMois())
-                return true;
-            else if(date1.getMois()==date2.getMois())
-                    if(date1.getJour()<date2.getJour())
-                        return true;
-
-    }
-
-    return false;
-}
- bool operator >(Date & date1, Date & date2)
-{
-    if(date1.getAnnee()>date2.getAnnee())
-        return true;
-    else if(date1.getAnnee()==date2.getAnnee()){
-            if(date1.getMois()>date2.getMois())
-                return true;
-            else if(date1.getMois()==date2.getMois())
-                    if(date1.getJour()>date2.getJour())
-                        return true;
-
-    }
-
-    return false;
-}
-
-=======
 
 /*Class Test{
     public:
@@ -156,4 +112,3 @@ cout<<"Test Date"<<endl;
         cout<<"\tEchec"<<endl;
     return 0;
 return 0;}
->>>>>>> 2831a0ca7d58c3c5eb2148cc552470ac322788cc
