@@ -7,7 +7,10 @@ using namespace std;
 
 //void Test::verif(Date dateDonnee, Date dateJuste,string message )
 
-
+ostream& operator<<(ostream& flux ,const Date& D){
+        flux<< D.jour << "/" << D.mois << "/" << D.annee <<endl;
+        return flux;
+}
 
 /*Class Test{
     public:
@@ -110,5 +113,5 @@ cout<<"Test Date"<<endl;
         cout<<"\tSuccee"<<endl;
     else
         cout<<"\tEchec"<<endl;
-    return 0;
+/*string ch="29/8/2015";Date d15=convStrToDate(ch); cout<<d15<<endl;*/
 return 0;}

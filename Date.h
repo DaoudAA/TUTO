@@ -14,6 +14,7 @@ private:
     int annee;
 
 public:
+    //Date(){};
     Date(int d, int m, int y);
     Date(string ch);
     int getJour()const{return jour;}
@@ -22,11 +23,19 @@ public:
     void incrementerDate();
     bool anneeBissextile();
     int nbJourDuMois();
-    friend ostream& operator<<(ostream& flux , const Date& );
+    //friend ostream& operator<<(ostream& flux , const Date& );
     friend istream& operator>>(istream& flux, Date &);
+    //Date convStrToDate(string chInter);
     friend bool operator==(const Date& ,const Date&);
     friend bool operator<(const Date& ,const Date&);
+    friend ostream& operator<<(ostream& ,const Date&);
 };
+
+ostream& operator<<(ostream& os, const Date& date)
+{
+    os << date.getJour() << "/" << date.getMois() << "/" << date.getAnnee();
+    return os;
+}
 
 Date::Date(int d, int m, int y){
     if (y>0) annee=y;
@@ -55,7 +64,6 @@ Date::Date(int d, int m, int y){
         }
     }
 }
-
 Date::Date(string ch){
     string ch1,ch2,ch3;
     ch1=ch.substr(0, ch.find('/'));
@@ -65,7 +73,6 @@ Date::Date(string ch){
     mois= atoi(ch2.c_str());
     ch3=ch.erase(0, ch.find('/') + 1);
     annee = atoi(ch3.c_str());
-
     if (jour <= 0 || mois <= 0 || mois > 12) {
         jour= -1;
         mois= -1;
@@ -122,15 +129,35 @@ void Date::incrementerDate(){
     else jour++;
 }
 
-ostream& operator<<(ostream& flux , const Date& D){
-        flux<< D.jour << "/" << D.mois << "/" << D.annee <<endl;
-        return flux;
-    }
+Date convStrToDate(string chInter){
+    string ch1;
+    int jour1,mois1,annee1;
+    int poslimiter1,poslimiter2;
+    poslimiter1=chInter.find('/');
+    poslimiter2=chInter.find('/',chInter.find('/')+1);
+    ch1=chInter.substr(0,poslimiter1);
+    jour1=atoi(ch1.c_str());
+	mois1=atoi(chInter.substr(poslimiter1+1,poslimiter2-poslimiter1-1).c_str());
+    annee1=atoi(chInter.substr(poslimiter2+1,4).c_str());
+    Date d1(jour1,mois1,annee1);
+    return d1;
+    /*getline(chInter,ch1,'/');
+    jour1=atoi(ch1);
+    getline(chInter,ch1,'/');
+    mois1=atoi(ch1);
+    getline(chInter,ch1,'/');
+    annee1=atoi(ch1);*/
+}
+
 
 istream& operator>>(istream& flux, Date &date){
-    flux>>date.jour>>date.mois>>date.annee;
+    string chInter;
+    getline(flux,chInter);
+    date=convStrToDate(chInter);
     return flux;
 }
+
+
 bool operator==(const Date& d1 ,const Date& d2){
     if ((d1.getJour()==d2.getJour())&&(d1.getMois()==d2.getMois())
             &&(d1.getAnnee()==d2.getAnnee()))
