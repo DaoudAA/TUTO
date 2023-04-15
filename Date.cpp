@@ -16,6 +16,11 @@ using namespace std;
 Test::Verif{}*/
 
 int main(){
+    /*Date d1("31/4/2015");
+        d1.incrementerDate();
+    verif(d1,d(01,05.2015),Flag);
+    */
+
 Date d1("31/4/2015");
 Date d2("29/2/2012");
 Date d3("29/2/2013");
