@@ -32,11 +32,24 @@ public:
     friend ostream& operator<<(ostream& ,const Date&);
 };
 
-ostream& operator<<(ostream& os, const Date& date)
-{
-    os << date.getJour() << "/" << date.getMois() << "/" << date.getAnnee();
-    return os;
-}
+class TestDate{
+    public:
+        void verif(Date &given,Date const&attendu);
+        string getTitre()const{return titre;}
+        string getFlag()const{return flag;}
+        TestDate(string t);
+    private:
+        string titre;
+        string flag;
+};
+TestDate::TestDate(string t):titre(t),flag("Echec"){}
+void TestDate::verif(Date &given,Date const&attendu){
+    given.incrementerDate();
+    if(given==attendu)
+        flag="Succes";
+    else
+        flag="Echec";
+    }
 
 Date::Date(int d, int m, int y){
     if (y>0) annee=y;
