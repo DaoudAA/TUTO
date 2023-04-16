@@ -6,7 +6,7 @@
 #include<fstream>
 using namespace std;
 
-int main(){
+/*int main(){
     string ch1;
     //PrixJournalier Pj;
     ch1="C:/Users/HPOMEN/Downloads/prices_simple.csv";
@@ -18,4 +18,4 @@ int main(){
     cout << vPj[1] << endl;
     cout << vPj[2] << endl;
     return 0;
-}
+}*/
