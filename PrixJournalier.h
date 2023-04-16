@@ -14,6 +14,9 @@ private:
     double  prix;
 public:
     //PrixJournalier(){};
+    Date getDate()const{return date;}
+    string getNomAction()const {return nomAction;}
+    double getPrix()const{return prix;}
     PrixJournalier(Date  d, string  n , double  p):date(d),nomAction(n),prix(p){};
     friend ostream& operator<<(ostream& , const PrixJournalier&);
     friend istream& operator>>(istream& , PrixJournalier&);

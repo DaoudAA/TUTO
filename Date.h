@@ -28,6 +28,7 @@ public:
     //Date convStrToDate(string chInter);
     friend bool operator==(const Date& ,const Date&);
     friend bool operator<(const Date& ,const Date&);
+    friend bool operator>(const Date& ,const Date&);
     friend ostream& operator<<(ostream& ,const Date&);
 };
 
@@ -173,6 +174,18 @@ bool operator<(const Date& date1,const Date& date2){
                 return true;
             else if(date1.getMois()==date2.getMois())
                     if(date1.getJour()<date2.getJour())
+                        return true;
+    }
+    return false;
+}
+bool operator>(const Date& date1,const Date& date2){
+    if(date1.getAnnee()>date2.getAnnee())
+        return true;
+    else if(date1.getAnnee()==date2.getAnnee()){
+            if(date1.getMois()>date2.getMois())
+                return true;
+            else if(date1.getMois()==date2.getMois())
+                    if(date1.getJour()>date2.getJour())
                         return true;
     }
     return false;
