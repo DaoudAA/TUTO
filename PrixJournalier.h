@@ -13,7 +13,7 @@ private:
     string nomAction;
     double  prix;
 public:
-    //PrixJournalier(){};
+    PrixJournalier(){};
     Date getDate()const{return date;}
     string getNomAction()const {return nomAction;}
     double getPrix()const{return prix;}

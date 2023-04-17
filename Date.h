@@ -14,7 +14,7 @@ private:
     int annee;
 
 public:
-    //Date(){};
+    Date(){};
     Date(int d, int m, int y);
     Date(string ch);
     int getJour()const{return jour;}
