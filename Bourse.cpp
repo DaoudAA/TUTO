@@ -71,7 +71,7 @@ int main()
 {
     string ch1;
     //PrixJournalier Pj;
-    ch1="F:/Cpp/GitProjects/Tradesim/TradingSimulator/prices_simple.csv";
+    ch1="../prices_simple.csv";
 	vector<PrixJournalier> vPj;
     PersistancePrixJournaliers ppj;
 	vPj=ppj.lirePrixJournaliersDUnFichier(ch1);
