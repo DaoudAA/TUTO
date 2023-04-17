@@ -5,10 +5,6 @@
 using namespace std;
 //void Test::verif(Date dateDonnee, Date dateJuste,string message )
 
-ostream& operator<<(ostream& flux ,const Date& D){
-        flux<< D.jour << "/" << D.mois << "/" << D.annee <<endl;
-        return flux;
-}
 
 
 

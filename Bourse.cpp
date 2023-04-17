@@ -59,13 +59,13 @@ vector<PrixJournalier>recherchePrixJournalier(vector<PrixJournalier> liste,const
 
 int main()
 {
-
     string ch1;
     //PrixJournalier Pj;
-    ch1="./prices_simple.csv";
+    ch1="F:/Cpp/GitProjects/Tradesim/TradingSimulator/prices_simple.csv";
 	vector<PrixJournalier> vPj;
     PersistancePrixJournaliers ppj;
 	vPj=ppj.lirePrixJournaliersDUnFichier(ch1);
+    cout << vPj[20]<<endl;
 	const Date date(1,3,2010);
     BourseVector bourse(vPj,date);
     const Date d(2,2,2010);

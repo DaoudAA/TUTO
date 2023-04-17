@@ -171,6 +171,10 @@ istream& operator>>(istream& flux, Date &date){
     return flux;
 }
 
+ostream& operator<<(ostream& flux ,const Date& D){
+        flux<< D.jour << "/" << D.mois << "/" << D.annee <<endl;
+        return flux;
+}
 
 bool operator==(const Date& d1 ,const Date& d2){
     if ((d1.getJour()==d2.getJour())&&(d1.getMois()==d2.getMois())
