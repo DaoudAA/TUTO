@@ -14,7 +14,7 @@ private:
     int annee;
 
 public:
-    //Date(){};
+    Date(){};
     Date(int d, int m, int y);
     Date(string ch);
     int getJour()const{return jour;}
@@ -29,14 +29,14 @@ public:
     friend bool operator==(const Date& ,const Date&);
     friend bool operator<(const Date& ,const Date&);
     friend bool operator>(const Date& ,const Date&);
-    friend ostream& operator<<(ostream& ,const Date&);
+    friend ostream& operator<<(ostream& flux ,const Date& D){
+        flux<< D.jour << "/" << D.mois << "/" << D.annee <<endl;
+        return flux;
+}
+
 };
 
-ostream& operator<<(ostream& os, const Date& date)
-{
-    os << date.getJour() << "/" << date.getMois() << "/" << date.getAnnee();
-    return os;
-}
+
 
 Date::Date(int d, int m, int y){
     if (y>0) annee=y;
@@ -190,4 +190,23 @@ bool operator>(const Date& date1,const Date& date2){
     }
     return false;
 }
+class TestDate{
+    public:
+        void verif(Date &given,Date const&attendu);
+        string getTitre()const{return titre;}
+        string getFlag()const{return flag;}
+        TestDate(string t);
+    private:
+        string titre;
+        string flag;
+};
+     
+TestDate::TestDate(string t):titre(t),flag("Echec"){}
+void TestDate::verif(Date &given,Date const&attendu){
+    given.incrementerDate();
+    if(given==attendu)
+        flag="Succes";
+    else
+        flag="Echec";
+    }
 #endif

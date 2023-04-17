@@ -8,7 +8,7 @@
 using namespace std;
 vector<string>BourseVector::getActionDisponibleParDate(const Date &d){
     vector<string>actions;
-    if(d<dateFinRecherche){
+    if(d<dateAujourdhui){
         vector<PrixJournalier> pj=recherchePrixJournalier(historique,d);
         for(unsigned int i=0;i<pj.size();i++)
             actions.push_back(pj[i].getNomAction());
@@ -17,7 +17,7 @@ vector<string>BourseVector::getActionDisponibleParDate(const Date &d){
 }
 vector<PrixJournalier> BourseVector::getPrixJournaliersParDate(const Date &d){
     vector<PrixJournalier> prixJParDate;
-    if(d<dateFinRecherche){
+    if(d<dateAujourdhui){
         vector<PrixJournalier> pj=recherchePrixJournalier(historique,d);
         for(unsigned int i=0;i<pj.size();i++)
             prixJParDate.push_back(pj[i]);

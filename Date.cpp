@@ -7,10 +7,6 @@ using namespace std;
 
 //void Test::verif(Date dateDonnee, Date dateJuste,string message )
 
-ostream& operator<<(ostream& flux ,const Date& D){
-        flux<< D.jour << "/" << D.mois << "/" << D.annee <<endl;
-        return flux;
-}
 
 /*Class Test{
     public:
@@ -19,10 +15,6 @@ ostream& operator<<(ostream& flux ,const Date& D){
 Test::Verif{}*/
 
 int main(){
-    /*Date d1("31/4/2015");
-        d1.incrementerDate();
-    verif(d1,d(01,05.2015),Flag);
-    */
 
 Date d1("31/4/2015");
 Date d2("29/2/2012");
@@ -38,80 +30,36 @@ cout<<"11/10/2012\t---->\t" << d5 << endl ;
 cout<<"Test Date"<<endl;
 
 
-//test1
+
     Date date1(31,01,2011);
-    Date date2(31,03,2013);
-    Date date3(31,05,2015);
-
-//test2
     Date date4(30,04,2014);
-    Date date5(30,06,2016);
-
-//test3
     Date date6(31,12,2010);
-
-//test4
     Date date7(28,02,2010);
-//test5
-    Date date8(28,02,2016);
     Date date9(29,02,2012);
-//test6
-	Date date10(12,03,2001);
 
-//test0
-    cout<<"test 0";
-    if((d1.getJour()==-1)&&(d1.getMois()==-1)&&(d3.getJour()==-1)&&(d4.getJour()==-1))
-        cout<<"\tSuccee"<<endl;
-    else
-        cout<<"\tEchec"<<endl;
-//test2
-//test1
-    cout<<"test 1";
-    date1.incrementerDate();
-    date2.incrementerDate();
-    date3.incrementerDate();
-    if ( ((date1.getJour()==01)&&(date1.getMois()==02))&&((date2.getJour()==01)&&(date2.getMois()==04))&&((date3.getJour()==01)&&(date3.getMois()==06)))
-        cout<<"\tSuccee"<<endl;
-    else
-        cout<<"\tEchec"<<endl;
-//test2
-    cout<<"test 2";
-    date4.incrementerDate();
-    date5.incrementerDate();
-    if ( ((date4.getJour()==01)&&(date4.getMois()==05))&&((date5.getJour()==01)&&(date5.getMois()==07)))
-        cout<<"\tSuccee"<<endl;
-    else
-        cout<<"\tEchec"<<endl;
-//test3
-    cout<<"test 3";
-    date6.incrementerDate();
-    if ( ((date6.getJour()==01)&&(date6.getMois()==01)&&(date6.getAnnee()==2011)))
-        cout<<"\tSuccee"<<endl;
-    else
-        cout<<"\tEchec"<<endl;
-//test4
-    cout<<"test 4";
-    date7.incrementerDate();
-    if ( ((date7.getJour()==01)&&(date7.getMois()==03)))
-        cout<<"\tSuccee"<<endl;
-    else
-        cout<<"\tEchec"<<endl;
-//test5
-    cout<<"test 5";
-    date8.incrementerDate();
-    date9.incrementerDate();
-    if ( ((date8.getJour()==29)&&(date8.getMois()==02))&&((date9.getJour()==01)&&(date9.getMois()==03)))
-        cout<<"\tSuccee"<<endl;
-    else
-        cout<<"\tEchec"<<endl;
-    //cout<<"Date 8 :"<<date8.getJour()<<"/"<<date8.getMois()<<"/"<<date8.getAnnee()<<endl;
-    //cout<<"Date 9 :" <<date9.getJour()<<"/"<<date9.getMois()<<"/"<<date9.getAnnee()<<endl;
-//test6
-    cout<<"test 6";
-    date10.incrementerDate();
-    if ( ((date10.getJour()==13)&&(date10.getMois()==03)&&(date10.getAnnee()==2001)))
-        cout<<"\tSuccee"<<endl;
-    else
-        cout<<"\tEchec"<<endl;
-/*string ch="29/8/2015";Date d15=convStrToDate(ch); cout<<d15<<endl;*/
+    TestDate test1("fin du mois de 31 jours");
+    cout<<test1.getTitre()<<":\t";
+    test1.verif(date1,Date(1,2,2011));
+    cout<<test1.getFlag();
+
+    TestDate test2("fin du mois de 30 jours");
+    cout<<endl<<test2.getTitre()<<":\t";
+    test2.verif(date4,Date(1,5,2014));
+    cout<<test2.getFlag();
+
+    TestDate test3("fin d'annnee");
+    cout<<endl<<test3.getTitre()<<":\t";
+    test3.verif(date6,Date(1,1,2011));
+    cout<<test3.getFlag();
+
+    TestDate test4("mois 2-annee non bisextile");
+    cout<<endl<<test4.getTitre()<<":\t";
+    test4.verif(date7,Date(1,3,2010));
+    cout<<test4.getFlag();
+
+    TestDate test5("mois 2-annee bisextile");
+    cout<<endl<<test5.getTitre()<<":\t";
+    test5.verif(date9,Date(1,3,2012));
+    cout<<test5.getFlag();
+
 return 0;}
