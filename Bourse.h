@@ -16,11 +16,14 @@ private:
     const Date dateFinRecherche;
 
 public:
-    BourseVector(vector<PrixJournalier>&b,const Date &d):historique(b),dateFinRecherche(d){}
+    BourseVector(){};
+    BourseVector(vector<PrixJournalier>&b,const Date &d):historique(b),dateFinRecherche(d){};
     vector<string> getActionDisponibleParDate(const Date &);
     vector<PrixJournalier> getPrixJournaliersParDate(const Date &);
+    vector<PrixJournalier> getPrixJournaliersDAujourdhui();
+    Date getDateFinRecherche()const{return dateFinRecherche;}
 
 };
 vector<PrixJournalier>recherchePrixJournalier(vector<PrixJournalier>,const Date&);
-
+/*set fi 3oudh vector w set connait si il existe redondances ou non  pushback->insert */
 #endif // BOURSE_H_INCLUDED

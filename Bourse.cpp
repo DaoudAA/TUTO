@@ -6,6 +6,16 @@
 #include<iostream>
 #include<fstream>
 using namespace std;
+vector<PrixJournalier> BourseVector::getPrixJournaliersDAujourdhui(){
+    vector<PrixJournalier>actions;
+    BourseVector bv;
+    if(bv.getDateFinRecherche()<dateFinRecherche){
+        vector<PrixJournalier> pj=recherchePrixJournalier(historique,bv.getDateFinRecherche());
+        for(unsigned int i=0;i<pj.size();i++)
+            actions.push_back(pj[i]);
+    }
+    return actions;
+}
 vector<string>BourseVector::getActionDisponibleParDate(const Date &d){
     vector<string>actions;
     if(d<dateFinRecherche){
