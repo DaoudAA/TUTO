@@ -11,7 +11,8 @@ vector<string>BourseVector::getActionDisponibleParDate(const Date &d){
     if(d<dateAujourdhui){
         vector<PrixJournalier> pj=recherchePrixJournalier(historique,d);
         for(unsigned int i=0;i<pj.size();i++)
-            actions.push_back(pj[i].getNomAction());
+        	if (!(appartientAction(pj[i].getNomAction(),actions)))
+            	actions.push_back(pj[i].getNomAction());
     }
     return actions;
 }
@@ -20,7 +21,8 @@ vector<PrixJournalier> BourseVector::getPrixJournaliersParDate(const Date &d){
     if(d<dateAujourdhui){
         vector<PrixJournalier> pj=recherchePrixJournalier(historique,d);
         for(unsigned int i=0;i<pj.size();i++)
-            prixJParDate.push_back(pj[i]);
+        if(!(appartientPrixJournalier(pj[i],prixJParDate)))	
+            	prixJParDate.push_back(pj[i]);
     }
     return prixJParDate;
 }
@@ -56,6 +58,73 @@ vector<PrixJournalier>recherchePrixJournalier(vector<PrixJournalier> liste,const
     return resultat;
 }
 
+vector<string>BourseVector2::getActionDisponibleParDate(const Date &d){
+    vector<string>actions;
+    int i=0;
+    while((d<dateAujourdhui)&&(i<historique.size()))
+	{
+		while((historique[i].getDate()==d)&&(i<historique.size()))
+		{
+			if (!(appartientAction(historique[i].getNomAction(),actions)))
+				actions.push_back(historique[i].getNomAction());
+			i++;
+		}
+		if(historique[i].getDate()>d)
+			return actions;   		
+	}
+    return actions;
+	
+}
+
+bool appartientAction (string nomAction,vector<string>& vecteurActions){
+	if(vecteurActions.size()==0)return false;
+	for(int i=0;i<vecteurActions.size();i++)
+	{
+		if(vecteurActions[i]==nomAction)
+			return true;
+	}
+	return false;
+}
+
+vector<PrixJournalier>BourseVector2::getPrixJournaliersParDate(const Date &d){
+    vector<PrixJournalier>prixJParDate;
+    int i=0;
+    while((d<dateAujourdhui)&&(i<historique.size()))
+	{
+		while((historique[i].getDate()==d)&&(i<historique.size()))
+		{
+			if(!(appartientPrixJournalier(historique[i],prixJParDate)))
+				prixJParDate.push_back(historique[i]);
+			i++;
+		}
+		if(historique[i].getDate()>d)
+			return prixJParDate;   		
+	}
+    return prixJParDate;
+	
+}
+bool appartientPrixJournalier (PrixJournalier pj,vector<PrixJournalier>& vecteurPrixJournalier){
+	if(vecteurPrixJournalier.size()==0)return false;
+	for(int i=0;i<vecteurPrixJournalier.size();i++)
+	{
+		if(vecteurPrixJournalier[i]==pj)
+			return true;
+	}
+	return false;
+}
+vector<PrixJournalier>Bourse::getPrixJournaliersDispoAujourdhui(double solde)
+	{
+		vector<PrixJournalier>resultat;
+		if ((solde<0)||((this->getPrixJournaliersAujourdhui()).size()==0))return resultat;
+		int i=0;
+		while ((i<(this->getPrixJournaliersAujourdhui()).size())&&((this->getPrixJournaliersAujourdhui())[i].getPrix()<solde))
+		{
+			if(!(appartientPrixJournalier((this->getPrixJournaliersAujourdhui())[i],resultat)))	
+				resultat.push_back((this->getPrixJournaliersAujourdhui())[i]);
+			i++;
+		}
+		return resultat;
+	}
 
 int main()
 {

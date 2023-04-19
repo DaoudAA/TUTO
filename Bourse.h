@@ -17,10 +17,10 @@ class Bourse{
 
 public:
     Bourse(const Date& d1):dateAujourdhui(d1){}
-    virtual vector<string>getActionDisponibleParDate(const Date &){
-	}
-    virtual vector<PrixJournalier>getPrixJournaliersParDate(const Date &){
-	}
+    virtual vector<string>getActionDisponibleParDate(const Date &){}
+    virtual vector<PrixJournalier>getPrixJournaliersParDate(const Date &){}
+	vector<PrixJournalier>getPrixJournaliersAujourdhui(){return getPrixJournaliersParDate(dateAujourdhui);}
+	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde);
     virtual ~Bourse(){};
 
 };
@@ -38,7 +38,21 @@ public:
     ~BourseVector(){}
 
 };
-
 vector<PrixJournalier>recherchePrixJournalier(vector<PrixJournalier>,const Date&);
+
+
+class BourseVector2:public Bourse{
+private:
+	vector<PrixJournalier>historique;
+public:
+	BourseVector2(vector<PrixJournalier>&b,const Date& d):historique(b),Bourse(d){}
+	vector<string> getActionDisponibleParDate(const Date &);
+    vector<PrixJournalier> getPrixJournaliersParDate(const Date&);
+    ~BourseVector2(){}
+		
+		
+};
+bool appartientAction (string,vector<string>&);
+bool appartientPrixJournalier (PrixJournalier pj,vector<PrixJournalier>& vecteurPrixJournalier);
 
 #endif // BOURSE_H_INCLUDED

@@ -18,9 +18,11 @@ public:
     string getNomAction()const {return nomAction;}
     double getPrix()const{return prix;}
     PrixJournalier(Date  d, string  n , double  p):date(d),nomAction(n),prix(p){};
+    friend bool operator==(PrixJournalier&,PrixJournalier&);
     friend ostream& operator<<(ostream& , const PrixJournalier&);
     friend istream& operator>>(istream& , PrixJournalier&);
 };
+
 
 ostream& operator<<(ostream& flux , const PrixJournalier& pj){
         flux << "La date :" << pj.date ;
@@ -38,6 +40,13 @@ istream& operator>>(istream& flux , PrixJournalier& pj){
     pj.prix=atof(chPrix.c_str());
     return flux;
     
+}
+bool operator==(PrixJournalier &pj1,PrixJournalier &pj2)
+{
+	if((pj1.getDate()==pj2.getDate())&&(pj1.getNomAction()==pj2.getNomAction())&&(pj1.getPrix()==pj2.getPrix()))
+		return	true;
+	else
+		return false;
 }
 
 #endif // PRIXJOURNALIER_H_INCLUDED
