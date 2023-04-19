@@ -9,7 +9,7 @@ using namespace std;
 /*int main(){
     string ch1;
     //PrixJournalier Pj;
-    ch1="C:/Users/HPOMEN/Downloads/prices_simple.csv";
+    ch1="../prices_simple.csv";
 	vector<PrixJournalier> vPj;
     PersistancePrixJournaliers ppj;
 	vPj=ppj.lirePrixJournaliersDUnFichier(ch1);

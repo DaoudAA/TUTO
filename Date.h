@@ -29,14 +29,27 @@ public:
     friend bool operator==(const Date& ,const Date&);
     friend bool operator<(const Date& ,const Date&);
     friend bool operator>(const Date& ,const Date&);
-    friend ostream& operator<<(ostream& flux ,const Date& D){
-        flux<< D.jour << "/" << D.mois << "/" << D.annee <<endl;
-        return flux;
-}
-
+    friend ostream& operator<<(ostream& ,const Date&);
 };
 
-
+class TestDate{
+    public:
+        void verif(Date &given,Date const&attendu);
+        string getTitre()const{return titre;}
+        string getFlag()const{return flag;}
+        TestDate(string t);
+    private:
+        string titre;
+        string flag;
+};
+TestDate::TestDate(string t):titre(t),flag("Echec"){}
+void TestDate::verif(Date &given,Date const&attendu){
+    given.incrementerDate();
+    if(given==attendu)
+        flag="Succes";
+    else
+        flag="Echec";
+    }
 
 Date::Date(int d, int m, int y){
     if (y>0) annee=y;
@@ -158,6 +171,10 @@ istream& operator>>(istream& flux, Date &date){
     return flux;
 }
 
+ostream& operator<<(ostream& flux ,const Date& D){
+        flux<< D.jour << "/" << D.mois << "/" << D.annee <<endl;
+        return flux;
+}
 
 bool operator==(const Date& d1 ,const Date& d2){
     if ((d1.getJour()==d2.getJour())&&(d1.getMois()==d2.getMois())
@@ -190,23 +207,4 @@ bool operator>(const Date& date1,const Date& date2){
     }
     return false;
 }
-class TestDate{
-    public:
-        void verif(Date &given,Date const&attendu);
-        string getTitre()const{return titre;}
-        string getFlag()const{return flag;}
-        TestDate(string t);
-    private:
-        string titre;
-        string flag;
-};
-     
-TestDate::TestDate(string t):titre(t),flag("Echec"){}
-void TestDate::verif(Date &given,Date const&attendu){
-    given.incrementerDate();
-    if(given==attendu)
-        flag="Succes";
-    else
-        flag="Echec";
-    }
 #endif

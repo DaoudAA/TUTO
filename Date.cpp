@@ -3,18 +3,17 @@
 #include <cstdlib>
 #include"Date.h"
 using namespace std;
-//constructeurs
-
 //void Test::verif(Date dateDonnee, Date dateJuste,string message )
 
 
-/*Class Test{
-    public:
-        Verif(DateG,DateAttente,Flag)
-};
-Test::Verif{}*/
+
+
 
 int main(){
+    //Date d1("31/4/2015");
+      //  d1.incrementerDate();
+   // verif(d1,d(01,05.2015),Flag);
+    
 
 Date d1("31/4/2015");
 Date d2("29/2/2012");
@@ -31,6 +30,12 @@ cout<<"Test Date"<<endl;
 
 
 
+Date date2(31,03,2013);
+Date date3(31,05,2015);
+Date date5(30,06,2016);
+Date date8(28,02,2016);
+Date date10(12,03,2001);
+    
     Date date1(31,01,2011);
     Date date4(30,04,2014);
     Date date6(31,12,2010);
@@ -61,5 +66,6 @@ cout<<"Test Date"<<endl;
     cout<<endl<<test5.getTitre()<<":\t";
     test5.verif(date9,Date(1,3,2012));
     cout<<test5.getFlag();
+
 
 return 0;}

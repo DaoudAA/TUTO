@@ -6,6 +6,16 @@
 #include<iostream>
 #include<fstream>
 using namespace std;
+vector<PrixJournalier> BourseVector::getPrixJournaliersDAujourdhui(){
+    vector<PrixJournalier>actions;
+    BourseVector bv;
+    if(bv.getDateFinRecherche()<dateFinRecherche){
+        vector<PrixJournalier> pj=recherchePrixJournalier(historique,bv.getDateFinRecherche());
+        for(unsigned int i=0;i<pj.size();i++)
+            actions.push_back(pj[i]);
+    }
+    return actions;
+}
 vector<string>BourseVector::getActionDisponibleParDate(const Date &d){
     vector<string>actions;
     if(d<dateAujourdhui){
@@ -128,13 +138,13 @@ vector<PrixJournalier>Bourse::getPrixJournaliersDispoAujourdhui(double solde)
 
 int main()
 {
-
     string ch1;
     //PrixJournalier Pj;
-    ch1="./prices_simple.csv";
+    ch1="../prices_simple.csv";
 	vector<PrixJournalier> vPj;
     PersistancePrixJournaliers ppj;
 	vPj=ppj.lirePrixJournaliersDUnFichier(ch1);
+    cout << vPj[20]<<endl;
 	const Date date(1,3,2010);
     BourseVector bourse(vPj,date);
     const Date d(2,2,2010);

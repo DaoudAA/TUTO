@@ -16,6 +16,7 @@ class Bourse{
     const Date dateAujourdhui;
 
 public:
+
     Bourse(const Date& d1):dateAujourdhui(d1){}
     virtual vector<string>getActionDisponibleParDate(const Date &){}
     virtual vector<PrixJournalier>getPrixJournaliersParDate(const Date &){}
@@ -55,4 +56,8 @@ public:
 bool appartientAction (string,vector<string>&);
 bool appartientPrixJournalier (PrixJournalier pj,vector<PrixJournalier>& vecteurPrixJournalier);
 
+
+
+vector<PrixJournalier>recherchePrixJournalier(vector<PrixJournalier>,const Date&);
+/*set fi 3oudh vector w set connait si il existe redondances ou non  pushback->insert */
 #endif // BOURSE_H_INCLUDED
