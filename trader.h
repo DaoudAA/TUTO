@@ -30,9 +30,9 @@ public:
 
 class TraderAlea :public Trader{
 public:
-    virtual Transaction choisirTransaction(Bourse& bourse, const Portefeuille &portefeuille);
+    virtual Transaction choisirTransaction(const Bourse& , const Portefeuille &);
 };
-Transaction TraderAlea::choisirTransaction(Bourse& bour, const Portefeuille &portef){
+Transaction TraderAlea::choisirTransaction(const Bourse& bour, const Portefeuille &portef){
     //1 ere transaction suggere est achat 
     TypeTransaction type;
     if ((portef.getTitre()).size()==0){type = achat ;}
