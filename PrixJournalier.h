@@ -25,8 +25,8 @@ public:
 
 
 ostream& operator<<(ostream& flux , const PrixJournalier& pj){
-        flux << "La date :" << pj.date ;
-		flux << "\n Le nom de l'action:\t" << pj.nomAction << endl << "Le prix est:\t" << pj.prix <<endl;
+        flux << endl<<"La date :" << pj.date<<endl ;
+		flux << "\t Le nom de l'action:\t" << pj.nomAction << endl << "\t Le prix est:\t" << pj.prix <<endl;
         return flux;
     }
 
