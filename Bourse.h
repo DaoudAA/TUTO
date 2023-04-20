@@ -7,6 +7,8 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include<map>
+#include<set>
 
 using namespace std;
 
@@ -18,9 +20,9 @@ class Bourse{
 public:
 
     Bourse(const Date& d1):dateAujourdhui(d1){}
-    virtual vector<string>getActionDisponibleParDate(const Date &){}
-    virtual vector<PrixJournalier>getPrixJournaliersParDate(const Date &){}
-	vector<PrixJournalier>getPrixJournaliersAujourdhui(){return getPrixJournaliersParDate(dateAujourdhui);}
+    virtual vector<string>getActionDisponibleParDate(const Date &)const{};
+    virtual vector<PrixJournalier>getPrixJournaliersParDate (const Date &)const{};
+	virtual vector<PrixJournalier>getPrixJournaliersAujourdhui()const{return getPrixJournaliersParDate(dateAujourdhui);}
 	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde);
     virtual ~Bourse(){};
 
@@ -34,8 +36,8 @@ private:
 
 public:
     BourseVector(vector<PrixJournalier>&b,const Date& d1):historique(b),Bourse(d1){}
-    vector<string> getActionDisponibleParDate(const Date &);
-    vector<PrixJournalier> getPrixJournaliersParDate(const Date &);
+    vector<string> getActionDisponibleParDate(const Date &)const;
+    vector<PrixJournalier> getPrixJournaliersParDate(const Date &)const;
     ~BourseVector(){}
 
 };
@@ -47,8 +49,8 @@ private:
 	vector<PrixJournalier>historique;
 public:
 	BourseVector2(vector<PrixJournalier>&b,const Date& d):historique(b),Bourse(d){}
-	vector<string> getActionDisponibleParDate(const Date &);
-    vector<PrixJournalier> getPrixJournaliersParDate(const Date&);
+	vector<string> getActionDisponibleParDate(const Date &)const;
+    vector<PrixJournalier> getPrixJournaliersParDate(const Date&)const;
     ~BourseVector2(){}
 		
 		
@@ -56,8 +58,13 @@ public:
 bool appartientAction (string,vector<string>&);
 bool appartientPrixJournalier (PrixJournalier pj,vector<PrixJournalier>& vecteurPrixJournalier);
 
-
-
-vector<PrixJournalier>recherchePrixJournalier(vector<PrixJournalier>,const Date&);
-/*set fi 3oudh vector w set connait si il existe redondances ou non  pushback->insert */
+class BourseDict:public Bourse{
+private:
+	map<string, vector<PrixJournalier> >  historique;
+	
+public:
+	BourseDict(vector<PrixJournalier>&vPJ,const Date &d);
+	map<string, vector<PrixJournalier> > getHistoriqueAction()const{return historique;}
+	
+};
 #endif // BOURSE_H_INCLUDED
