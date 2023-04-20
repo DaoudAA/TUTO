@@ -28,6 +28,7 @@ public:
 	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde);
 	double getPrixAujourdhui(string);
     virtual ~Bourse(){};
+    friend class Simulation;
 
 };
 

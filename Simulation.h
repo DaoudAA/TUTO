@@ -26,13 +26,13 @@ public:
  void Simulation::executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit)
 {
 	Portefeuille portefeuille(soldeInit);
-	Date dateCourante(dateDebut);
+	bourse.dateAujourdhui=dateDebut;
 	string action;
 	int qte;
 	double prix;
-	while(dateCourante<dateFin)
+	while(bourse.dateAujourdhui<dateFin)
 	{
-		//bourse(dateCourante);
+		
 		trader.choisirTransaction(bourse,portefeuille);		
 		while(1)
 		{	
@@ -59,7 +59,7 @@ public:
 		
 		
 		
-		dateCourante.incrementerDate();
+		(bourse.dateAujourdhui).incrementerDate();
 	}
 	
 	
