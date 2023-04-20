@@ -17,19 +17,19 @@ private:
 
 public:
     Transaction(TypeTransaction type, string nomdAct, int qte): typeTx(type), nomdAction(nomdAct), qtedAction(qte) {}
-    TypeTransaction gettypeTx() const { return typeTx; }
+    TypeTransaction getTypeTx() const { return typeTx; }
     string getnomdAction() const { return nomdAction; }
     int getqtedAction() const { return qtedAction; }
 };
 class Trader
 {
 public:
-    virtual Transaction choisirTransaction(const Bourse& bourse, const Portefeuille &portefeuille)=0;
+    virtual Transaction choisirTransaction(const Bourse& bourse, const Portefeuille &portefeuille);
 };
 
 class TraderAlea :public Trader{
 public:
-    virtual Transaction choisirTransaction(const Bourse& , const Portefeuille &);
+    Transaction choisirTransaction(const Bourse& , const Portefeuille &);
 };
 Transaction TraderAlea::choisirTransaction(const Bourse& bour, const Portefeuille &portef){
     //1 ere transaction suggere est achat 

@@ -30,11 +30,12 @@ public:
     Portefeuille(double s) : solde(s) {}
 	double getSolde() const { return solde; }
     vector<Titre> getTitre() const { return titres; }
-	void ajouterTitre(const string& nomAction, int quantite) {
+	void ajouterTitre(const string& nomAction, int quantite) 
+	{
         Titre titre(nomAction, quantite);
         titres.push_back(titre);
     }
-    void retirerTitre(const string& nomAction);/* {
+    void retirerTitre(const string& nomAction,int quantite);/* {
         for (auto it = titres.begin(); it != titres.end(); ++it) {
             if (it->getNomAction() == nomAction) {
                 titres.erase(it);
@@ -42,5 +43,6 @@ public:
             }
         }
     }*/
+    friend class Simulation;
     };
 #endif
