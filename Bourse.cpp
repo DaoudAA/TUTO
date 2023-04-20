@@ -17,7 +17,11 @@ using namespace std;
     }
     return actions;
 }*/
+
 vector<string> BourseVector::getActionDisponibleParDate(const Date &d)const{
+
+
+
     vector<string>actions;
     if(d<dateAujourdhui){
         vector<PrixJournalier> pj=recherchePrixJournalier(historique,d);

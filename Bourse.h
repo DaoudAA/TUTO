@@ -20,6 +20,7 @@ class Bourse{
 public:
 
     Bourse(const Date& d1):dateAujourdhui(d1){}
+
     virtual vector<string>getActionDisponibleParDate(const Date &)const{};
     virtual vector<PrixJournalier>getPrixJournaliersParDate (const Date &)const{};
 	virtual vector<PrixJournalier>getPrixJournaliersAujourdhui()const{return getPrixJournaliersParDate(dateAujourdhui);}
