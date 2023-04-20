@@ -1,8 +1,7 @@
 #ifndef TRADER_H_INCLUDED
 #define TRADER_H_INCLUDED
-#include "Date.h"
-#include"PersistancePrixJournaliers.h"
-#include"portefeuille.h"
+#include "Bourse.h"
+#include "portefeuille.h"
 #include<vector>
 #include<iostream>
 #include<string>
@@ -47,13 +46,14 @@ Transaction TraderAlea::choisirTransaction(const Bourse& bour, const Portefeuill
         int choixQte=1+rand()%maxQte;
         return Transaction(achat,Pj[choixDAction].getNomAction(),choixQte);
     }
-    /*else if (type==vente){
-        vector<PrixJournalier> Pj=bour.getPrixJournaliersAujourdhui();
-        vector<titres> Pt=portef.getTitre();
-        n=pj.size();
+    else if (type==vente){
+        vector<Titre> Pt=portef.getTitre();
+        int n=Pt.size();
         int choixDAction=rand()%n;
-        if Pj[choixDAction] in 
-    }*/
+        int x=Pt[choixDAction].getQte();
+        int choixQte=1+rand()%x;
+        return Transaction(vente,Pt[choixDAction].getNomAction(),choixQte); 
+    }
 }
 
 #endif

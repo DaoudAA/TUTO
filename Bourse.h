@@ -18,8 +18,8 @@ class Bourse{
 public:
 
     Bourse(const Date& d1):dateAujourdhui(d1){}
-    virtual vector<string>getActionDisponibleParDate(const Date &){}
-    virtual vector<PrixJournalier>getPrixJournaliersParDate (const Date &)const{}
+    virtual vector<string>getActionDisponibleParDate(const Date &);
+    virtual vector<PrixJournalier>getPrixJournaliersParDate (const Date &)const;
 	vector<PrixJournalier>getPrixJournaliersAujourdhui()const{return getPrixJournaliersParDate(dateAujourdhui);}
 	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde);
     virtual ~Bourse(){};
