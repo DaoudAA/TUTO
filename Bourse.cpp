@@ -6,7 +6,7 @@
 #include<iostream>
 #include<fstream>
 using namespace std;
-vector<PrixJournalier> BourseVector::getPrixJournaliersDAujourdhui(){
+/*vector<PrixJournalier> BourseVector::getPrixJournaliersDAujourdhui(){
     vector<PrixJournalier>actions;
     BourseVector bv;
     if(bv.getDateFinRecherche()<dateFinRecherche){
@@ -15,7 +15,7 @@ vector<PrixJournalier> BourseVector::getPrixJournaliersDAujourdhui(){
             actions.push_back(pj[i]);
     }
     return actions;
-}
+}*/
 vector<string>BourseVector::getActionDisponibleParDate(const Date &d){
     vector<string>actions;
     if(d<dateAujourdhui){
