@@ -2,6 +2,7 @@
 #include "Date.h"
 #include "PersistancePrixJournaliers.h"
 #include "Bourse.h"
+
 #include<vector>
 #include<iostream>
 #include<fstream>
@@ -151,6 +152,22 @@ BourseDict::BourseDict(vector<PrixJournalier>&vPJ, Date &d):Bourse(d)
 			i++;	
 		}
 	}
+	
+	
+
+map<string, vector<PrixJournalier> > BourseDict::getHistoriqueAction(string action)
+{
+	map<string, vector<PrixJournalier> > historiqueAction;
+	int i=0;
+	while(((historique[action])[i].getDate()<=dateAujourdhui)&&(i<historique[action].size()))
+	{
+		if(!(appartientPrixJournalier(historique[action][i],historiqueAction[action])))
+			historiqueAction[action].push_back(historique[action][i]);
+		i++;
+	}
+	return historiqueAction;
+}
+	
 double Bourse::getPrixAujourdhui(string nomAction)
 {
 	int i=0;
@@ -182,18 +199,25 @@ int main()
     {   cout<<"action:"<<endl;
         for(unsigned int i=0;i<action.size();i++)
             cout<<action[i]<<" || ";
-    }*/
-    vector<PrixJournalier>PJParDate=bourse.getPrixJournaliersAujourdhui();
+    }
+    /vector<PrixJournalier>PJParDate=bourse.getPrixJournaliersAujourdhui();
     if(PJParDate.size()!=0)
     {
         cout<<endl<<"PJParDate:"<<endl;
         for(unsigned int i=0;i<PJParDate.size();i++)
         cout<<PJParDate[i]<<" || ";
+    }*/
+    BourseDict b1(vPj,date);
+    vector<PrixJournalier>PJAction=b1.getHistoriqueAction("JCI")["JCI"];
+        if(PJAction.size()!=0)
+    {
+        cout<<endl<<"PJParAction: JCI"<<endl;
+        for(unsigned int i=0;i<PJAction.size();i++)
+        cout<<PJAction[i]<<endl;
     }
-    Date d1(4,1,2010);
-	BourseDict b(vPj,d1);
-	//for(int i=0;i<b.getHistoriqueAction()["GOOGL"].size();i++)
-	//	cout<<b.getHistoriqueAction()["GOOGL"][i];
-	//cout<<"IPG    "<<b.getPrixAujourdhui("IPG");
+
+    
+    
+
     return 0;
 }

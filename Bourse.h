@@ -68,7 +68,7 @@ private:
 	
 public:
 	BourseDict(vector<PrixJournalier>&vPJ, Date &d);
-	map<string, vector<PrixJournalier> > getHistoriqueAction()const{return historique;}
+	map<string, vector<PrixJournalier> > getHistoriqueAction(string);
 	
 };
 #endif // BOURSE_H_INCLUDED
