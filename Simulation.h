@@ -42,24 +42,27 @@ public:
 					break;
 				else if ((T.getTypeTx()==achat)&&(T.getqtedAction()>0))
 				{	bool found = false;
-for (auto action : Actions) {
-	if (action == T.getnomdAction()) {
-    	found = true;
-    break;
-    }
-}
-if (found) {
-action=T.getnomdAction();
+					for (auto action : Actions) {
+						if (action == T.getnomdAction()) {
+    						found = true;
+   							 break;
+    					}
+					}
+				if (found) {
+				action=T.getnomdAction();
 					qte=T.getqtedAction();
 					prix=bourse.getPrixAujourdhui(action);
 					portefeuille.achatTitre(action,qte,prix);}
 				}
-				else if (T.getTypeTx()==vente)
-				{
-					action=T.getnomdAction();
-					qte=T.getqtedAction();
-					prix=bourse.getPrixAujourdhui(action);
-					portefeuille.venteTitre(action,qte,prix);
+				else if ((T.getTypeTx()==vente)&&(T.getqtedAction()>0))
+				for (auto titre : portefeuille.titres){
+					if (titre.getNomAction() == actionNom){
+						action=T.getnomdAction();
+						qte=T.getqtedAction();
+						prix=bourse.getPrixAujourdhui(action);
+						portefeuille.venteTitre(action,qte,prix);
+					}
+					//else
 				}
 		}
 		(bourse.dateAujourdhui).incrementerDate();
