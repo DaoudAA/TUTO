@@ -24,7 +24,7 @@ public:
 class Trader
 {
 public:
-    virtual Transaction choisirTransaction(const Bourse& bourse, const Portefeuille &portefeuille);
+    virtual Transaction choisirTransaction(const Bourse& bourse, const Portefeuille &portefeuille)=0;
 };
 
 class TraderAlea :public Trader{
