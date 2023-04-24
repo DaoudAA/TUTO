@@ -24,6 +24,7 @@ public:
 
     virtual vector<string>getActionDisponibleParDate( const Date &)const{};
     virtual vector<PrixJournalier>getPrixJournaliersParDate ( const Date &)const{};
+    vector<string>getActionDisponibleAujourdhui() const {return getActionDisponibleParDate(dateAujourdhui);}
 	vector<PrixJournalier>getPrixJournaliersAujourdhui()const{return getPrixJournaliersParDate(dateAujourdhui);}		
 	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde);
 	double getPrixAujourdhui(string);

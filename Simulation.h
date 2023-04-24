@@ -14,8 +14,7 @@ private:
 //	const Date debut;
 //	const Date fin;
 	double budget;
-	 void modifierSoldePortefeuille(Portefeuille& portefeuille, double nouveauSolde) {
-    }
+	void modifierSoldePortefeuille(Portefeuille& portefeuille, double nouveauSolde) {}
 public:
 	//Simulation(const Date d1, const Date d2, double b):debut(d1),fin(d2),budget(b){}
 	Simulation( double b):budget(b){}
@@ -32,59 +31,38 @@ public:
 	double prix;
 	while(bourse.dateAujourdhui<dateFin)
 	{
-		
-		trader.choisirTransaction(bourse,portefeuille);		
+		vector<PrixJournalier> Pj=bourse.getPrixJournaliersAujourdhui();
+		vector<string> Actions=bourse.getActionDisponibleAujourdhui();
 		while(1)
 		{	
-				if((trader.choisirTransaction(bourse,portefeuille)).getTypeTx()==rienAFaire)
+			Transaction T=trader.choisirTransaction(bourse,portefeuille);
+			const string& actionNom = T.getnomdAction();
+			string actionNomCopy = actionNom;
+				if(T.getTypeTx()==rienAFaire)
 					break;
-				else if ((trader.choisirTransaction(bourse,portefeuille)).getTypeTx()==achat)
-				{
-					action=trader.choisirTransaction(bourse,portefeuille).getnomdAction();
-					qte=trader.choisirTransaction(bourse,portefeuille).getqtedAction();
+				else if ((T.getTypeTx()==achat)&&(T.getqtedAction()>0))
+				{	bool found = false;
+for (auto action : Actions) {
+	if (action == T.getnomdAction()) {
+    	found = true;
+    break;
+    }
+}
+if (found) {
+action=T.getnomdAction();
+					qte=T.getqtedAction();
 					prix=bourse.getPrixAujourdhui(action);
-					portefeuille.solde-=qte*prix;
-					portefeuille.ajouterTitre(action,qte);
-					
+					portefeuille.achatTitre(action,qte,prix);}
 				}
-				else if ((trader.choisirTransaction(bourse,portefeuille)).getTypeTx()==vente)
+				else if (T.getTypeTx()==vente)
 				{
-					action=trader.choisirTransaction(bourse,portefeuille).getnomdAction();
-					qte=trader.choisirTransaction(bourse,portefeuille).getqtedAction();
+					action=T.getnomdAction();
+					qte=T.getqtedAction();
 					prix=bourse.getPrixAujourdhui(action);
-					portefeuille.solde+=qte*prix;
-					portefeuille.retirerTitre(action,qte);
+					portefeuille.venteTitre(action,qte,prix);
 				}
 		}
-		
-		
-		
 		(bourse.dateAujourdhui).incrementerDate();
 	}
-	
-	
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #endif 
