@@ -46,7 +46,7 @@ Transaction TraderAlea::choisirTransaction(const Bourse& bour, const Portefeuill
         int choixQte=1+rand()%maxQte;
         return Transaction(achat,Pj[choixDAction].getNomAction(),choixQte);
     }
-    else if (type==vente){
+    else {
         vector<Titre> Pt=portef.getTitre();
         int n=Pt.size();
         int choixDAction=rand()%n;

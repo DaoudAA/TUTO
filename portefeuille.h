@@ -33,7 +33,7 @@ public:
     Portefeuille(double s) : solde(s) {}
 	double getSolde() const { return solde; }
     vector<Titre> getTitre() const { return titres; }
-	void ajouterTitre(const string& nomAction, int quantite) 
+	void achatTitre(const string& nomAction, int quantite,double prix) 
 	{   int i=0;
         while ( i !=titres.size()){
             if (nomAction==titres[i].nomAction){
@@ -46,8 +46,9 @@ public:
             Titre titre(nomAction, quantite);
             titres.push_back(titre);
         }
+        solde-=quantite*prix;
     }
-    void retirerTitre(const string& nomAction,int quantite){
+    void venteTitre(const string& nomAction,int quantite,double prix){
         int i=0;
         while ( i !=titres.size()){
             if (nomAction == titres[i].nomAction){
@@ -59,6 +60,7 @@ public:
             }
             i++;
         }
+        solde+=quantite*prix;
     }/* {
         for (auto it = titres.begin(); it != titres.end(); ++it) {
             if (it->getNomAction() == nomAction) {
