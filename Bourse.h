@@ -20,12 +20,12 @@ class Bourse{
 
 public:
 
-    Bourse( Date& d1):dateAujourdhui(d1){}
     Date setDate(Date& d1){return dateAujourdhui=d1;}
-    virtual vector<string>getActionDisponibleParDate( const Date &)const{};
-    virtual vector<PrixJournalier>getPrixJournaliersParDate ( const Date &)const{};
-    vector<string>getActionDisponibleAujourdhui() const {return getActionDisponibleParDate(dateAujourdhui);}
+    virtual vector<PrixJournalier>getPrixJournaliersParDate ( const Date &)const = 0;
+    virtual vector<string> getActionDisponibleParDate(const Date& ) const = 0;
+    virtual double getLastPrixAction(string)=0;
 	vector<PrixJournalier>getPrixJournaliersAujourdhui()const{return getPrixJournaliersParDate(dateAujourdhui);}		
+    vector<string>getActionDisponibleAujourdhui() const {return getActionDisponibleParDate(dateAujourdhui);}
 	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde);
 	double getPrixAujourdhui(string);
     virtual ~Bourse(){};
@@ -40,9 +40,10 @@ private:
     vector<PrixJournalier>historique;
 
 public:
-    BourseVector(vector<PrixJournalier>&b, Date& d1):historique(b),Bourse(d1){}
-    vector<string> getActionDisponibleParDate(const Date &)const;
+    BourseVector(vector<PrixJournalier>&b):historique(b){}
     vector<PrixJournalier> getPrixJournaliersParDate(const Date &)const;
+    vector<string> getActionDisponibleParDate(const Date &)const;
+    double getLastPrixAction(string);
     ~BourseVector(){}
 
 };
@@ -53,9 +54,10 @@ class BourseVector2:public Bourse{
 private:
 	vector<PrixJournalier>historique;
 public:
-	BourseVector2(vector<PrixJournalier>&b, Date& d):historique(b),Bourse(d){}
-	vector<string> getActionDisponibleParDate(const Date&)const;
+	BourseVector2(vector<PrixJournalier>&b):historique(b){}
     vector<PrixJournalier> getPrixJournaliersParDate(const Date&)const;
+	vector<string> getActionDisponibleParDate(const Date&)const;
+    double getLastPrixAction(string);
     ~BourseVector2(){}
 		
 		
@@ -63,13 +65,15 @@ public:
 bool appartientAction (string,vector<string>&);
 bool appartientPrixJournalier (PrixJournalier pj,vector<PrixJournalier>& vecteurPrixJournalier);
 
-class BourseDict:public Bourse{
+class BourseDictNom:public Bourse{
 private:
 	map<string, vector<PrixJournalier> >  historique;
 	
 public:
-	BourseDict(vector<PrixJournalier>&vPJ, Date &d);
-	map<string, vector<PrixJournalier> > getHistoriqueAction(string);
-	
+	BourseDictNom(vector<PrixJournalier>&vPJ);
+    vector<PrixJournalier> getPrixJournaliersParDate(const Date&)const;
+	vector<string> getActionDisponibleParDate(const Date&)const;
+	vector<PrixJournalier> getHistoriqueAction(string);
+    double getLastPrixAction(string);
 };
 #endif // BOURSE_H_INCLUDED
