@@ -19,6 +19,7 @@ public:
 	//Simulation(const Date d1, const Date d2, double b):debut(d1),fin(d2),budget(b){}
 	Simulation( double b):budget(b){}
 	static void executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit);
+	//map <string,long>
 	
 };
 
@@ -29,6 +30,8 @@ public:
 	string action;
 	int qte;
 	double prix;
+	//map<string, long> stats;
+	//stats["MON_COMPTEUR"]++;
 	while(bourse.dateAujourdhui<dateFin)
 	{
 		vector<PrixJournalier> Pj=bourse.getPrixJournaliersAujourdhui();
