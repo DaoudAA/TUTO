@@ -18,7 +18,10 @@ using namespace std;
     }
     return actions;
 }*/
-
+double Bourse::getLastPrixAction(string nomAct)const{
+    vector<PrixJournalier> vectHistoria=getHistoriqueAction(nomAct);
+    return vectHistoria[vectHistoria.size()-1].getPrix();
+}
 //bourse vector
 vector<PrixJournalier> BourseVector::getPrixJournaliersParDate( const Date &date)const{
     vector<PrixJournalier> prixJParDate;
@@ -181,6 +184,51 @@ BourseDictNom::BourseDictNom(vector<PrixJournalier> &vPJ){
     }
 }*/
 
+BourseDictDate::BourseDictDate(vector<PrixJournalier> &historiya ){
+    int i=0;
+    while(i<historiya.size()){
+        historique[historiya[i].getDate()].push_back(historiya[i]);
+        i++;
+    }
+}
+
+vector<PrixJournalier> BourseDictDate::getPrixJournaliersParDate(const Date &dateAChercher)const {
+    vector<PrixJournalier> vectRes;// const auto elt :historique[dateCopie]
+   // const Date d1=dateAChercher;
+   // Date dateCopie=d1;
+    if (dateAChercher>dateAujourdhui) return vectRes;
+    if(historique.find(dateAChercher) != historique.end()){
+    for(const auto elt:historique.at(dateAChercher)){
+        vectRes.push_back(elt);
+        }
+    }
+    return vectRes;
+}
+
+vector<string> BourseDictDate::getActionDisponibleParDate(const Date &dateAChercher)const  {
+     vector<string> vectResStr; 
+    if (dateAChercher>dateAujourdhui) return vectResStr;
+    if(historique.find(dateAChercher)!=historique.end()){
+        for(auto it:historique.at(dateAChercher)){
+                vectResStr.push_back(it.getNomAction()) ;
+            }
+    }
+    return vectResStr;
+}
+
+vector<PrixJournalier> BourseDictDate::getHistoriqueAction(string nomact)const{
+    vector<PrixJournalier> vectRes;
+    for(auto elt : historique ){
+        if(elt.first>dateAujourdhui) return vectRes;
+        for (int i=0;i<elt.second.size();i++){
+        if ((elt.second[i]).getNomAction()==nomact){vectRes.push_back(elt.second[i]);}
+        }
+    }
+    return vectRes;
+}
+
+
+
 
 int main()
 {
@@ -217,6 +265,7 @@ int main()
     }
 
     
+
     
 
     return 0;

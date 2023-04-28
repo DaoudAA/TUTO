@@ -23,7 +23,8 @@ public:
     Date setDate(Date& d1){return dateAujourdhui=d1;}
     virtual vector<PrixJournalier>getPrixJournaliersParDate ( const Date &)const = 0;
     virtual vector<string> getActionDisponibleParDate(const Date& ) const = 0;
-    virtual double getLastPrixAction(string)=0;
+    virtual vector<PrixJournalier> getHistoriqueAction(string) const =0;
+    double getLastPrixAction(string)const;
 	vector<PrixJournalier>getPrixJournaliersAujourdhui()const{return getPrixJournaliersParDate(dateAujourdhui);}		
     vector<string>getActionDisponibleAujourdhui() const {return getActionDisponibleParDate(dateAujourdhui);}
 	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde);
@@ -75,5 +76,14 @@ public:
 	vector<string> getActionDisponibleParDate(const Date&)const;
 	vector<PrixJournalier> getHistoriqueAction(string);
     double getLastPrixAction(string);
+};
+class BourseDictDate:public Bourse{
+    map< Date , vector<PrixJournalier>> historique ;
+    public:
+    BourseDictDate( vector<PrixJournalier> & ); 
+    vector<PrixJournalier> getPrixJournaliersParDate(const Date &)const;   
+    vector<string> getActionDisponibleParDate(const Date &)const ;
+    vector<PrixJournalier> getHistoriqueAction(string)const;
+    double getLastPrixAction(string)const;
 };
 #endif // BOURSE_H_INCLUDED
