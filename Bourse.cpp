@@ -18,6 +18,7 @@ using namespace std;
     }
     return actions;
 }*/
+//Bourse
 double Bourse::getLastPrixAction(string nomAct)const{
     vector<PrixJournalier> vectHistoria=getHistoriqueAction(nomAct);
     return vectHistoria[vectHistoria.size()-1].getPrix();
@@ -80,6 +81,16 @@ vector<PrixJournalier>recherchePrixJournalier(vector<PrixJournalier> &liste,cons
     return resultat;
 }
 
+vector<PrixJournalier> BourseVector::getHistoriqueAction(string nomact) const{
+    int i=0;
+    vector<PrixJournalier> vectRes;
+    while(historique[i].getDate()<dateAujourdhui && i<historique.size()){
+        if (historique[i].getNomAction()==nomact) vectRes.push_back(historique[i]);
+        i++;
+    }
+
+}
+
 //bourse vector2 
 vector<PrixJournalier>BourseVector2::getPrixJournaliersParDate(const Date &d)const{
     vector<PrixJournalier>prixJParDate;
@@ -115,6 +126,16 @@ vector<string>BourseVector2::getActionDisponibleParDate(const Date &d)const{
 	}
     return actions;
 	
+}
+
+vector<PrixJournalier> BourseVector::getHistoriqueAction(string nomact) const{
+    int i=0;
+    vector<PrixJournalier> vectRes;
+    while(historique[i].getDate()<dateAujourdhui && i<historique.size()){
+        if (historique[i].getNomAction()==nomact) vectRes.push_back(historique[i]);
+        i++;
+    }
+
 }
 
 //verif redondance 
@@ -183,7 +204,7 @@ BourseDictNom::BourseDictNom(vector<PrixJournalier> &vPJ){
 		}
     }
 }*/
-
+//Bourse Dictionnaire Nom 
 BourseDictDate::BourseDictDate(vector<PrixJournalier> &historiya ){
     int i=0;
     while(i<historiya.size()){
@@ -192,6 +213,8 @@ BourseDictDate::BourseDictDate(vector<PrixJournalier> &historiya ){
     }
 }
 
+//vector<PrixJournalier> BourseDictDate::getHistoriqueAction(string action)
+//Bourse Dictionnaire Date 
 vector<PrixJournalier> BourseDictDate::getPrixJournaliersParDate(const Date &dateAChercher)const {
     vector<PrixJournalier> vectRes;// const auto elt :historique[dateCopie]
    // const Date d1=dateAChercher;

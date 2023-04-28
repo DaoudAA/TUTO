@@ -44,7 +44,7 @@ public:
     BourseVector(vector<PrixJournalier>&b):historique(b){}
     vector<PrixJournalier> getPrixJournaliersParDate(const Date &)const;
     vector<string> getActionDisponibleParDate(const Date &)const;
-    double getLastPrixAction(string);
+    vector<PrixJournalier> getHistoriqueAction(string) const;
     ~BourseVector(){}
 
 };
@@ -58,7 +58,7 @@ public:
 	BourseVector2(vector<PrixJournalier>&b):historique(b){}
     vector<PrixJournalier> getPrixJournaliersParDate(const Date&)const;
 	vector<string> getActionDisponibleParDate(const Date&)const;
-    double getLastPrixAction(string);
+    vector<PrixJournalier> getHistoriqueAction(string) const;
     ~BourseVector2(){}
 		
 		

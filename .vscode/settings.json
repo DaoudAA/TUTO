@@ -35,6 +35,9 @@
   ],
   "C_Cpp_Runner.useAddressSanitizer": false,
   "files.associations": {
-    "iosfwd": "cpp"
+    "iosfwd": "cpp",
+    "memory": "cpp",
+    "istream": "cpp",
+    "functional": "cpp"
   }
 }
