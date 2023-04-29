@@ -62,7 +62,7 @@ public:
 					if (titre.getNomAction() == actionNom){
 						action=T.getnomdAction();
 						qte=T.getqtedAction();
-						prix=bourse.getPrixAujourdhui(action);
+						prix=bourse.getLastPrixAction(action);
 						portefeuille.venteTitre(action,qte,prix);
 					}
 					//else
