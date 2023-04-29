@@ -265,7 +265,7 @@ vector<string> BourseDictNom::getActionDisponibleParDate(const Date&date)const{
 
 //vector<PrixJournalier> BourseDictDate::getHistoriqueAction(string action)
 //Bourse Dictionnaire Date 
-/*vector<PrixJournalier> BourseDictDate::getPrixJournaliersParDate(const Date &dateAChercher)const {
+vector<PrixJournalier> BourseDictDate::getPrixJournaliersParDate(const Date &dateAChercher)const {
     vector<PrixJournalier> vectRes;// const auto elt :historique[dateCopie]
    // const Date d1=dateAChercher;
    // Date dateCopie=d1;
@@ -298,7 +298,7 @@ vector<PrixJournalier> BourseDictDate::getHistoriqueAction(string nomact)const{
         }
     }
     return vectRes;
-}*/
+}
 
 
 
