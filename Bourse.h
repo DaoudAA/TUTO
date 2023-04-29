@@ -27,7 +27,7 @@ public:
     double getLastPrixAction(string)const;
 	vector<PrixJournalier>getPrixJournaliersAujourdhui()const{return getPrixJournaliersParDate(dateAujourdhui);}		
     vector<string>getActionDisponibleAujourdhui() const {return getActionDisponibleParDate(dateAujourdhui);}
-	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde);
+	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde) const ;
 	double getPrixAujourdhui(string);
     virtual ~Bourse(){};
     friend class Simulation;

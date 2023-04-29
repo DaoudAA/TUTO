@@ -159,7 +159,7 @@ bool appartientPrixJournalier (PrixJournalier pj,vector<PrixJournalier>& vecteur
 	return false;
 }
 //dispo aujourdhui 
-vector<PrixJournalier>Bourse::getPrixJournaliersDispoAujourdhui(double solde){
+vector<PrixJournalier>Bourse::getPrixJournaliersDispoAujourdhui(double solde)const {
 		vector<PrixJournalier>resultat;
 		if ((solde<=0)||((this->getPrixJournaliersAujourdhui()).size()==0))return resultat;
 		int i=0;

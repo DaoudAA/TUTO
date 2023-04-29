@@ -36,9 +36,10 @@ Transaction TraderAlea::choisirTransaction(const Bourse& bour, const Portefeuill
     TypeTransaction type;
     if ((portef.getTitre()).size()==0){type = achat ;}
     else type = static_cast<TypeTransaction>(rand() % 3);
+    double ss=portef.getSolde();
     if (type==rienAFaire){return Transaction(rienAFaire,"",0);}
     else if (type==achat){
-        vector<PrixJournalier> Pj=bour.getPrixJournaliersAujourdhui();
+        vector<PrixJournalier> Pj=bour.getPrixJournaliersDispoAujourdhui(ss);
         int n=Pj.size();
         int choixDAction=rand()%n;
         double QteDispo=portef.getSolde()/(Pj[choixDAction].getPrix());
