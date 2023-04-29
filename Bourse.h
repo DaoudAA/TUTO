@@ -8,7 +8,7 @@
 #include <string>
 #include <cstdlib>
 #include<map>
-#include<set>
+
 
 using namespace std;
 
@@ -16,8 +16,9 @@ using namespace std;
 class Bourse{
 	protected:
     Date dateAujourdhui;
-
-public:   
+public:
+    void setDateaujourdhui(Date dd){ dateAujourdhui=dd;}
+    
     virtual vector<PrixJournalier>getPrixJournaliersParDate ( const Date &)const = 0;
     virtual vector<string> getActionDisponibleParDate(const Date& ) const = 0;
 	virtual vector<PrixJournalier>getHistoriqueAction(string)const = 0 ;
@@ -74,6 +75,7 @@ public:
 	vector<string> getActionDisponibleParDate(const Date&)const;
 	vector<PrixJournalier> getHistoriqueAction(string)const;
 };
+
 class BourseDictDate:public Bourse{
     map< Date , vector<PrixJournalier> > historique ;
     public:

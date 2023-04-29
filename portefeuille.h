@@ -45,7 +45,7 @@ public:
     friend class Simulation;
     };
 	void Portefeuille::achatTitre(const string& nomAction, int quantite,double prix) 
-	{   int i=0;
+	{   unsigned int i=0;
         while ( i <titres.size()){
             if (nomAction==titres[i].nomAction){
                 (titres[i].Qte)+=quantite;
@@ -61,7 +61,7 @@ public:
     }
     void Portefeuille::venteTitre(const string& nomAction,int quantite,double prix)
  	{
-        int i=0;
+        unsigned int i=0;
         while ( i !=titres.size()){
             if (nomAction == titres[i].nomAction){
                 if (quantite==titres[i].Qte){

@@ -1,7 +1,7 @@
 #ifndef TRADER_H_INCLUDED
 #define TRADER_H_INCLUDED
 #include "portefeuille.h"
-#include"Bourse.h"
+#include "Bourse.h"
 #include<vector>
 #include<iostream>
 #include<string>
@@ -28,7 +28,7 @@ public:
     virtual Transaction choisirTransaction(const Bourse& , const Portefeuille &portefeuille)=0;
 };
 
-class TraderAlea :public Trader{
+/*class TraderAlea :public Trader{
 public:
     Transaction choisirTransaction(const Bourse& , const Portefeuille &);
 };
@@ -37,10 +37,9 @@ Transaction TraderAlea::choisirTransaction(const Bourse & bour, const Portefeuil
     TypeTransaction type;
     if ((portefeuille.getTitre()).size()==0){type = achat ;}
     else type = static_cast<TypeTransaction>(rand() % 3);
-    double ss=portef.getSolde();
     if (type==rienAFaire){return Transaction(rienAFaire,"",0);}
     else if (type==achat){
-        vector<PrixJournalier> Pj=bour.getPrixJournaliersDispoAujourdhui(portefeuille.getSolde());
+        vector<PrixJournalier> Pj=bour.getPrixJournaliersAujourdhui();
         int n=Pj.size();
         int choixDAction=rand()%n;
         double QteDispo=portefeuille.getSolde()/(Pj[choixDAction].getPrix());
@@ -56,7 +55,7 @@ Transaction TraderAlea::choisirTransaction(const Bourse & bour, const Portefeuil
         int choixQte=1+rand()%x;
         return Transaction(vente,Pt[choixDAction].getNomAction(),choixQte); 
     }
-}
+}*/
 // trader algorithmique 1
 class TraderAlgo1 :public Trader{
 public:
@@ -64,16 +63,14 @@ public:
 };
 
 Transaction TraderAlgo1::choisirTransaction(const Bourse&bourse , const Portefeuille &portefeuille){
-	TypeTransaction type;
 	int qte=0;
 	Transaction t(TypeTransaction,string,int);	
 	vector<PrixJournalier>vPJ=bourse.getPrixJournaliersDispoAujourdhui(portefeuille.getSolde());
-
-	for(int i=0;i<vPJ.size();i++){
+    int maxv=(int)vPJ.size();
+	for(int i=0;i<maxv;i++){
 		double dernierPrix=bourse.getLastPrixAction(vPJ[i].getNomAction());
 		double avantDernierPrix=bourse.getAvantDernierPrixDAction(vPJ[i].getNomAction());
 		if((dernierPrix>avantDernierPrix)&&(portefeuille.getSolde()>dernierPrix)){
-			type=achat;
 			while(portefeuille.getSolde()>dernierPrix*(qte+1))
 				qte	++;			
 			return t(achat,vPJ[i].getNomAction(),qte);			
@@ -81,12 +78,12 @@ Transaction TraderAlgo1::choisirTransaction(const Bourse&bourse , const Portefeu
 
 	}
 	if((portefeuille.getTitre()).size()==0)
-		return t(rienAFaire,"",0);		
-	for(int i=0;i<(portefeuille.getTitre()).size();i++){
+		return t(rienAFaire,"",0);	
+    int maxp=(int)(portefeuille.getTitre()).size();	
+	for(int i=0;i<maxp;i++){
 		double dernierPrix=bourse.getLastPrixAction(portefeuille.getTitre()[i].getNomAction());
 		double avantDernierPrix=bourse.getAvantDernierPrixDAction(portefeuille.getTitre()[i].getNomAction());
 		if(dernierPrix<avantDernierPrix){
-			type=vente;
 			qte=portefeuille.getTitre()[i].getQte();		
 			return t(vente,portefeuille.getTitre()[i].getNomAction(),qte);			
 		}
@@ -126,7 +123,7 @@ Transaction TraderBollin::choisirTransaction(const Bourse& bour, const Portefeui
             double ecartType ;
             //calcul decart type en se basant au plus sur les 10 derniers val
             if (historique1Action.size()>10){
-                for (int i = historique1Action.size() - 1; i >= historique1Action.size() - 10; i--) {
+                for (unsigned int i = historique1Action.size() - 1; i >= historique1Action.size() - 10; i--) {
                     double diff = historique1Action[i].getPrix() - MoydAction[nomdActi].first ;
                     sommeDiff += diff * diff;
                 }

@@ -43,21 +43,22 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
 		stats["Temps_GetPrixJournalierAujourdhui_µs"]+=duration.count();
 		//stats pour la fct getActionDisponibleAujourdhui
-		auto start = chrono::high_resolution_clock::now();
+		start = chrono::high_resolution_clock::now();
 		stats["getActionDisponibleAujourdhui"]++;
 		vector<string> Actions=bourse.getActionDisponibleAujourdhui();
-		auto stop = chrono::high_resolution_clock::now();
-		auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+		stop = chrono::high_resolution_clock::now();
+		duration = chrono::duration_cast<chrono::microseconds>(stop - start);
 		stats["Temps_GetActionDisponibleAujourdhui_µs"]+=duration.count();
 		// les choix de transactions dans une meme journee
-		while(1)
+		int i=0;
+		while(i<100)
 		{	//stats pour la fct choisirTransaction
-		    stats["choisirTransaction"]++;
+		    stats["NombreDeTransaction"]++;
 		    auto start = chrono::high_resolution_clock::now();
 			Transaction T=trader.choisirTransaction(bourse ,portefeuille);
 			auto stop = chrono::high_resolution_clock::now();
 			auto duration =chrono::duration_cast<chrono::microseconds>(stop-start);
-			stats["Temps_ChoisirTransaction_µs"]+=duration.count();
+			stats["Temps_ChoixTransaction_µs"]+=duration.count();
 			const string& actionNom = T.getnomdAction();
 				if(T.getTypeTx()==rienAFaire){
 				    stats["nombreDRienAFaire"]++;
@@ -67,7 +68,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 					stats["nombreDAchat"]++;
 					bool found = appartientAction(T.getnomdAction(),Actions);
 				    if (found&&(portefeuille.getSolde()>=bourse.getPrixAujourdhui(T.getnomdAction()))) {
-						stats["getPrixAujourdhui(action)"]++;
+						stats["getPrixAujourdhui(action)/NbDachatachevees"]++;
 					    action=T.getnomdAction();
 					    qte=T.getqtedAction();
 					    prix=bourse.getPrixAujourdhui(action);
@@ -76,19 +77,21 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 				}
 				else if ((T.getTypeTx()==vente)&&(T.getqtedAction()>0)){
 					stats["nombreDVente"]++;
-					for(int i=0;i<(portefeuille.titres).size();i++){
+					for(unsigned int i=0;i<(portefeuille.titres).size();i++){
 						if ((portefeuille.titres)[i].getNomAction() == actionNom){
 							action=T.getnomdAction();
-							qte=T.getqtedAction();
+							qte=T.getqtedAction();//chrono 
 							prix=bourse.getLastPrixAction(action);
-							stats["getLastPrixAction"]++;
+							stats["getLastPrixAction/NbDventeachevees"]++;
 							portefeuille.venteTitre(action,qte,prix);
 						}
 						//else
 					}
 				}
+				i++;
 		}
 		(bourse.dateAujourdhui).incrementerDate();
 	}
+	return stats;
 }
 #endif 

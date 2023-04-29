@@ -2,12 +2,12 @@
 #include "Date.h"
 #include <iostream>
 int main(){
-    string ch1;
-    ch1="./prices_simple.csv";
+    /*string ch1;
+    ch1="../prices_simple.csv";
 	vector<PrixJournalier> vPj;
     PersistancePrixJournaliers ppj;
 	vPj=ppj.lirePrixJournaliersDUnFichier(ch1);
-    Bourse * bourse=new BourseDictDate(vPj);
+    Bourse * bourse=new BourseDictNom(vPj);
     Trader * trader=new TraderAlea;
     map <string , long > statiktiks;
     double soldeInit;
@@ -25,13 +25,13 @@ int main(){
         cout << "date Fin : "<< endl; 
         cin >> dateFin ;
     }while ((dateFin<dateDebut )&&(dateFin<Date(1,1,2010))) ; 
-    /*for (Date d=dateDebut;d<dateFin;d.incrementerDate()){
+    *//*for (Date d=dateDebut;d<dateFin;d.incrementerDate()){
         TestDate test
         cout << d;
          }*/
-    statiktiks=Sim.executer(*bourse,*trader,dateDebut,dateFin,soldeInit);
+   /*statiktiks=Sim.executer(*bourse,*trader,dateDebut,dateFin,soldeInit);
     for(auto elt : statiktiks){
         cout << elt.first << " : \t" <<  elt .second << endl ; 
-    }
+    }*/
     return 0 ;
 }
