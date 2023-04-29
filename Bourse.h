@@ -17,18 +17,16 @@ class Bourse{
 	protected:
     Date dateAujourdhui;
 
-
-public:
-
-    Date setDate(Date& d1){return dateAujourdhui=d1;}
+public:   
     virtual vector<PrixJournalier>getPrixJournaliersParDate ( const Date &)const = 0;
     virtual vector<string> getActionDisponibleParDate(const Date& ) const = 0;
-    virtual vector<PrixJournalier> getHistoriqueAction(string) const =0;
-    double getLastPrixAction(string)const;
+	virtual vector<PrixJournalier>getHistoriqueAction(string)const = 0 ;
 	vector<PrixJournalier>getPrixJournaliersAujourdhui()const{return getPrixJournaliersParDate(dateAujourdhui);}		
     vector<string>getActionDisponibleAujourdhui() const {return getActionDisponibleParDate(dateAujourdhui);}
-	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde) const ;
-	double getPrixAujourdhui(string);
+	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde)const;
+	double getPrixAujourdhui(string);// ona utiliser cette fonction dans l simulation pour donner directement le prix d'une action 
+	virtual double getLastPrixAction(string)const ;// il faut s'assurer que le vecteur provenant de gethistoriqueAction est trier par date
+	virtual double getAvantDernierPrixDAction(string)const ; // est utilisee dans la partie du trader algorithique 1
     virtual ~Bourse(){};
     friend class Simulation;
 
@@ -44,7 +42,7 @@ public:
     BourseVector(vector<PrixJournalier>&b):historique(b){}
     vector<PrixJournalier> getPrixJournaliersParDate(const Date &)const;
     vector<string> getActionDisponibleParDate(const Date &)const;
-    vector<PrixJournalier> getHistoriqueAction(string) const;
+    vector<PrixJournalier> getHistoriqueAction(string)const;
     ~BourseVector(){}
 
 };
@@ -58,7 +56,7 @@ public:
 	BourseVector2(vector<PrixJournalier>&b):historique(b){}
     vector<PrixJournalier> getPrixJournaliersParDate(const Date&)const;
 	vector<string> getActionDisponibleParDate(const Date&)const;
-    vector<PrixJournalier> getHistoriqueAction(string) const;
+	vector<PrixJournalier> getHistoriqueAction(string)const;
     ~BourseVector2(){}
 		
 		
@@ -74,16 +72,14 @@ public:
 	BourseDictNom(vector<PrixJournalier>&vPJ);
     vector<PrixJournalier> getPrixJournaliersParDate(const Date&)const;
 	vector<string> getActionDisponibleParDate(const Date&)const;
-	vector<PrixJournalier> getHistoriqueAction(string);
-    double getLastPrixAction(string);
+	vector<PrixJournalier> getHistoriqueAction(string)const;
 };
 class BourseDictDate:public Bourse{
-    map< Date , vector<PrixJournalier>> historique ;
+    map< Date , vector<PrixJournalier> > historique ;
     public:
     BourseDictDate( vector<PrixJournalier> & ); 
     vector<PrixJournalier> getPrixJournaliersParDate(const Date &)const;   
     vector<string> getActionDisponibleParDate(const Date &)const ;
     vector<PrixJournalier> getHistoriqueAction(string)const;
-    double getLastPrixAction(string)const;
 };
 #endif // BOURSE_H_INCLUDED
