@@ -2,7 +2,6 @@
 #define PORTEFEUILLE_H_INCLUDED
 #include <iostream>
 #include <vector>
-#include "Bourse.h"
 #include "Date.h"
 #include "PersistancePrixJournaliers.h"
 #include "PrixJournalier.h"
@@ -24,18 +23,31 @@ public:
     friend bool operator==(const Titre& a, const Titre& b);
 };
 
+    bool operator==(const Titre& a, const Titre& b){
+        if (a.nomAction == b.nomAction) return true;
+        return false;
+    }
+
+
+
 class Portefeuille {
 private:
     double solde;
     vector<Titre> titres;
+    	void achatTitre(const string& nomAction, int quantite,double prix) ;
+
+    void venteTitre(const string& nomAction,int quantite,double prix);
 public:
     
     Portefeuille(double s) : solde(s) {}
 	double getSolde() const { return solde; }
     vector<Titre> getTitre() const { return titres; }
-	void achatTitre(const string& nomAction, int quantite,double prix) 
+
+    friend class Simulation;
+    };
+	void Portefeuille::achatTitre(const string& nomAction, int quantite,double prix) 
 	{   int i=0;
-        while ( i !=titres.size()){
+        while ( i <titres.size()){
             if (nomAction==titres[i].nomAction){
                 (titres[i].Qte)+=quantite;
                 break;
@@ -48,7 +60,8 @@ public:
         }
         solde-=quantite*prix;
     }
-    void venteTitre(const string& nomAction,int quantite,double prix){
+    void Portefeuille::venteTitre(const string& nomAction,int quantite,double prix)
+ 	{
         int i=0;
         while ( i !=titres.size()){
             if (nomAction == titres[i].nomAction){
@@ -61,7 +74,8 @@ public:
             i++;
         }
         solde+=quantite*prix;
-    }/* {
+    }   
+     /* {
         for (auto it = titres.begin(); it != titres.end(); ++it) {
             if (it->getNomAction() == nomAction) {
                 titres.erase(it);
@@ -69,13 +83,5 @@ public:
             }
         }
     }*/
-    friend class Simulation;
-    };
-
-
-    bool operator==(const Titre& a, const Titre& b){
-        if (a.nomAction == b.nomAction) return true;
-        return false;
-    }
 
 #endif

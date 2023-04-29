@@ -78,7 +78,7 @@ public:
     double getLastPrixAction(string);
 };
 class BourseDictDate:public Bourse{
-    map< Date , vector<PrixJournalier>> historique ;
+    map< Date , vector<PrixJournalier> > historique ;
     public:
     BourseDictDate( vector<PrixJournalier> & ); 
     vector<PrixJournalier> getPrixJournaliersParDate(const Date &)const;   
