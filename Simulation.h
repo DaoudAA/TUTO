@@ -18,12 +18,12 @@ private:
 public:
 	//Simulation(const Date d1, const Date d2, double b):debut(d1),fin(d2),budget(b){}
 	Simulation( double b):budget(b){}
-	static void executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit);
+	static map <string , long > executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit);
 	//map <string,long>
 	
 };
 
- void Simulation::executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit)
+ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit)
 {
 	Portefeuille portefeuille(soldeInit);
 	bourse.dateAujourdhui=dateDebut;

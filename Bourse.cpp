@@ -158,7 +158,7 @@ bool appartientPrixJournalier (PrixJournalier pj,vector<PrixJournalier>& vecteur
 	}
 	return false;
 }
-
+//dispo aujourdhui 
 vector<PrixJournalier>Bourse::getPrixJournaliersDispoAujourdhui(double solde){
 		vector<PrixJournalier>resultat;
 		if ((solde<=0)||((this->getPrixJournaliersAujourdhui()).size()==0))return resultat;
@@ -278,8 +278,8 @@ int main()
         for(unsigned int i=0;i<PJParDate.size();i++)
         cout<<PJParDate[i]<<" || ";
     }*/
-    BourseDictNom b1(vPj);
-    vector<PrixJournalier>PJAction=b1.getHistoriqueAction("JCI");
+    Bourse * b1=new BourseDictNom(vPj);
+    vector<PrixJournalier>PJAction=(*b1).getHistoriqueAction("JCI");
         if(PJAction.size()!=0)
     {
         cout<<endl<<"PJParAction: JCI"<<endl;
