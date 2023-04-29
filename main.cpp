@@ -25,7 +25,10 @@ int main(){
         cout << "date Fin : "<< endl; 
         cin >> dateFin ;
     }while ((dateFin<dateDebut )&&(dateFin<Date(1,1,2010))) ; 
-    for (Date d=dateDebut;d<dateFin;d.incrementerDate()){}
+    /*for (Date d=dateDebut;d<dateFin;d.incrementerDate()){
+        TestDate test
+        cout << d;
+         }*/
     statiktiks=Sim.executer(*bourse,*trader,dateDebut,dateFin,soldeInit);
     for(auto elt : statiktiks){
         cout << elt.first << " : \t" <<  elt .second << endl ; 
