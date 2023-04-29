@@ -20,46 +20,47 @@ public:
 	Simulation( double b):budget(b){}
 	static map <string , long > executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit);
 	//map <string,long>
-	
-};
 
- map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit)
+};
+map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit)
 {
 	Portefeuille portefeuille(soldeInit);
 	bourse.dateAujourdhui=dateDebut;
 	string action;
 	int qte;
 	double prix;
-	//map<string, long> stats;
-	//stats["MON_COMPTEUR"]++;
 	while(bourse.dateAujourdhui<dateFin)
 	{
+		//dans une meme journée
 		vector<PrixJournalier> Pj=bourse.getPrixJournaliersAujourdhui();
 		vector<string> Actions=bourse.getActionDisponibleAujourdhui();
+		// les choix de transactions dans une meme journée
 		while(1)
 		{	
-			Transaction T=trader.choisirTransaction(bourse,portefeuille);
+			Transaction T=trader.choisirTransaction(bourse ,portefeuille);
 			const string& actionNom = T.getnomdAction();
-			string actionNomCopy = actionNom;
 				if(T.getTypeTx()==rienAFaire)
 					break;
 				else if ((T.getTypeTx()==achat)&&(T.getqtedAction()>0))
-				{	bool found = false;
-					for (auto action : Actions) {
+				{	bool found = appartientAction(T.getnomdAction(),Actions);
+					/*for (int i=0;i<Actions.size();i++) {
+						action= Actions[i];
 						if (action == T.getnomdAction()) {
     						found = true;
-   							 break;
+   							break;
     					}
-					}
-				if (found) {
-				action=T.getnomdAction();
+					}*/
+					//
+				if (found&&(portefeuille.getSolde()>=bourse.getPrixAujourdhui(T.getnomdAction()))) {
+					action=T.getnomdAction();
 					qte=T.getqtedAction();
 					prix=bourse.getPrixAujourdhui(action);
 					portefeuille.achatTitre(action,qte,prix);}
 				}
 				else if ((T.getTypeTx()==vente)&&(T.getqtedAction()>0))
-				for (auto titre : portefeuille.titres){
-					if (titre.getNomAction() == actionNom){
+				//for (auto titre : portefeuille.titres){
+				for(int i=0;i<(portefeuille.titres).size();i++){
+					if ((portefeuille.titres)[i].getNomAction() == actionNom){
 						action=T.getnomdAction();
 						qte=T.getqtedAction();
 						prix=bourse.getPrixAujourdhui(action);

@@ -2,7 +2,6 @@
 #include "Date.h"
 #include "PersistancePrixJournaliers.h"
 #include "Bourse.h"
-
 #include<vector>
 #include<iostream>
 #include<fstream>
@@ -18,16 +17,12 @@ using namespace std;
     }
     return actions;
 }*/
-//Bourse
-double Bourse::getLastPrixAction(string nomAct)const{
-    vector<PrixJournalier> vectHistoria=getHistoriqueAction(nomAct);
-    return vectHistoria[vectHistoria.size()-1].getPrix();
-}
+
 //bourse vector
-vector<PrixJournalier> BourseVector::getPrixJournaliersParDate( const Date &date)const{
+vector<PrixJournalier> BourseVector::getPrixJournaliersParDate( const Date &d)const{
     vector<PrixJournalier> prixJParDate;
-    if(date<=dateAujourdhui){
-        vector<PrixJournalier> pj=recherchePrixJournalier(historique,date);
+    if(d<=dateAujourdhui){
+        vector<PrixJournalier> pj=recherchePrixJournalier(historique,d);
         for(unsigned int i=0;i<pj.size();i++)
         if(!(appartientPrixJournalier(pj[i],prixJParDate)))	
             	prixJParDate.push_back(pj[i]);
@@ -63,7 +58,7 @@ while(le<=ri){
         }
 }
 
-vector<PrixJournalier>recherchePrixJournalier(vector<PrixJournalier> &liste,const Date&d)
+vector<PrixJournalier>recherchePrixJournalier(vector<PrixJournalier> liste,const Date&d)
 {
     int left=0;
     int right=liste.size()-1;
@@ -80,7 +75,6 @@ vector<PrixJournalier>recherchePrixJournalier(vector<PrixJournalier> &liste,cons
     }
     return resultat;
 }
-
 vector<PrixJournalier> BourseVector::getHistoriqueAction(string nomact) const{
     int i=0;
     vector<PrixJournalier> vectRes;
@@ -90,7 +84,6 @@ vector<PrixJournalier> BourseVector::getHistoriqueAction(string nomact) const{
     }
 
 }
-
 //bourse vector2 
 vector<PrixJournalier>BourseVector2::getPrixJournaliersParDate(const Date &d)const{
     vector<PrixJournalier>prixJParDate;
@@ -127,8 +120,7 @@ vector<string>BourseVector2::getActionDisponibleParDate(const Date &d)const{
     return actions;
 	
 }
-
-vector<PrixJournalier> BourseVector::getHistoriqueAction(string nomact) const{
+vector<PrixJournalier> BourseVector2::getHistoriqueAction(string nomact) const{
     int i=0;
     vector<PrixJournalier> vectRes;
     while(historique[i].getDate()<dateAujourdhui && i<historique.size()){
@@ -137,7 +129,6 @@ vector<PrixJournalier> BourseVector::getHistoriqueAction(string nomact) const{
     }
 
 }
-
 //verif redondance 
 bool appartientAction (string nomAction,vector<string>& vecteurActions){
 	if(vecteurActions.size()==0)return false;
@@ -158,8 +149,9 @@ bool appartientPrixJournalier (PrixJournalier pj,vector<PrixJournalier>& vecteur
 	}
 	return false;
 }
-//dispo aujourdhui 
-vector<PrixJournalier>Bourse::getPrixJournaliersDispoAujourdhui(double solde){
+//Bourse mere
+
+vector<PrixJournalier>Bourse::getPrixJournaliersDispoAujourdhui(double solde)const{
 		vector<PrixJournalier>resultat;
 		if ((solde<=0)||((this->getPrixJournaliersAujourdhui()).size()==0))return resultat;
 		int i=0;
@@ -170,30 +162,8 @@ vector<PrixJournalier>Bourse::getPrixJournaliersDispoAujourdhui(double solde){
 		}
 		return resultat;
 }
-
-BourseDictNom::BourseDictNom(vector<PrixJournalier> &vPJ){	
-	int i=0;
-	while(i<vPJ.size()){
-		historique[vPJ[i].getNomAction()].push_back(vPJ[i]);
-		i++;	
-	}
-}
-	
-	//cond pour lastprix (vPJ[i].getDate()< dateAujourdhui)
-
- vector<PrixJournalier> BourseDictNom::getHistoriqueAction(string action)
-{
-	vector<PrixJournalier> historiquedAction;
-	int i=0;
-	while((historique[action])[i].getDate()<=dateAujourdhui){
-		if(!(appartientPrixJournalier(historique[action][i],historiquedAction)))
-			historiquedAction.push_back(historique[action][i]);
-		i++;
-	}
-	return historiquedAction;
-}
-	
-/*double Bourse::getPrixAujourdhui(string nomAction){
+//cond pour lastprix (vPJ[i].getDate()< dateAujourdhui)
+double Bourse::getPrixAujourdhui(string nomAction){
 	int i=0;
 	vector<string> actionsDisponibles = this->getActionDisponibleAujourdhui();
 	if(appartientAction(nomAction,actionsDisponibles)){
@@ -203,19 +173,99 @@ BourseDictNom::BourseDictNom(vector<PrixJournalier> &vPJ){
 			i++;
 		}
     }
-}*/
-//Bourse Dictionnaire Nom 
-BourseDictDate::BourseDictDate(vector<PrixJournalier> &historiya ){
-    int i=0;
-    while(i<historiya.size()){
-        historique[historiya[i].getDate()].push_back(historiya[i]);
-        i++;
-    }
+}
+
+double Bourse::getLastPrixAction(string nomAct)const{
+    vector<PrixJournalier> vectHistoria=this->getHistoriqueAction(nomAct);
+    return vectHistoria[vectHistoria.size()-1].getPrix();
+}
+double Bourse::getAvantDernierPrixDAction(string nomAct) const {
+    vector<PrixJournalier> vectHistoria=this->getHistoriqueAction(nomAct);
+    return vectHistoria[vectHistoria.size()-2].getPrix();
+}	
+	
+
+//BourseDictNom
+
+BourseDictNom::BourseDictNom(vector<PrixJournalier> &vPJ){	
+	int i=0;
+	while(i<vPJ.size()){
+		historique[vPJ[i].getNomAction()].push_back(vPJ[i]);
+		i++;	
+	}
+}
+ vector<PrixJournalier> BourseDictNom::getHistoriqueAction(string action)const
+{
+	vector<PrixJournalier> historiquedAction;
+	/*while((historique[action])[i].getDate()<=dateAujourdhui){
+		if(!(appartientPrixJournalier(historique[action][i],historiquedAction)))
+			historiquedAction.push_back(historique[action][i]);
+		i++;
+	}*/
+	for(map<string, vector<PrixJournalier> >::const_iterator it = historique.begin();it!=historique.end();++it){
+		const string& key = it->first;
+		const vector<PrixJournalier>&vPJ=it->second;
+		if(key==action){		
+			for(int i=0;i<vPJ.size();i++){			
+				if(vPJ[i].getDate()<=dateAujourdhui)
+					historiquedAction.push_back(vPJ[i]);
+				else
+					break;
+			}
+			break;
+		}			
+	}
+	
+	
+	return historiquedAction;
+}
+	
+
+	
+
+ vector<PrixJournalier> BourseDictNom::getPrixJournaliersParDate(const Date&date)const
+{
+	vector<PrixJournalier> resultat;
+	int i=0;
+	if (date<=dateAujourdhui){
+		for(map<string, vector<PrixJournalier> >::const_iterator it = historique.begin();it!=historique.end();++it){
+			const string& key = it->first;
+			const vector<PrixJournalier>&vPJ=it->second;
+			i=0;
+			while(vPJ[i].getDate()<date)
+				i++;
+			if(vPJ[i].getDate()==date)
+				if(!appartientPrixJournalier(vPJ[i],resultat) )
+					resultat.push_back(vPJ[i]);			
+	  	}
+	}
+	return resultat;	
+}
+
+
+
+
+vector<string> BourseDictNom::getActionDisponibleParDate(const Date&date)const{
+	vector<string> resultat;
+	int i=0;
+	if (date<=dateAujourdhui){
+		for(map<string, vector<PrixJournalier> >::const_iterator it = historique.begin();it!=historique.end();++it){
+			const string& key = it->first;
+			const vector<PrixJournalier>&vPJ=it->second;
+			i=0;
+			while(vPJ[i].getDate()<date)
+				i++;
+			if(vPJ[i].getDate()==date)
+				if(!appartientAction(vPJ[i].getNomAction(),resultat) )
+					resultat.push_back(vPJ[i].getNomAction());			
+	  	}
+	}	
+	return resultat;
 }
 
 //vector<PrixJournalier> BourseDictDate::getHistoriqueAction(string action)
 //Bourse Dictionnaire Date 
-vector<PrixJournalier> BourseDictDate::getPrixJournaliersParDate(const Date &dateAChercher)const {
+/*vector<PrixJournalier> BourseDictDate::getPrixJournaliersParDate(const Date &dateAChercher)const {
     vector<PrixJournalier> vectRes;// const auto elt :historique[dateCopie]
    // const Date d1=dateAChercher;
    // Date dateCopie=d1;
@@ -243,12 +293,12 @@ vector<PrixJournalier> BourseDictDate::getHistoriqueAction(string nomact)const{
     vector<PrixJournalier> vectRes;
     for(auto elt : historique ){
         if(elt.first>dateAujourdhui) return vectRes;
-        for (int i=0;i<elt.second.size();i++){
+        for (unsigned int i=0;i<elt.second.size();i++){
         if ((elt.second[i]).getNomAction()==nomact){vectRes.push_back(elt.second[i]);}
         }
     }
     return vectRes;
-}
+}*/
 
 
 
@@ -286,10 +336,7 @@ int main()
         for(unsigned int i=0;i<PJAction.size();i++)
         cout<<PJAction[i]<<endl;
     }
-
     
-
     
-
     return 0;
 }
