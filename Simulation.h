@@ -26,7 +26,7 @@ public:
 map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit)
 {
 	Portefeuille portefeuille(soldeInit);
-	bourse.dateAujourdhui=dateDebut;
+	bourse.setDateaujourdhui(dateDebut);
 	string action;
 	int qte;
 	double prix;
@@ -58,6 +58,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		{	//cout<<"1"<<endl ; 
 			//stats pour la fct choisirTransaction
 		    stats["NombreDeTransaction"]++;
+			cout<<"Trader en acceuil "<<endl;
 		    start = chrono::high_resolution_clock::now();
 			Transaction T=trader.choisirTransaction(bourse ,portefeuille);
 			//cout<<"2"<<endl ; 
@@ -66,28 +67,31 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 			duration =chrono::duration_cast<chrono::microseconds>(stop-start);
 			//cout<<"2"<<endl ; 
 			stats["Temps_ChoixTransaction_µs"]+=duration.count();
-			cout<<"2"<<endl ; 
+			//cout<<"2"<<endl ; 
 			const string actionNom = T.getnomdAction();
-			cout<<"2"<<endl ; 
+			//cout<<"2"<<endl ; 
 				if(T.getTypeTx()==rienAFaire){
 				    stats["nombreDRienAFaire"]++;
-					cout<<"R"<<endl ; 
+					cout<<"JOUR SUIVANT : "<<bourse.dateAujourdhui<<endl ; 
 					break;
 				}
 				else if ((T.getTypeTx()==achat)&&(T.getqtedAction()>0)){
 					stats["nombreDAchat"]++;
-					cout<<"Achatdans sim "<<endl ; 
+					cout<<"Achat dans sim "<<endl ; 
 					string str=	T.getnomdAction()	;			
 					bool found = appartientAction(str,Actions);
-					cout<<"dec found"<<endl ;
-					cout <<portefeuille.getSolde() <<"\t" << bourse.getPrixAujourdhui(T.getnomdAction()) << endl; 
+					//cout<<Actions.size()<<endl;
+					if (found ){cout<<"ma<joud"<<endl ; }
+					//cout<<"dec found"<<endl ;
+					//cout <<portefeuille.getSolde() <<"\t" << bourse.getPrixAujourdhui(T.getnomdAction()) << endl; 
 					//system("pause");
-				    if (found&&(portefeuille.getSolde()>=bourse.getPrixAujourdhui(T.getnomdAction()))) {
-						cout<<"found"<<endl ;
+					double p=bourse.getPrixAujourdhui(T.getnomdAction());
+				    if ((portefeuille.getSolde()>=p)) {
+						//cout<<"found"<<endl ;
 						stats["getPrixAujourdhui(action)/NbDachatachevees"]++;
 					    action=T.getnomdAction();
 					    qte=T.getqtedAction();
-					    prix=bourse.getPrixAujourdhui(action);
+					    prix=p;
 					    portefeuille.achatTitre(action,qte,prix);
 					}
 				}

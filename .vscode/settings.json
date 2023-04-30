@@ -48,6 +48,9 @@
     "initializer_list": "cpp",
     "ranges": "cpp",
     "iostream": "cpp",
-    "ostream": "cpp"
+    "ostream": "cpp",
+    "chrono": "cpp",
+    "set": "cpp",
+    "new": "cpp"
   }
 }

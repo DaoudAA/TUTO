@@ -8,6 +8,7 @@
 #include <string>
 #include <cstdlib>
 #include<map>
+#include<set>
 
 
 using namespace std;
@@ -63,7 +64,9 @@ public:
 		
 };
 bool appartientAction (string nomAction,vector<string>& vecteurActions){
+	//cout<<"AAACCCCCCCCCCCCCCCCCCCCC"<<endl ;
 	if(vecteurActions.size()==0)return false;
+	//cout<<"BBBBBBBBBBBBBBBBBBBBB"<<endl ;
 	for(int i=0;i<vecteurActions.size();i++)
 	{
 		if(vecteurActions[i]==nomAction)
@@ -74,6 +77,55 @@ bool appartientAction (string nomAction,vector<string>& vecteurActions){
 bool appartientPrixJournalier (PrixJournalier pj,vector<PrixJournalier>& vecteurPrixJournalier);
 
 //bourse vector
+vector<string> BourseVector::getActionDisponibleParDate(const Date& d) const {
+    static map<Date, vector<string>> cache;
+    auto it = cache.find(d);
+    if (it != cache.end()) {
+        return it->second;
+    }
+    set<string> actions;
+    if (d <= dateAujourdhui) {
+        vector<PrixJournalier> pj = recherchePrixJournalier(historique, d);
+        for (const auto& p : pj) {
+            actions.insert(p.getNomAction());
+        }
+    }
+    vector<string> res(actions.begin(), actions.end());
+    cache[d] = res;
+    return res;
+}
+
+/*vector<PrixJournalier> BourseVector::getPrixJournaliersParDate(const Date& d) const {
+    static map<Date, vector<PrixJournalier>> cache;
+    auto it = cache.find(d);
+    if (it != cache.end()) {
+        return it->second;
+    }
+    vector<PrixJournalier> pj;
+    if (d <= dateAujourdhui) {
+        vector<PrixJournalier> allPj = historique;
+        int left = 0, right = allPj.size() - 1, mid;
+        while (left <= right) {
+            mid = (left + right) / 2;
+            if (allPj[mid].getDate() < d) {
+                left = mid + 1;
+            } else if (allPj[mid].getDate() > d) {
+                right = mid - 1;
+            } else {
+                break;
+            }
+        }
+        while (mid >= 0 && allPj[mid].getDate() == d) {
+            pj.push_back(allPj[mid--]);
+        }
+        mid = (left + right) / 2;
+        while (mid < allPj.size() && allPj[mid].getDate() == d) {
+            pj.push_back(allPj[mid++]);
+        }
+    }
+    cache[d] = pj;
+    return pj;
+}*/
 vector<PrixJournalier> BourseVector::getPrixJournaliersParDate( const Date &d)const{
     vector<PrixJournalier> prixJParDate;
     if(d<=dateAujourdhui){
@@ -84,28 +136,35 @@ vector<PrixJournalier> BourseVector::getPrixJournaliersParDate( const Date &d)co
     }
     return prixJParDate;
 }
-vector<string> BourseVector::getActionDisponibleParDate(const Date &d)const{
-
-
-
-    vector<string>actions;
-    if(d<=dateAujourdhui){
+/*vector<string> BourseVector::getActionDisponibleParDate(const Date &d)const{
+	set<string> actions;
+    if (d <= dateAujourdhui) {
+        vector<PrixJournalier> pj = recherchePrixJournalier(historique, d);
+        for (unsigned int i = 0; i < pj.size(); i++) {
+            actions.insert(pj[i].getNomAction());
+        }
+    }
+    return vector<string>(actions.begin(), actions.end());*/
+	/*vector<string>actions;
+	int i=0;
+    if((d<=dateAujourdhui)&&(i<historique.size())){
         vector<PrixJournalier> pj=recherchePrixJournalier(historique,d);
+		cout<<pj.size()<<endl;
         for(unsigned int i=0;i<pj.size();i++)
         	if (!(appartientAction(pj[i].getNomAction(),actions)))
             	actions.push_back(pj[i].getNomAction());
     }
-    return actions;
-}
+
+    return actions;*/
+//}
 void rechercheDichotomiqueVector(const Date d,const vector<PrixJournalier> &liste,int le,int ri,int mi){
 while(le<=ri){
+		mi=(ri+le)/2;
         if(d<liste[mi].getDate()){
             ri=mi-1;
-            mi=(ri+le)/2;
         }
         else if(d>liste[mi].getDate()){
             le=mi+1;
-            mi=(ri+le)/2;
         }
         else break;
         }
@@ -115,23 +174,25 @@ vector<PrixJournalier>recherchePrixJournalier(vector<PrixJournalier> liste,const
     int left=0;
     int right=liste.size()-1;
     int mid=(right+left)/2;
-    rechercheDichotomiqueVector(d,liste,left,right,mid);
+    if (!(liste[mid].getDate()==d)) {rechercheDichotomiqueVector(d,liste,left,right,mid);}
     vector<PrixJournalier>resultat;
     bool test=false;
-    for(int i=left;i<=right;i++){
+    for(int i=left;i<=right && left<=right ;i++){
         if(d==liste[i].getDate()){
-            resultat.push_back(liste[i]);
-            test=true;}
-        else if(test==true)
-            break;
+            resultat.push_back(liste[i]);}
+        //    test=true;}
+        //else if(test==true)
+        //    break;
     }
     return resultat;
 }
 vector<PrixJournalier> BourseVector::getHistoriqueAction(string nomact) const{
     int i=0;
     vector<PrixJournalier> vectRes;
-    while(historique[i].getDate()<dateAujourdhui && i<historique.size()){
-        if (historique[i].getNomAction()==nomact) vectRes.push_back(historique[i]);
+    while(historique[i].getDate()<=dateAujourdhui && i<historique.size()){
+        if (historique[i].getNomAction()==nomact){
+		vectRes.push_back(historique[i]);
+		}	
         i++;
     }
 return vectRes;
@@ -165,8 +226,7 @@ vector<PrixJournalier>BourseVector2::getPrixJournaliersParDate(const Date &d)con
 vector<string>BourseVector2::getActionDisponibleParDate(const Date &d)const{
     vector<string>actions;
     int i=0;
-    while((d<=dateAujourdhui)&&(i<historique.size()))
-	{
+    while((d<=dateAujourdhui)&&(i<historique.size())){
 	    if(historique[i].getDate() <= d){
             if((historique[i].getDate()==d)){
 			    if (!(appartientAction(historique[i].getNomAction(),actions)))
@@ -174,7 +234,7 @@ vector<string>BourseVector2::getActionDisponibleParDate(const Date &d)const{
             }
             i++;
 		}
-		return actions;   		
+		else break ;    		
 	}
     return actions;
 	
@@ -194,7 +254,7 @@ vector<PrixJournalier>Bourse::getPrixJournaliersDispoAujourdhui(double solde)con
 		if ((solde<=0)||((this->getPrixJournaliersAujourdhui()).size()==0))return resultat;
 		int i=0;
 		while ((i<(this->getPrixJournaliersAujourdhui()).size())&&((this->getPrixJournaliersAujourdhui())[i].getPrix()<solde)){
-			if(!(appartientPrixJournalier((this->getPrixJournaliersAujourdhui())[i],resultat)))	
+			//if(!(appartientPrixJournalier((this->getPrixJournaliersAujourdhui())[i],resultat)))	
 				resultat.push_back((this->getPrixJournaliersAujourdhui())[i]);
 			i++;
 		}

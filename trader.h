@@ -8,6 +8,7 @@
 #include<cmath>
 #include<cstdlib>
 #include <algorithm>
+#include <unordered_map>
 using namespace std;
 enum TypeTransaction { achat, vente, rienAFaire };
 class Transaction {
@@ -144,6 +145,7 @@ Transaction TraderAlgo1::choisirTransaction(const Bourse&bourse , const Portefeu
 	int qte=0;
 	Transaction t(TypeTransaction,string,int);	
 	vector<PrixJournalier>vPJ=bourse.getPrixJournaliersDispoAujourdhui(portefeuille.getSolde());
+    cout<< vPJ.size() << endl;
     int maxv=(int)vPJ.size();
 	for(int i=0;i<maxv;i++){
 		double dernierPrix=bourse.getLastPrixAction(vPJ[i].getNomAction());
@@ -339,4 +341,113 @@ i++;
 }
 v.push_back(make_pair(lastPrix, 1));
 }
+
+
+class TraderBollin1 : public Trader {
+private:
+    unordered_map<string, pair<double, int>> moydAction;
+public:
+    Transaction choisirTransaction(const Bourse&, const Portefeuille&);
+
+private:
+    double calculerEcartType(const vector<PrixJournalier>& historique, double moyenne);
+    double calculerBornInf(double moyenne, double ecartType);
+    double calculerBornSup(double moyenne, double ecartType);
+    //double calculerMoyenne(const vector<PrixJournalier>& historique);
+    bool comparePriceDescending(const PrixJournalier& pj1, const PrixJournalier& pj2);
+};
+bool TraderBollin1::comparePriceDescending(const PrixJournalier& pj1, const PrixJournalier& pj2){
+    return pj1.getPrix() > pj2.getPrix();
+}
+Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeuille& portef) {
+    
+    vector<PrixJournalier>PrixJournaliers=bour.getPrixJournaliersDispoAujourdhui(portef.getSolde());
+    //vector<PrixJournalier>PrixJactionen=bour.getPrixJournaliersAujourdhui();
+    cout<< "lmarchi fih pj  dispo :" <<PrixJournaliers.size() << endl;
+    //cout<< "lmarchi fih  pj khw  :" <<PrixJactionen.size() << endl;
+    cout<< "portefill fih "<<portef.getTitre().size()<<endl;
+    //vector<PrixJournalier> PrixJournaliers = vPJ;
+    if (portef.getTitre().size() == 0) {
+        cout << "portef feragh "<<endl ; 
+        PrixJournalier pluscher=PrixJournaliers[0];
+        for (int i = 1; i < PrixJournaliers.size(); i++) {
+             if (PrixJournaliers[i].getPrix() > pluscher.getPrix()) {
+                 pluscher = PrixJournaliers[i]; // update most expensive
+             }
+        }
+
+        double qteDispo = portef.getSolde() / pluscher.getPrix();
+        int qte = min(3, static_cast<int>(qteDispo));
+        return Transaction(TypeTransaction::achat, pluscher.getNomAction(), floor(qteDispo));
+    }
+
+    for (const PrixJournalier& prixJournalier : PrixJournaliers) {
+        const string nomAction = prixJournalier.getNomAction();
+        if (prixJournalier.getPrix() > portef.getSolde() ) {
+        //|| find(bour.getActionDisponibleAujourdhui().begin(), bour.getActionDisponibleAujourdhui().end(), nomAction) == bour.getActionDisponibleAujourdhui().end()
+            break;
+        }
+        cout <<prixJournalier.getNomAction() << endl;
+        const vector<PrixJournalier>& historique = bour.getHistoriqueAction(nomAction);
+        //cout<<"historique dyal l action "<<bour.getHistoriqueAction(nomAction).size() <<endl ;
+        double dernierPrix = bour.getLastPrixAction(nomAction);
+
+        double& moyenne = moydAction[nomAction].first;
+       // double  =moy;
+        int& nbInstances = moydAction[nomAction].second;
+
+        moyenne = ((moyenne * nbInstances) + prixJournalier.getPrix()) / (nbInstances + 1);
+        ++nbInstances;
+
+        double ecartType = calculerEcartType(historique, moyenne);
+        double bornInf = calculerBornInf(moyenne, ecartType);
+        double bornSup = calculerBornSup(moyenne, ecartType);
+
+        if (bornSup < dernierPrix) {
+            for (const Titre& titre : portef.getTitre()) {
+                if (titre.getNomAction() == nomAction) {
+                    int qte = titre.getQte();
+                    return Transaction(TypeTransaction::vente, nomAction, qte);
+                }
+            }
+        }
+        else if (bornInf > dernierPrix) {
+            double qteDispo = portef.getSolde() / prixJournalier.getPrix();
+            int qte = min(3, static_cast<int>(qteDispo));
+            return Transaction(TypeTransaction::achat, nomAction, qte);
+        }
+    }
+
+    return Transaction(TypeTransaction::rienAFaire, "", 0);
+}
+double TraderBollin1::calculerEcartType(const vector<PrixJournalier>& historique, double moyenne) {
+double sommeDiffCarrees = 0.0;
+int n = historique.size();
+int nbValuesToConsider; //= min(n * 0.1, 10); // only consider 10% of the most recent data or 10 data points, whichever is smaller
+if (n>10) {nbValuesToConsider=10 ;}else {nbValuesToConsider=n;}
+int startIndex = n - nbValuesToConsider;
+for (int i = startIndex; i < n; i++) {
+double diff = historique[i].getPrix() - moyenne;
+sommeDiffCarrees += diff * diff;
+}
+return sqrt(sommeDiffCarrees / nbValuesToConsider);
+}
+double TraderBollin1::calculerBornInf(double moyenne, double ecartType) {
+    return moyenne - 2 * ecartType;
+}
+
+double TraderBollin1::calculerBornSup(double moyenne, double ecartType) {
+    return moyenne + 2 * ecartType;
+}
+
+/*double TraderBollin1::calculerMoyenne(const vector<PrixJournalier>& historique) {
+    double somme = 0.0;
+    int n = historique.size();
+    for (const PrixJournalier& pj : historique) {
+        somme += pj.getPrix();
+    }
+    return somme / n;
+}*/
+
+
 #endif
