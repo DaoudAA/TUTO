@@ -2,14 +2,14 @@
 #define SIMULATION_H_INCLUDED
 #include "Bourse.h"
 #include "portefeuille.h"
-#include"trader.h"
+#include "trader.h"
 #include<vector>
 #include<iostream>
 #include<string>
 #include<cmath>
 #include<cstdlib>
 #include<chrono>
-
+#include <random>
 using namespace std;
 class Simulation{
 private:
@@ -33,14 +33,16 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 	//dictionnaire pour les statistiques
     map <string, long> stats;
 	while(bourse.dateAujourdhui<dateFin)
-	{
+	{   //cout<<"1"<<endl ; 
 		//dans une meme journee
 		//stats pour la fct getPrixJournalierAujourdhui
 		stats["getPrixJournaliersAujourdhui"]++;
 		auto start = chrono::high_resolution_clock::now();
+		//cout<<"chronostart"<<endl ; 
 		vector<PrixJournalier> Pj=bourse.getPrixJournaliersAujourdhui();
 		auto stop = chrono::high_resolution_clock::now();
 		auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+		//cout<<"getPJaujourd"<<endl ; 
 		stats["Temps_GetPrixJournalierAujourdhui_µs"]+=duration.count();
 		//stats pour la fct getActionDisponibleAujourdhui
 		start = chrono::high_resolution_clock::now();
@@ -50,24 +52,38 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		duration = chrono::duration_cast<chrono::microseconds>(stop - start);
 		stats["Temps_GetActionDisponibleAujourdhui_µs"]+=duration.count();
 		// les choix de transactions dans une meme journee
+		//cout<<"6"<<endl ; 
 		int i=0;
 		while(i<100)
-		{	//stats pour la fct choisirTransaction
+		{	//cout<<"1"<<endl ; 
+			//stats pour la fct choisirTransaction
 		    stats["NombreDeTransaction"]++;
-		    auto start = chrono::high_resolution_clock::now();
+		    start = chrono::high_resolution_clock::now();
 			Transaction T=trader.choisirTransaction(bourse ,portefeuille);
-			auto stop = chrono::high_resolution_clock::now();
-			auto duration =chrono::duration_cast<chrono::microseconds>(stop-start);
+			//cout<<"2"<<endl ; 
+			//cout << T.getnomdAction() << T.getqtedAction() << endl ; 
+			stop = chrono::high_resolution_clock::now();
+			duration =chrono::duration_cast<chrono::microseconds>(stop-start);
+			//cout<<"2"<<endl ; 
 			stats["Temps_ChoixTransaction_µs"]+=duration.count();
-			const string& actionNom = T.getnomdAction();
+			cout<<"2"<<endl ; 
+			const string actionNom = T.getnomdAction();
+			cout<<"2"<<endl ; 
 				if(T.getTypeTx()==rienAFaire){
 				    stats["nombreDRienAFaire"]++;
+					cout<<"R"<<endl ; 
 					break;
 				}
 				else if ((T.getTypeTx()==achat)&&(T.getqtedAction()>0)){
 					stats["nombreDAchat"]++;
-					bool found = appartientAction(T.getnomdAction(),Actions);
+					cout<<"Achatdans sim "<<endl ; 
+					string str=	T.getnomdAction()	;			
+					bool found = appartientAction(str,Actions);
+					cout<<"dec found"<<endl ;
+					cout <<portefeuille.getSolde() <<"\t" << bourse.getPrixAujourdhui(T.getnomdAction()) << endl; 
+					//system("pause");
 				    if (found&&(portefeuille.getSolde()>=bourse.getPrixAujourdhui(T.getnomdAction()))) {
+						cout<<"found"<<endl ;
 						stats["getPrixAujourdhui(action)/NbDachatachevees"]++;
 					    action=T.getnomdAction();
 					    qte=T.getqtedAction();
@@ -77,6 +93,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 				}
 				else if ((T.getTypeTx()==vente)&&(T.getqtedAction()>0)){
 					stats["nombreDVente"]++;
+					cout<<"V"<<endl ; 
 					for(unsigned int i=0;i<(portefeuille.titres).size();i++){
 						if ((portefeuille.titres)[i].getNomAction() == actionNom){
 							action=T.getnomdAction();

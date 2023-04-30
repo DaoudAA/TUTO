@@ -34,8 +34,7 @@ class Portefeuille {
 private:
     double solde;
     vector<Titre> titres;
-    	void achatTitre(const string& nomAction, int quantite,double prix) ;
-
+    void achatTitre(const string& nomAction, int quantite,double prix) ;
     void venteTitre(const string& nomAction,int quantite,double prix);
 public:
     
