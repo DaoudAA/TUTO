@@ -248,18 +248,21 @@ vector<PrixJournalier> BourseVector2::getHistoriqueAction(string nomact) const{
     }
  return vectRes;
 }
-
-vector<PrixJournalier>Bourse::getPrixJournaliersDispoAujourdhui(double solde)const {
-		vector<PrixJournalier> resultat;
-        vector<PrixJournalier> vpj=(this->getPrixJournaliersAujourdhui());
-		if ((solde<=0)||(vpj.size()==0))return resultat;
-		int i=0;
-		while ((i<vpj.size())&&(vpj[i].getPrix()<solde)){
-			//if(!(appartientPrixJournalier((this->getPrixJournaliersAujourdhui())[i],resultat)))	
-			resultat.push_back(vpj[i]);
-			i++;
-		}
-		return resultat;
+vector<PrixJournalier> Bourse::getPrixJournaliersDispoAujourdhui(double solde) const {
+    vector<PrixJournalier> resultat;
+    vector<PrixJournalier> vpj = this->getPrixJournaliersAujourdhui();
+    if (solde <= 0 || vpj.size() == 0) {
+        return resultat;
+    }
+    for (const PrixJournalier& prixJournalier : vpj) {
+        if (prixJournalier.getPrix() > solde) {
+            continue;
+        }
+        //if (!appartientPrixJournalier(prixJournalier, resultat)) {
+        resultat.push_back(prixJournalier);
+        //}
+    }
+    return resultat;
 }
 
 //cond pour lastprix (vPJ[i].getDate()< dateAujourdhui)

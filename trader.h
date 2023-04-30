@@ -145,7 +145,7 @@ Transaction TraderAlgo1::choisirTransaction(const Bourse&bourse , const Portefeu
 	int qte=0;
 	Transaction t(TypeTransaction,string,int);	
 	vector<PrixJournalier>vPJ=bourse.getPrixJournaliersDispoAujourdhui(portefeuille.getSolde());
-    cout<< vPJ.size() << endl;
+    //cout<< vPJ.size() << endl;
     int maxv=(int)vPJ.size();
 	for(int i=0;i<maxv;i++){
 		double dernierPrix=bourse.getLastPrixAction(vPJ[i].getNomAction());
@@ -362,13 +362,14 @@ bool TraderBollin1::comparePriceDescending(const PrixJournalier& pj1, const Prix
 Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeuille& portef) {
     
     vector<PrixJournalier>PrixJournaliers=bour.getPrixJournaliersDispoAujourdhui(portef.getSolde());
-    //vector<PrixJournalier>PrixJactionen=bour.getPrixJournaliersAujourdhui();
-    cout<< "lmarchi fih pj  dispo :" <<PrixJournaliers.size() << endl;
+    vector<PrixJournalier>PrixJactionen=bour.getPrixJournaliersAujourdhui();
+    //cout<< "solde restant : " <<portef.getSolde() <<endl;
+    //cout<< "lmarchi fih pj  dispo :" <<PrixJournaliers.size() << endl;
     //cout<< "lmarchi fih  pj khw  :" <<PrixJactionen.size() << endl;
-    cout<< "portefill fih "<<portef.getTitre().size()<<endl;
+    //cout<< "portefill fih "<<portef.getTitre().size()<<endl;
     //vector<PrixJournalier> PrixJournaliers = vPJ;
     if (portef.getTitre().size() == 0) {
-        cout << "portef feragh "<<endl ; 
+        //cout << "portef feragh "<<endl ; 
         PrixJournalier pluscher=PrixJournaliers[0];
         for (int i = 1; i < PrixJournaliers.size(); i++) {
              if (PrixJournaliers[i].getPrix() > pluscher.getPrix()) {
@@ -381,13 +382,14 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
         return Transaction(TypeTransaction::achat, pluscher.getNomAction(), floor(qteDispo));
     }
     bool triedAll=false;
+    //cout << "PJ size this time "<<PrixJournaliers.size()<<endl;
     for (const PrixJournalier& prixJournalier : PrixJournaliers) {
         const string nomAction = prixJournalier.getNomAction();
         if (prixJournalier.getPrix() > portef.getSolde() ) {
         //|| find(bour.getActionDisponibleAujourdhui().begin(), bour.getActionDisponibleAujourdhui().end(), nomAction) == bour.getActionDisponibleAujourdhui().end()
             continue;
         }
-        cout <<prixJournalier.getNomAction() << endl;
+        //cout <<prixJournalier.getNomAction() << endl;
         const vector<PrixJournalier>& historique = bour.getHistoriqueAction(nomAction);
         //cout<<"historique dyal l action "<<bour.getHistoriqueAction(nomAction).size() <<endl ;
         double dernierPrix = bour.getLastPrixAction(nomAction);
@@ -418,7 +420,7 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
         }
         if (&prixJournalier == &PrixJournaliers.back()){
         triedAll = true;
-        cout<<"ARRIVED"<<endl;
+        //cout<<"ARRIVED"<<endl;
         }
     }
     if (triedAll){return Transaction(TypeTransaction::rienAFaire, "", 0);}

@@ -58,7 +58,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		{	//cout<<"1"<<endl ; 
 			//stats pour la fct choisirTransaction
 		    stats["NombreDeTransaction"]++;
-			cout<<"Trader en acceuil "<<endl;
+			cout<<"Transaction en cours . . .  "<<endl;
 		    start = chrono::high_resolution_clock::now();
 			Transaction T=trader.choisirTransaction(bourse ,portefeuille);
 			//cout<<"2"<<endl ; 
@@ -67,20 +67,22 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 			duration =chrono::duration_cast<chrono::microseconds>(stop-start);
 			//cout<<"2"<<endl ; 
 			stats["Temps_ChoixTransaction_µs"]+=duration.count();
-			//cout<<"2"<<endl ; 
+			//cout<<"2"<<endl ;
+			Date dd= bourse.dateAujourdhui;
+			dd.incrementerDate();
 			const string actionNom = T.getnomdAction();
 			//cout<<"2"<<endl ; 
 				if(T.getTypeTx()==rienAFaire){
 				    stats["nombreDRienAFaire"]++;
-					cout<<"JOUR SUIVANT : "<<bourse.dateAujourdhui<<endl ; 
+					cout<<"\t JOUR SUIVANT : "<<dd<<endl ; 
 					break;
 				}
 				else if ((T.getTypeTx()==achat)&&(T.getqtedAction()>0)){
 					stats["nombreDAchat"]++;
-					cout<<"Achat dans sim "<<endl ; 			
+					cout<<"Achat de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ;
 					bool found = appartientAction(actionNom,Actions);
 					//cout<<Actions.size()<<endl;
-					if (found ){cout<<"mawjoud"<<endl ; }
+					//if (found ){cout<<"mawjoud"<<endl ; }
 					//cout<<"dec found"<<endl ;
 					//cout <<portefeuille.getSolde() <<"\t" << bourse.getPrixAujourdhui(T.getnomdAction()) << endl; 
 					//system("pause");
@@ -96,7 +98,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 				}
 				else if ((T.getTypeTx()==vente)&&(T.getqtedAction()>0)){
 					stats["nombreDVente"]++;
-					cout<<"V"<<endl ; 
+					cout<<"Vente de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ; 
 					for(unsigned int i=0;i<(portefeuille.titres).size();i++){
 						if ((portefeuille.titres)[i].getNomAction() == actionNom){
 							action=T.getnomdAction();
