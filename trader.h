@@ -42,25 +42,25 @@ public:
     else {
         type = static_cast<TypeTransaction>(rand() % 3);
     }
-    cout <<"506"<<endl;
+    //cout <<"506"<<endl;
     if (type == rienAFaire) {
         return Transaction(rienAFaire, "", 0);
     }
     else if (type == achat) {
-        vector<PrixJournalier> Pj = bour.getPrixJournaliersAujourdhui();
+        vector<PrixJournalier> Pj = bour.getPrixJournaliersDispoAujourdhui(portefeuille.getSolde());
         int n =(int) Pj.size();
         if (n>0){
         int choixDAction = rand() % Pj.size();
-        cout << choixDAction << endl;
+        //cout << choixDAction << endl;
         double QteDispo = portefeuille.getSolde() / Pj[choixDAction].getPrix();
         int maxQte = floor(QteDispo);
-        cout << "3" << endl;
+        //cout << "3" << endl;
         int choixQte = 1 + rand() % maxQte;
-        cout << "3" << endl;
+        //cout << "3" << endl;
         return Transaction(achat, Pj[choixDAction].getNomAction(), choixQte);
     }}
     else {
-        cout << "5" << endl;
+        //cout << "5" << endl;
         vector<Titre> Pt = portefeuille.getTitre();
         int n = Pt.size();
         int choixDAction = rand() % n;
@@ -368,13 +368,13 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
     //cout<< "lmarchi fih  pj khw  :" <<PrixJactionen.size() << endl;
     //cout<< "portefill fih "<<portef.getTitre().size()<<endl;
     //vector<PrixJournalier> PrixJournaliers = vPJ;
-    if (portef.getTitre().size() == 0) {
+    if (portef.getTitre().size() == 0){
         //cout << "portef feragh "<<endl ; 
         PrixJournalier pluscher=PrixJournaliers[0];
         for (int i = 1; i < PrixJournaliers.size(); i++) {
-             if (PrixJournaliers[i].getPrix() > pluscher.getPrix()) {
+            if (PrixJournaliers[i].getPrix() > pluscher.getPrix()) {
                  pluscher = PrixJournaliers[i]; // update most expensive
-             }
+            }
         }
 
         double qteDispo = portef.getSolde() / pluscher.getPrix();
@@ -385,10 +385,9 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
     //cout << "PJ size this time "<<PrixJournaliers.size()<<endl;
     for (const PrixJournalier& prixJournalier : PrixJournaliers) {
         const string nomAction = prixJournalier.getNomAction();
-        if (prixJournalier.getPrix() > portef.getSolde() ) {
+        
         //|| find(bour.getActionDisponibleAujourdhui().begin(), bour.getActionDisponibleAujourdhui().end(), nomAction) == bour.getActionDisponibleAujourdhui().end()
-            continue;
-        }
+        
         //cout <<prixJournalier.getNomAction() << endl;
         const vector<PrixJournalier>& historique = bour.getHistoriqueAction(nomAction);
         //cout<<"historique dyal l action "<<bour.getHistoriqueAction(nomAction).size() <<endl ;
@@ -405,7 +404,7 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
         double bornInf = calculerBornInf(moyenne, ecartType);
         double bornSup = calculerBornSup(moyenne, ecartType);
 
-        if (bornSup < dernierPrix) {
+        if (moyenne*1.05 <= dernierPrix || portef.getSolde()<1) {
             for (const Titre& titre : portef.getTitre()) {
                 if (titre.getNomAction() == nomAction) {
                     int qte = titre.getQte();
@@ -413,10 +412,10 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
                 }
             }
         }
-        else if (bornInf > dernierPrix) {
+        else if (moyenne*0.95 > dernierPrix && prixJournalier.getPrix() < portef.getSolde()){
             double qteDispo = portef.getSolde() / prixJournalier.getPrix();
-            int qte = min(3, static_cast<int>(qteDispo));
-            return Transaction(TypeTransaction::achat, nomAction, qte);
+            int qte = min(5, static_cast<int>(qteDispo));
+            return Transaction(TypeTransaction::achat, nomAction, floor(qte));
         }
         if (&prixJournalier == &PrixJournaliers.back()){
         triedAll = true;

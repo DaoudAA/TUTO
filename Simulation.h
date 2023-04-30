@@ -58,7 +58,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		{	//cout<<"1"<<endl ; 
 			//stats pour la fct choisirTransaction
 		    stats["NombreDeTransaction"]++;
-			cout<<"Transaction en cours . . .  "<<endl;
+			//cout<<"Transaction en cours . . .  "<<endl;
 		    start = chrono::high_resolution_clock::now();
 			Transaction T=trader.choisirTransaction(bourse ,portefeuille);
 			//cout<<"2"<<endl ; 
@@ -73,32 +73,31 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 			const string actionNom = T.getnomdAction();
 			//cout<<"2"<<endl ; 
 				if(T.getTypeTx()==rienAFaire){
-				    stats["nombreDRienAFaire"]++;
+				    stats["Nbr de Jours"]++;
 					cout<<"\t JOUR SUIVANT : "<<dd<<endl ; 
 					break;
 				}
 				else if ((T.getTypeTx()==achat)&&(T.getqtedAction()>0)){
 					stats["nombreDAchat"]++;
-					cout<<"Achat de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ;
 					bool found = appartientAction(actionNom,Actions);
 					//cout<<Actions.size()<<endl;
 					//if (found ){cout<<"mawjoud"<<endl ; }
 					//cout<<"dec found"<<endl ;
-					//cout <<portefeuille.getSolde() <<"\t" << bourse.getPrixAujourdhui(T.getnomdAction()) << endl; 
 					//system("pause");
 					double p=bourse.getPrixAujourdhui(T.getnomdAction(),Actions);
-				    if ((portefeuille.getSolde()>=p)) {
+				    if ((portefeuille.getSolde()>=p)&& (p>0.5)) {
+						cout <<portefeuille.getSolde() <<"\t" << p << endl; 
 						//cout<<"found"<<endl ;
 						stats["getPrixAujourdhui(action)/NbDachatachevees"]++;
 					    action=T.getnomdAction();
 					    qte=T.getqtedAction();
 					    prix=p;
 					    portefeuille.achatTitre(action,qte,prix);
+					cout<<"Achat de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ;
 					}
 				}
 				else if ((T.getTypeTx()==vente)&&(T.getqtedAction()>0)){
 					stats["nombreDVente"]++;
-					cout<<"Vente de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ; 
 					for(unsigned int i=0;i<(portefeuille.titres).size();i++){
 						if ((portefeuille.titres)[i].getNomAction() == actionNom){
 							action=T.getnomdAction();
@@ -106,6 +105,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 							prix=bourse.getLastPrixAction(action);
 							stats["getLastPrixAction/NbDventeachevees"]++;
 							portefeuille.venteTitre(action,qte,prix);
+					cout<<"Vente de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ; 
 						}
 						//else
 					}

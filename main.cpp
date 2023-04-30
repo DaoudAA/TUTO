@@ -7,13 +7,13 @@ int main(){
 	vector<PrixJournalier> vPj;
     PersistancePrixJournaliers ppj;
 	vPj=ppj.lirePrixJournaliersDUnFichier(ch1);
-    Bourse * bourse=new BourseVector(vPj);
+    Bourse * bourse=new BourseVector2(vPj);
     //cout << (*bourse).getHistoriqueAction("LVLT")[0]<<endl ; 
     Trader * trader=new TraderBollin1;
     map <string , long > statiktiks;
     double soldeInit=800;
-    Date dateDebut(4,1,2010);
-    Date dateFin(5,1,2010);
+    Date dateDebut(1,4,2010);
+    Date dateFin(7,10,2010);
     /*do {
         cout << "Solde Initial : "<< endl; 
         cin >> soldeInit ;
