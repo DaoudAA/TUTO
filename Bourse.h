@@ -26,7 +26,7 @@ public:
 	vector<PrixJournalier>getPrixJournaliersAujourdhui()const{return getPrixJournaliersParDate(dateAujourdhui);}		
     vector<string>getActionDisponibleAujourdhui() const {return getActionDisponibleParDate(dateAujourdhui);}
 	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde)const;
-	double getPrixAujourdhui(string);// ona utiliser cette fonction dans l simulation pour donner directement le prix d'une action 
+	double getPrixAujourdhui(string,vector<string>);// ona utiliser cette fonction dans l simulation pour donner directement le prix d'une action 
 	virtual double getLastPrixAction(string)const ;// il faut s'assurer que le vecteur provenant de gethistoriqueAction est trier par date
 	virtual double getAvantDernierPrixDAction(string)const ; // est utilisee dans la partie du trader algorithique 1
     virtual ~Bourse(){};
@@ -251,11 +251,12 @@ vector<PrixJournalier> BourseVector2::getHistoriqueAction(string nomact) const{
 
 vector<PrixJournalier>Bourse::getPrixJournaliersDispoAujourdhui(double solde)const {
 		vector<PrixJournalier> resultat;
-		if ((solde<=0)||((this->getPrixJournaliersAujourdhui()).size()==0))return resultat;
+        vector<PrixJournalier> vpj=(this->getPrixJournaliersAujourdhui());
+		if ((solde<=0)||(vpj.size()==0))return resultat;
 		int i=0;
-		while ((i<(this->getPrixJournaliersAujourdhui()).size())&&((this->getPrixJournaliersAujourdhui())[i].getPrix()<solde)){
+		while ((i<vpj.size())&&(vpj[i].getPrix()<solde)){
 			//if(!(appartientPrixJournalier((this->getPrixJournaliersAujourdhui())[i],resultat)))	
-				resultat.push_back((this->getPrixJournaliersAujourdhui())[i]);
+			resultat.push_back(vpj[i]);
 			i++;
 		}
 		return resultat;
@@ -263,13 +264,13 @@ vector<PrixJournalier>Bourse::getPrixJournaliersDispoAujourdhui(double solde)con
 
 //cond pour lastprix (vPJ[i].getDate()< dateAujourdhui)
 
-double Bourse::getPrixAujourdhui(string nomAction){
+double Bourse::getPrixAujourdhui(string nomAction,vector<string>actionsDisponibles){
 	int i=0;
-	vector<string> actionsDisponibles = this->getActionDisponibleAujourdhui();
+    vector<PrixJournalier> PJTODAY=this->getPrixJournaliersAujourdhui();
 	if(appartientAction(nomAction,actionsDisponibles)){
 		while(i<(actionsDisponibles).size()){
-			if(nomAction==(this->getPrixJournaliersAujourdhui()[i]).getNomAction())
-				return (this->getPrixJournaliersAujourdhui()[i]).getPrix();
+			if(nomAction==PJTODAY[i].getNomAction())
+				return (PJTODAY[i]).getPrix();
 			i++;
 		}
     }

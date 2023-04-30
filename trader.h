@@ -261,7 +261,7 @@ void TraderBollin::mettreajour(map <string,pair<double , int>>& MoydAction,const
     }
 }*/
 
-
+/*
 class TraderBollin : public Trader {
 private:
     vector<pair<double, int>> MoydAction; // moving average and number of instances for each action
@@ -341,7 +341,7 @@ i++;
 }
 v.push_back(make_pair(lastPrix, 1));
 }
-
+*/
 
 class TraderBollin1 : public Trader {
 private:
@@ -380,12 +380,12 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
         int qte = min(3, static_cast<int>(qteDispo));
         return Transaction(TypeTransaction::achat, pluscher.getNomAction(), floor(qteDispo));
     }
-
+    bool triedAll=false;
     for (const PrixJournalier& prixJournalier : PrixJournaliers) {
         const string nomAction = prixJournalier.getNomAction();
         if (prixJournalier.getPrix() > portef.getSolde() ) {
         //|| find(bour.getActionDisponibleAujourdhui().begin(), bour.getActionDisponibleAujourdhui().end(), nomAction) == bour.getActionDisponibleAujourdhui().end()
-            break;
+            continue;
         }
         cout <<prixJournalier.getNomAction() << endl;
         const vector<PrixJournalier>& historique = bour.getHistoriqueAction(nomAction);
@@ -416,9 +416,12 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
             int qte = min(3, static_cast<int>(qteDispo));
             return Transaction(TypeTransaction::achat, nomAction, qte);
         }
+        if (&prixJournalier == &PrixJournaliers.back()){
+        triedAll = true;
+        cout<<"ARRIVED"<<endl;
+        }
     }
-
-    return Transaction(TypeTransaction::rienAFaire, "", 0);
+    if (triedAll){return Transaction(TypeTransaction::rienAFaire, "", 0);}
 }
 double TraderBollin1::calculerEcartType(const vector<PrixJournalier>& historique, double moyenne) {
 double sommeDiffCarrees = 0.0;

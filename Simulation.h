@@ -54,7 +54,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		// les choix de transactions dans une meme journee
 		//cout<<"6"<<endl ; 
 		int i=0;
-		while(i<100)
+		while(i<10)
 		{	//cout<<"1"<<endl ; 
 			//stats pour la fct choisirTransaction
 		    stats["NombreDeTransaction"]++;
@@ -77,15 +77,14 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 				}
 				else if ((T.getTypeTx()==achat)&&(T.getqtedAction()>0)){
 					stats["nombreDAchat"]++;
-					cout<<"Achat dans sim "<<endl ; 
-					string str=	T.getnomdAction()	;			
-					bool found = appartientAction(str,Actions);
+					cout<<"Achat dans sim "<<endl ; 			
+					bool found = appartientAction(actionNom,Actions);
 					//cout<<Actions.size()<<endl;
-					if (found ){cout<<"ma<joud"<<endl ; }
+					if (found ){cout<<"mawjoud"<<endl ; }
 					//cout<<"dec found"<<endl ;
 					//cout <<portefeuille.getSolde() <<"\t" << bourse.getPrixAujourdhui(T.getnomdAction()) << endl; 
 					//system("pause");
-					double p=bourse.getPrixAujourdhui(T.getnomdAction());
+					double p=bourse.getPrixAujourdhui(T.getnomdAction(),Actions);
 				    if ((portefeuille.getSolde()>=p)) {
 						//cout<<"found"<<endl ;
 						stats["getPrixAujourdhui(action)/NbDachatachevees"]++;

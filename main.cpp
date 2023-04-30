@@ -33,7 +33,7 @@ int main(){
         cout << d;
          }*/
    statiktiks=Sim.executer(*bourse,*trader,dateDebut,dateFin,soldeInit);
-    cout<< statiktiks.size()<<endl;
+    cout<< "Stats : "<<endl;
     for(auto elt : statiktiks){
         cout << elt.first << " : \t" <<  elt .second << endl ; 
     }
