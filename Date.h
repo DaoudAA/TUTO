@@ -23,9 +23,7 @@ public:
     void incrementerDate();
     bool anneeBissextile();
     int nbJourDuMois();
-    //friend ostream& operator<<(ostream& flux , const Date& );
     friend istream& operator>>(istream& flux, Date &);
-    //Date convStrToDate(string chInter);
     friend bool operator==(const Date& ,const Date&);
     friend bool operator<(const Date& ,const Date&);
     friend bool operator<=(const Date& ,const Date&);
@@ -156,12 +154,6 @@ Date convStrToDate(string chInter){
     annee1=atoi(chInter.substr(poslimiter2+1,4).c_str());
     Date d1(jour1,mois1,annee1);
     return d1;
-    /*getline(chInter,ch1,'/');
-    jour1=atoi(ch1);
-    getline(chInter,ch1,'/');
-    mois1=atoi(ch1);
-    getline(chInter,ch1,'/');
-    annee1=atoi(ch1);*/
 }
 
 

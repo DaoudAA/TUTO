@@ -73,13 +73,4 @@ public:
         }
         solde+=quantite*prix;
     }   
-    /* {
-        for (auto it = titres.begin(); it != titres.end(); ++it) {
-            if (it->getNomAction() == nomAction) {
-                titres.erase(it);
-                break;
-            }
-        }
-    }*/
-
 #endif

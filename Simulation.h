@@ -13,14 +13,11 @@
 using namespace std;
 class Simulation{
 private:
-//	const Date debut;
-//	const Date fin;
+
 	double budget;
 public: 
-	//Simulation(const Date d1, const Date d2, double b):debut(d1),fin(d2),budget(b){}
 	Simulation( double b):budget(b){}
 	static map <string , long > executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit);
-	//map <string,long>
 
 };
 map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit)
@@ -42,7 +39,6 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		vector<PrixJournalier> Pj=bourse.getPrixJournaliersAujourdhui();
 		auto stop = chrono::high_resolution_clock::now();
 		auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-		//cout<<"getPJaujourd"<<endl ; 
 		stats["Temps_GetPrixJournalierAujourdhui_µs"]+=duration.count();
 		//stats pour la fct getActionDisponibleAujourdhui
 		start = chrono::high_resolution_clock::now();
@@ -52,26 +48,18 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		duration = chrono::duration_cast<chrono::microseconds>(stop - start);
 		stats["Temps_GetActionDisponibleAujourdhui_µs"]+=duration.count();
 		// les choix de transactions dans une meme journee
-		//cout<<"6"<<endl ; 
+		 
 		int i=0;
-		while(i<10)
-		{	//cout<<"1"<<endl ; 
-			//stats pour la fct choisirTransaction
+		while(i<10){
 		    stats["NombreDeTransaction"]++;
-			//cout<<"Transaction en cours . . .  "<<endl;
 		    start = chrono::high_resolution_clock::now();
 			Transaction T=trader.choisirTransaction(bourse ,portefeuille);
-			//cout<<"2"<<endl ; 
-			//cout << T.getnomdAction() << T.getqtedAction() << endl ; 
 			stop = chrono::high_resolution_clock::now();
 			duration =chrono::duration_cast<chrono::microseconds>(stop-start);
-			//cout<<"2"<<endl ; 
 			stats["Temps_ChoixTransaction_µs"]+=duration.count();
-			//cout<<"2"<<endl ;
 			Date dd= bourse.dateAujourdhui;
 			dd.incrementerDate();
 			const string actionNom = T.getnomdAction();
-			//cout<<"2"<<endl ; 
 				if(T.getTypeTx()==rienAFaire){
 				    stats["Nbr de Jours"]++;
 					cout<<"\t JOUR SUIVANT : "<<dd<<endl ; 
@@ -80,14 +68,10 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 				else if ((T.getTypeTx()==achat)&&(T.getqtedAction()>0)){
 					stats["nombreDAchat"]++;
 					bool found = appartientAction(actionNom,Actions);
-					//cout<<Actions.size()<<endl;
-					//if (found ){cout<<"mawjoud"<<endl ; }
-					//cout<<"dec found"<<endl ;
-					//system("pause");
+					
 					double p=bourse.getPrixAujourdhui(T.getnomdAction(),Actions);
 				    if ((portefeuille.getSolde()>=p)&& (p>0.5)) {
-						cout <<portefeuille.getSolde() <<"\t" << p << endl; 
-						//cout<<"found"<<endl ;
+						
 						stats["getPrixAujourdhui(action)/NbDachatachevees"]++;
 					    action=T.getnomdAction();
 					    qte=T.getqtedAction();
