@@ -95,7 +95,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 					}
 				}
 				i++;
-				cout<<"solde du portefeuille"<<portefeuille.getSolde();
+				//cout<<"solde du portefeuille"<<portefeuille.getSolde();
 		}
 		(bourse.dateAujourdhui).incrementerDate();
 

@@ -124,14 +124,15 @@ bool TraderBollin1::comparePriceDescending(const PrixJournalier& pj1, const Prix
 }
 Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeuille& portef) {
     
-    vector<PrixJournalier>PrixJournaliers=bour.getPrixJournaliersDispoAujourdhui(portef.getSolde());
+    vector<PrixJournalier>PrixJournaliers=bour.getPrixJournaliersAujourdhui();
     vector<PrixJournalier>PrixJactionen=bour.getPrixJournaliersAujourdhui();
     //cout<< "solde restant : " <<portef.getSolde() <<endl;
     //cout<< "lmarchi fih pj  dispo :" <<PrixJournaliers.size() << endl;
     //cout<< "lmarchi fih  pj khw  :" <<PrixJactionen.size() << endl;
     //cout<< "portefill fih "<<portef.getTitre().size()<<endl;
     //vector<PrixJournalier> PrixJournaliers = vPJ;
-    if (portef.getTitre().size() == 0){
+    double minPrice = PrixJournaliers.empty() ? 0:1; 
+    if (portef.getTitre().size()==0){
         //cout << "portef feragh "<<endl ; 
         PrixJournalier pluscher=PrixJournaliers[0];
         for (unsigned int i = 1; i < PrixJournaliers.size(); i++) {
@@ -207,6 +208,77 @@ double TraderBollin1::calculerBornSup(double moyenne, double ecartType) {
     return moyenne + 2 * ecartType;
 }
 
+class TraderReverseMean : public Trader {
+private:
+    unordered_map<string, pair<double, int>> moydAction;
+
+public:
+    Transaction choisirTransaction(const Bourse&, const Portefeuille&);
+
+private:
+    bool comparePriceDescending(const PrixJournalier& pj1, const PrixJournalier& pj2);
+};
+bool TraderReverseMean::comparePriceDescending(const PrixJournalier& pj1, const PrixJournalier& pj2){
+    return pj1.getPrix() > pj2.getPrix();
+}
+Transaction TraderReverseMean::choisirTransaction(const Bourse& bour, const Portefeuille& portef) {
+    vector<PrixJournalier> PrixJournaliers = bour.getPrixJournaliersAujourdhui();
+    //sort(PrixJournaliers.begin(), PrixJournaliers.end(), comparePriceDescending);
+    for (const PrixJournalier& prixJournalier : PrixJournaliers) {
+        const string nomAction = prixJournalier.getNomAction();
+        // Get the historical prices and last price of the action
+        const vector<PrixJournalier>& historique = bour.getHistoriqueAction(nomAction);
+        double dernierPrix = bour.getLastPrixAction(nomAction);
+
+        double& moyenne = moydAction[nomAction].first;
+        int& nbInstances = moydAction[nomAction].second;
+
+        moyenne = ((moyenne * nbInstances) + prixJournalier.getPrix()) / (nbInstances + 1);
+        ++nbInstances;
+        // If the last price of the action is greater than the mean price,
+        // and there are some shares of the action in the portfolio, sell them all.
+        int qte=0;
+        if (dernierPrix > moyenne ) {
+            for (const Titre& titre : portef.getTitre()) {
+                if (titre.getNomAction() == nomAction) {
+                    qte = titre.getQte();
+                }
+            }   
+            if (qte>0){return Transaction(TypeTransaction::vente, nomAction, qte);}
+        }
+
+        // If the last price of the action is less than or equal to the mean price,
+        // and the price of the action is less than the available balance of the portfolio,
+        // buy as much shares of the action as possible.
+        if (dernierPrix <= moyenne && prixJournalier.getPrix() < portef.getSolde()) {
+            double qteDispo = portef.getSolde() / prixJournalier.getPrix();
+            int qte = min(5, static_cast<int>(qteDispo));
+            return Transaction(TypeTransaction::achat, nomAction, floor(qte));
+        }
+    }
+
+    // If no transaction was made, return "rienAFaire"
+    return Transaction(TypeTransaction::rienAFaire, "", 0);
+}
+/*double TraderReverseMean::calculerEcartType(const vector<PrixJournalier>& historique, double moyenne) {
+double sommeDiffCarrees = 0.0;
+int n = historique.size();
+int nbValuesToConsider; //= min(n * 0.1, 10); // only consider 10% of the most recent data or 10 data points, whichever is smaller
+if (n>10) {nbValuesToConsider=10 ;}else {nbValuesToConsider=n;}
+int startIndex = n - nbValuesToConsider;
+for (int i = startIndex; i < n; i++) {
+double diff = historique[i].getPrix() - moyenne;
+sommeDiffCarrees += diff * diff;
+}
+return sqrt(sommeDiffCarrees / nbValuesToConsider);
+}*/
+/*double TraderReverseMean::calculerBornInf(double moyenne, double ecartType) {
+    return moyenne - 2 * ecartType;
+}
+
+double TraderReverseMean::calculerBornSup(double moyenne, double ecartType) {
+    return moyenne + 2 * ecartType;
+}*/
 
 
 

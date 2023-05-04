@@ -8,11 +8,11 @@ int main(){
     PersistancePrixJournaliers ppj;
 	vPj=ppj.lirePrixJournaliersDUnFichier(ch1);
     Bourse * bourse=new BourseVector2(vPj);
-    Trader * trader=new TraderAlea;
+    Trader * trader=new TraderBollin1;
     map <string , long > statiktiks;
     double soldeInit=800;
     Date dateDebut(1,4,2010);
-    Date dateFin(7,10,2010);
+    Date dateFin(30,4,2010);
     Simulation Sim(soldeInit);
    statiktiks=Sim.executer(*bourse,*trader,dateDebut,dateFin,soldeInit);
     cout<< "Stats : "<<endl;
