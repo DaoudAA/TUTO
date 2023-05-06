@@ -131,13 +131,14 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
     //cout<< "lmarchi fih  pj khw  :" <<PrixJactionen.size() << endl;
     //cout<< "portefill fih "<<portef.getTitre().size()<<endl;
     //vector<PrixJournalier> PrixJournaliers = vPJ;
-    double minPrice = PrixJournaliers.empty() ? 0:1; 
+    //double minPrice = PrixJournaliers.empty() ? 0:1; 
     if (portef.getTitre().size()==0){
         //cout << "portef feragh "<<endl ; 
-        PrixJournalier pluscher=PrixJournaliers[0];
-        for (unsigned int i = 1; i < PrixJournaliers.size(); i++) {
-            if (PrixJournaliers[i].getPrix() > pluscher.getPrix()) {
-                 pluscher = PrixJournaliers[i]; // update most expensive
+        vector<PrixJournalier>PJdispo=bour.getPrixJournaliersDispoAujourdhui(portef.getSolde());
+        PrixJournalier pluscher=PJdispo[0];
+        for (unsigned int i = 1; i < PJdispo.size(); i++) {
+            if (PJdispo[i].getPrix() > pluscher.getPrix()) {
+                 pluscher = PJdispo[i]; // update most expensive
             }
         }
 
