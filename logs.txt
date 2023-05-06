@@ -1,0 +1,31 @@
+date: trader:montant_de_depart:date_depart:nombre de jours:%gains
+Sat May 06 16:06:49 2023
+:TraderAleatoire:300:1/1/2010:89:90
+Sat May 06 16:07:34 2023
+:TraderAleatoire:200:1/1/2010:89:100
+Sat May 06 16:08:50 2023
+:TraderAleatoire:200:1/1/2010:89:100
+Sat May 06 16:09:14 2023
+:TraderAleatoire:200:1/1/2010:89:76
+Sat May 06 16:09:36 2023
+:TraderAleatoire:200:1/1/2010:90:1220
+Sat May 06 16:10:09 2023
+:TraderAleatoire:200:1/1/2010:87:69
+Sat May 06 16:10:29 2023
+:TraderAleatoire:200:1/1/2010:88:48
+Sat May 06 16:13:24 2023
+:TraderBollinger:200:1/1/2010:83:87
+Sat May 06 16:14:29 2023
+:TraderBollinger:200:1/1/2010:89:15
+Sat May 062023
+:TraderAleatoire:500:1/1/2010:89:91
+Sat May 062023
+:TraderAleatoire:200:1/1/2010:89:100
+Sat May 062023
+:TraderAleatoire:200:1/1/2010:89:76
+Sat May 062023:TraderAleatoire:200:1/1/2010:89:100
+Sat May 062023:TraderAleatoire:100:1/1/2010:88:88
+Date:	Trader:	Montant_de_depart:	Date_depart:	Nombre_de_jours:	%%Gains
+Sat May 06 2023:TraderAlgorithmique:500:1/1/2010:83:22
+Date:	Trader:	Montant_de_depart:	Date_depart:	Nombre_de_jours:	%%Gains
+Sat May 06 2023:TraderBollinger:500:1/1/2010:72:78

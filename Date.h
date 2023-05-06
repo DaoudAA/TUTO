@@ -165,7 +165,7 @@ istream& operator>>(istream& flux, Date &date){
 }
 
 ostream& operator<<(ostream& flux ,const Date& D){
-        flux<< D.jour << "/" << D.mois << "/" << D.annee <<endl;
+        flux<< D.jour << "/" << D.mois << "/" << D.annee ;
         return flux;
 }
 

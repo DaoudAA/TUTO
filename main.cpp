@@ -1,6 +1,10 @@
 #include "Simulation.h"
 #include "Date.h"
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <chrono>
+#include <ctime>
 int main(){
     string ch1;
     ch1="../prices_simple.csv";
@@ -32,8 +36,8 @@ int main(){
         switch (choix) {
             case 1: {
                 int choixTrader=0, choixBourse=0;
-                Date dateDebut(1,1,2010), dateFin(1,2,2010);
-                
+                Date dateDebut(1,1,2010), dateFin(31,12,2016);
+                string strader="";
                 cout << "\n--- TRADERS ---" << endl;
                 cout << "1. TraderAlea" << endl;
                 cout << "2. TraderBollin1" << endl;
@@ -45,15 +49,19 @@ int main(){
                 switch (choixTrader) {
                     case 1:
                         trader = new TraderAlea;
+                        strader="TraderAleatoire";
                         break;
                     case 2:
                         trader = new TraderBollin1;
+                        strader="TraderBollinger";
                         break;
                     case 3:
                         trader = new TraderAlgo1;
+                        strader="TraderAlgorithmique";
                         break;
                     case 4:
                         trader = new TraderReverseMean;
+                        strader="TraderReverseMean";
                         break;
                     default:
                         cout << "Choix Invalid . Ressayer" << endl;
@@ -85,25 +93,29 @@ int main(){
                         cout << "Choix Invalid . Ressayer" << endl;
                         continue;
                 }
-                            // Prompt user for simulation start and end dates
+          /*      
             cout << "\nEntrer date debut de simulation (DD/MM/YYYY): ";
             string dateDStr;
-            cin >> dateDStr;
-            dateDebut = Date(dateDStr);
-            cout << dateDebut << endl; 
-            if (dateDebut.getJour()==-1 || dateDebut.getMois()==-1) {
-                cout << "Date Invalide . Ressayer" << endl;
-                continue;
-            }
-            cout << "Entrer date fin de simulation  (DD/MM/YYYY): ";
+            do {
+                cin >> dateDStr;
+                dateDebut = Date(dateDStr);
+                if (dateDebut.getJour()==-1 || dateDebut.getMois()==-1) {
+                    cout << "Date Invalide. Ressayer: ";
+                }
+            } while (dateDebut.getJour()==-1 || dateDebut.getMois()==-1);
+
+            cout << "Entrer date fin de simulation (DD/MM/YYYY): ";
             string dateFStr;
-            cin >> dateFStr;
-            dateFin = Date(dateFStr);
-            cout<<dateFin<<endl ; 
-            if (dateFin.getJour()==-1 || dateFin.getMois()==-1) {
-                 cout << "Date Invalide . Ressayer" << endl;
-                continue;
-            }
+            do {
+                cin >> dateFStr;
+                dateFin = Date(dateFStr);
+                if (dateFin.getJour()==-1 || dateFin.getMois()==-1) {
+                    cout << "Date Invalide. Ressayer: ";
+                }
+            } while (dateFin.getJour()==-1 || dateFin.getMois()==-1);
+*/
+            dateDebut = Date(1,1,2010);    
+            dateFin = Date(1,4,2010);    
             double soldeInit=0;
             cout << "Enter Initial Balance: ";
             cin >> soldeInit;
@@ -113,26 +125,36 @@ int main(){
             }
            Simulation Sim(soldeInit);
            statiktiks = Sim.executer(*bourse, *trader, dateDebut, dateFin, soldeInit);
-
-            // Print out statistics
             cout << "\nStats:" << endl;
             for (auto it = statiktiks.begin(); it != statiktiks.end(); ++it) {
                 cout << it->first << ": " << it->second << endl;
             }
-
+            //ecriture dans logs 
+            string fileName="../logs.txt";
+            ofstream flot(fileName, ios::app); 
+            if (!flot) {
+                flot.open("logs.txt");
+            }
+            if (flot.tellp() == 0) {
+                flot << "Date:\tTrader:\tMontant_de_depart:\tDate_depart:\tNombre_de_jours:\t%Gains" << endl; // Write the header line
+            
+            }
+            auto now = chrono::system_clock::now();
+            time_t time_now = chrono::system_clock::to_time_t(now);
+            string strdate=ctime(&time_now);
+            string strannee=ctime(&time_now);
+            flot<<strdate.substr(0,10)<<strannee.substr(19,5)<<":\t"<<strader<<":\t"<<soldeInit<<":\t"<<dateDebut<<":\t"<<statiktiks["Nbr de Jours"]<<":\t"<<statiktiks["Taux_du_gain_en_%"]<< endl;
+            flot.close(); 
             break;
         }
         case 2: {
-            // Read logs of previous simulations from file*/
-            /*string fileName;
-            cout << "Enter file name: ";
-            cin >> fileName;
-            PersistanceSimulation ps;
-            vector<SimulationLog> logs = ps.lireFichier(fileName);
-            for (auto log : logs) {
-                cout << log << endl;
-            }*/
-           break;
+            string ligne;
+            string fileName="../logs.txt";
+            ifstream flot(fileName);
+            while(getline(flot,ligne)){
+                cout << ligne << endl;
+            }
+            break;
         }
         case 3: {
             // Exit

@@ -33,10 +33,10 @@ public:
 class TraderAlea :public Trader{
 public:
     Transaction choisirTransaction(const Bourse& bour, const Portefeuille& portefeuille) {
-    // 1st suggested transaction is buying
     TypeTransaction type;
 
     if (portefeuille.getTitre().empty()) {
+        if (bour.getPrixJournaliersDispoAujourdhui(portefeuille.getSolde()).empty()){return Transaction(rienAFaire, "", 0);}
         type = achat;
     }
     else {
@@ -135,6 +135,7 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
     if (portef.getTitre().size()==0){
         //cout << "portef feragh "<<endl ; 
         vector<PrixJournalier>PJdispo=bour.getPrixJournaliersDispoAujourdhui(portef.getSolde());
+        if (PJdispo.empty()){return Transaction(rienAFaire,"",0);}
         PrixJournalier pluscher=PJdispo[0];
         for (unsigned int i = 1; i < PJdispo.size(); i++) {
             if (PJdispo[i].getPrix() > pluscher.getPrix()) {
@@ -173,21 +174,21 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
             for (const Titre& titre : portef.getTitre()) {
                 if (titre.getNomAction() == nomAction) {
                     int qte = titre.getQte();
-                    return Transaction(TypeTransaction::vente, nomAction, qte);
+                    return Transaction(vente, nomAction, qte);
                 }
             }
         }
         else if (moyenne*0.95 > dernierPrix && prixJournalier.getPrix() < portef.getSolde()){
             double qteDispo = portef.getSolde() / prixJournalier.getPrix();
             int qte = min(5, static_cast<int>(qteDispo));
-            return Transaction(TypeTransaction::achat, nomAction, floor(qte));
+            return Transaction(achat, nomAction, floor(qte));
         }
         if (&prixJournalier == &PrixJournaliers.back()){
         triedAll = true;
         //cout<<"ARRIVED"<<endl;
         }
     }
-    if (triedAll){return Transaction(TypeTransaction::rienAFaire, "", 0);}
+    if (triedAll){return Transaction(rienAFaire, "", 0);}
 }
 double TraderBollin1::calculerEcartType(const vector<PrixJournalier>& historique, double moyenne) {
 double sommeDiffCarrees = 0.0;
