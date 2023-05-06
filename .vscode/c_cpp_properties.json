@@ -6,13 +6,18 @@
                 "${workspaceFolder}/**",
                 "F:\\Program Files (x86)\\compile\\x86_64-w64-mingw32\\include"
             ],
-            "compilerPath": "F:/ProgramFiles(x86)/compile/bin/g++.exe",
+            "compilerPath": "C:\\Program Files (x86)\\Msys\\mingw64\\bin\\g++.exe",
             "cStandard": "${default}",
             "cppStandard": "${default}",
             "intelliSenseMode": "windows-gcc-x64",
             "compilerArgs": [
                 ""
-            ]
+            ],
+            "browse": {
+                "path": [
+                    "F:\\Program Files (x86)\\compile\\x86_64-w64-mingw32\\include"
+                ]
+            }
         }
     ],
     "version": 4
