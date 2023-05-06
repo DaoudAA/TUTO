@@ -49,8 +49,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		stats["Temps_GetActionDisponibleAujourdhui_µs"]+=duration.count();
 		// les choix de transactions dans une meme journee
 		int i=0;
-		while(i<10)
-		{	
+		while(i<10){	
 			//stats pour la fct choisirTransaction
 		    stats["NombreDeTransaction"]++;
 		    start = chrono::high_resolution_clock::now();
@@ -104,15 +103,15 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 	for(unsigned int i=0;i<portefeuille.getTitre().size();i++){
 		if(portefeuille.getTitre()[i].getQte()>0){
 			action=portefeuille.getTitre()[i].getNomAction();
-			cout<<"nom de laction dans le portefeuille"<<action<<endl;
+			//cout<<"nom de laction dans le portefeuille"<<action<<endl;
 			qte=portefeuille.getTitre()[i].getQte();
-			cout<<"quantite de laction dans le portefeuille"<<qte<<endl;
+			//cout<<"quantite de laction dans le portefeuille"<<qte<<endl;
 			prix=bourse.getLastPrixAction(action);
-			cout<<"prix de laction dans le portefeuille"<<prix<<endl;
+			//cout<<"prix de laction dans le portefeuille"<<prix<<endl;
 			stats["getLastPrixAction"]++;
 			portefeuille.venteTitre(action,qte,prix);
 			stats["nombreDVente"]++;
-			cout<<"le solde portefeuille"<<portefeuille.getSolde()<<endl;
+			//cout<<"le solde portefeuille"<<portefeuille.getSolde()<<endl;
 		}
 	}	
 	}
