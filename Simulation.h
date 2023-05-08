@@ -48,54 +48,56 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		stats["Temps_GetActionDisponibleAujourdhui_µs"]+=duration.count();
 		// les choix de transactions dans une meme journee
 		int i=0;
-		while(i<100)
-		{	
-			//stats pour la fct choisirTransaction
-		    stats["NombreDeTransaction"]++;
-		    start = chrono::high_resolution_clock::now();
-			Transaction T=trader.choisirTransaction(bourse ,portefeuille); 
-			stop = chrono::high_resolution_clock::now();
-			duration =chrono::duration_cast<chrono::microseconds>(stop-start);
-			stats["Temps_ChoixTransaction_µs"]+=duration.count();
-			Date dd= bourse.dateAujourdhui;
-			dd.incrementerDate();
-			const string actionNom = T.getnomdAction();
-				if(T.getTypeTx()==rienAFaire){
-				    stats["Nbr de Jours"]++;
-					cout<<"\t JOUR SUIVANT : "<<dd<<endl ; 
-					break;
-				}
-				else if ((T.getTypeTx()==achat)&&(T.getqtedAction()>0)){
-					
-					//bool found = appartientAction(actionNom,Actions);
-					double p=bourse.getPrixAujourdhui(T.getnomdAction(),Actions);
-				    if ((portefeuille.getSolde()>=p)&& (p>0.5)) {
-						stats["nombreDAchat"]++;
-						cout <<portefeuille.getSolde() <<"\t" << p << endl; 
-					    action=T.getnomdAction();
-					    qte=T.getqtedAction();
-					    prix=p;
-					    portefeuille.achatTitre(action,qte,prix);
-					cout<<"Achat de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ;
+		if(!Pj.empty()){
+			while(i<100)
+			{	
+				//stats pour la fct choisirTransaction
+				stats["NombreDeTransaction"]++;
+				start = chrono::high_resolution_clock::now();
+				Transaction T=trader.choisirTransaction(bourse ,portefeuille); 
+				stop = chrono::high_resolution_clock::now();
+				duration =chrono::duration_cast<chrono::microseconds>(stop-start);
+				stats["Temps_ChoixTransaction_µs"]+=duration.count();
+				Date dd= bourse.dateAujourdhui;
+				dd.incrementerDate();
+				const string actionNom = T.getnomdAction();
+					if(T.getTypeTx()==rienAFaire){
+						stats["Nbr de Jours"]++;
+						cout<<"\t JOUR SUIVANT : "<<dd<<endl ; 
+						break;
 					}
-				}
-				else if ((T.getTypeTx()==vente)&&(T.getqtedAction()>0)){
-					
-					for(unsigned int i=0;i<(portefeuille.titres).size();i++){
-						if ((portefeuille.titres)[i].getNomAction() == actionNom){
-							stats["nombreDVente"]++;
+					else if ((T.getTypeTx()==achat)&&(T.getqtedAction()>0)){
+						
+						//bool found = appartientAction(actionNom,Actions);
+						double p=bourse.getPrixAujourdhui(T.getnomdAction(),Actions);
+						if ((portefeuille.getSolde()>=p)&& (p>0.5)) {
+							stats["nombreDAchat"]++;
+							cout <<portefeuille.getSolde() <<"\t" << p << endl; 
 							action=T.getnomdAction();
 							qte=T.getqtedAction();
-							prix=bourse.getLastPrixAction(action);
-							stats["NombreDActionsPresentesLorsDuDernierJour"]++;
-							portefeuille.venteTitre(action,qte,prix);
-					cout<<"Vente de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ; 
+							prix=p;
+							portefeuille.achatTitre(action,qte,prix);
+						cout<<"Achat de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ;
 						}
-
 					}
-				}
-				i++;
-				cout<<"solde du portefeuille"<<portefeuille.getSolde();
+					else if ((T.getTypeTx()==vente)&&(T.getqtedAction()>0)){
+						
+						for(unsigned int i=0;i<(portefeuille.titres).size();i++){
+							if ((portefeuille.titres)[i].getNomAction() == actionNom){
+								stats["nombreDVente"]++;
+								action=T.getnomdAction();
+								qte=T.getqtedAction();
+								prix=bourse.getLastPrixAction(action);
+								stats["NombreDActionsPresentesLorsDuDernierJour"]++;
+								portefeuille.venteTitre(action,qte,prix);
+						cout<<"Vente de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ; 
+							}
+
+						}
+					}
+					i++;
+					cout<<"solde du portefeuille"<<portefeuille.getSolde();
+			}
 		}
 		(bourse.dateAujourdhui).incrementerDate();
 
