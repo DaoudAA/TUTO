@@ -137,26 +137,24 @@ int main(){
                 cout << it->first << ": " << it->second << endl;
             }
             //ecriture dans logs 
-            string fileName="../logs.txt";
+            char* fileName="../status.txt";
             ofstream flot(fileName, ios::app); 
             if (!flot) {
-                flot.open("logs.txt");
+                flot.open("status.txt");
             }
-            if (flot.tellp() == 0) {
-                flot << "Date:\tTrader:\tMontant_de_depart:\tDate_depart:\tNombre_de_jours:\t%Gains" << endl; // Write the header line
-            
-            }
-            auto now = chrono::system_clock::now();
+            auto now =  chrono::system_clock::now();
             time_t time_now = chrono::system_clock::to_time_t(now);
-            string strdate=ctime(&time_now);
+            tm* timeless=localtime(&time_now);
+            char* strdate;
+            strftime(strdate, 11, "%d/%m/%Y", timeless);
             string strannee=ctime(&time_now);
-            flot<<strdate.substr(0,10)<<strannee.substr(19,5)<<":\t"<<strader<<":\t"<<soldeInit<<":\t"<<dateDebut<<":\t"<<statiktiks["Nbr de Jours"]<<":\t"<<statiktiks["Taux_du_gain_en_%"]<< endl;
+            flot<<strdate<<":\t"<<strader<<":\t"<<soldeInit<<":\t"<<dateDebut<<":\t"<<dateFin<<":\t"<<statiktiks["Nbr de Jours"]<<":\t"<<statiktiks["Taux_du_gain_en_%"]<< endl;
             flot.close(); 
             break;
         }
         case 2: {
             string ligne;
-            string fileName="../logs.txt";
+            char* fileName = "../status.txt";
             ifstream flot(fileName);
             while(getline(flot,ligne)){
                 cout << ligne << endl;
