@@ -18,15 +18,17 @@ class Bourse{
 	protected:
     Date dateAujourdhui;
 public:
-    void setDateaujourdhui(Date dd){ dateAujourdhui=dd;}
-    
+    void setDateaujourdhui(Date dd){ dateAujourdhui=dd;}// a supprimer
+    Date getDateAujourdhui()const{return dateAujourdhui;}
+    vector<PrixJournalier>getActionParPeriode(Date&,Date&,string&)const;
+    vector<PrixJournalier>getPrixJournalierParPeriode(Date&,Date&)const;
     virtual vector<PrixJournalier>getPrixJournaliersParDate ( const Date &)const = 0;
     virtual vector<string> getActionDisponibleParDate(const Date& ) const = 0;
 	virtual vector<PrixJournalier>getHistoriqueAction(string)const = 0 ;
 	vector<PrixJournalier>getPrixJournaliersAujourdhui()const{return getPrixJournaliersParDate(dateAujourdhui);}		
     vector<string>getActionDisponibleAujourdhui() const {return getActionDisponibleParDate(dateAujourdhui);}
 	vector<PrixJournalier>getPrixJournaliersDispoAujourdhui(double solde)const;
-	double getPrixAujourdhui(string,vector<string>);
+	double getPrixAujourdhui(string,vector<string>)const;
 	virtual double getLastPrixAction(string)const ;
 	virtual double getAvantDernierPrixDAction(string)const ; 
     virtual ~Bourse(){};
@@ -59,10 +61,14 @@ public:
     vector<PrixJournalier> getPrixJournaliersParDate(const Date&)const;
 	vector<string> getActionDisponibleParDate(const Date&)const;
 	vector<PrixJournalier> getHistoriqueAction(string)const;
-    ~BourseVector2(){}	
+    ~BourseVector2(){}
+		
+		
 };
 bool appartientAction (string nomAction,vector<string>& vecteurActions){
+
 	if(vecteurActions.size()==0)return false;
+  
 	for(unsigned int i=0;i<vecteurActions.size();i++)
 	{
 		if(vecteurActions[i]==nomAction)
@@ -101,6 +107,7 @@ vector<PrixJournalier> BourseVector::getPrixJournaliersParDate( const Date &d)co
     }
     return prixJParDate;
 }
+
 void rechercheDichotomiqueVector(const Date d,const vector<PrixJournalier> &liste,int le,int ri,int mi){
 while(le<=ri){
 		mi=(ri+le)/2;
@@ -209,7 +216,7 @@ vector<PrixJournalier> Bourse::getPrixJournaliersDispoAujourdhui(double solde) c
 
 
 
-double Bourse::getPrixAujourdhui(string nomAction,vector<string>actionsDisponibles){
+double Bourse::getPrixAujourdhui(string nomAction,vector<string>actionsDisponibles)const{
 	unsigned int i=0;
     vector<PrixJournalier> PJTODAY=this->getPrixJournaliersAujourdhui();
 	if(appartientAction(nomAction,actionsDisponibles)){
@@ -376,5 +383,25 @@ double Bourse::getAvantDernierPrixDAction(string nomAct) const {
     return vectHistoria[vectHistoria.size()-2].getPrix();
 }	
 
+vector<PrixJournalier>Bourse::getActionParPeriode(Date &dateDebut,Date &dateFin,string&nom)const{
+    vector<PrixJournalier>resultat;
+    vector<PrixJournalier>pj=this->getPrixJournalierParPeriode(dateDebut,dateFin);
+    for(unsigned int i=0; i<pj.size();i++){
+        if(pj[i].getNomAction()==nom)
+            resultat.push_back(pj[i]);
+    }
 
+    return resultat;
+}
+vector<PrixJournalier>Bourse::getPrixJournalierParPeriode(Date &dateDebut,Date &dateFin)const{
+    vector<PrixJournalier>resultat;
+    for(Date date=dateDebut;date<=dateFin;date.incrementerDate()){
+        vector<PrixJournalier> vpjd=this->getPrixJournaliersParDate(date);
+        for(unsigned int i=0;i<vpjd.size();i++){
+            if(!appartientPrixJournalier(vpjd[i],resultat))
+                resultat.push_back(vpjd[i]);
+        }
+    }
+    return resultat;
+}
 #endif // BOURSE_H_INCLUDED

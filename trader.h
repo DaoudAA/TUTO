@@ -282,6 +282,201 @@ double TraderReverseMean::calculerBornSup(double moyenne, double ecartType) {
     return moyenne + 2 * ecartType;
 }*/
 
+class TraderManuel:public Trader{
+    public:
+        Transaction choisirTransaction(const Bourse& bour, const Portefeuille& portefeuille);
+};
+Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeuille&portefeuille){
+    int choixType,i,j,qte;
+    string nom;
+    TypeTransaction tx;
+    vector<string>v=bourse.getActionDisponibleAujourdhui();  
+    Date dateDebut;
+    Date dateFin(1,1,2011);
+    vector<PrixJournalier>v2;
+    vector<PrixJournalier> vs;
+    vector<string> vs2 =portefeuille.getNomAction();
+    
 
+    double prix;
+    while (1){
+        cout<<" 1 - Achat"<<endl;
+        cout<<" 2 - vente"<<endl;
+        cout<<" 3 - Rien a faire"<<endl;
+        cout<<" 4 - Acces a l'historique"<<endl;
+        do{
+            cout<<"\n Choisir une trasaction:\t";
+            cin>>choixType;
+        }while(choixType>4||choixType<1);
+       switch (choixType)
+        {
+        case 1://achat
+            do{
+                cout<<" 1 - Liste des prix journaliers disponibles aujourd'hui "<<endl;
+                cout<<" 2 - Confirmer l'achat"<<endl;
+                cout<<" 3 - Retour"<<endl;
+                do{
+                    cout<<"\n Votre choix:\t";
+                    cin>>i;
+                }while(i>3||i<1);
+                switch (i)
+                {
+                case 1:
+                    v2=bourse.getPrixJournaliersDispoAujourdhui(portefeuille.getSolde());
+                    for(unsigned int i=0;i<v2.size();i++){
+                        cout<<v2[i]<<endl;
+                    }
+                    break;
+                case 2:        
+                    do{
+                        cout<<"Donner le nom de l'action:\t";
+                        cin>>nom;    
+                    }while(!appartientAction(nom, v));
+                    prix=bourse.getPrixAujourdhui(nom,v);
+                    do{
+                        cout<<"Donner la quantite choisie:\t";
+                        cin>>qte;                             
+                    }while(qte<0 || portefeuille.getSolde()<(qte*prix));    
+                    return Transaction(achat,nom,qte);                 
+                case 3:
+                    break;
+                default:
+                    break;
+                }
+            
+            }while(i==1||i==2);
+            break;
+        case 2://vente
+            if(portefeuille.getNomAction().empty()){
+                cout<<"Vous n'avez rien a vendre"<<endl;
+                break;
+            }
+             do{
+                cout<<" 1 - liste des titres de votre portefeuille "<<endl;
+                cout<<" 2 - Voir votre solde"<<endl;
+                cout<<" 3 - Confirmer la vente"<<endl;
+                cout<<" 4 - Retour"<<endl;
+                do{
+                    cout<<"\n Votre choix:\t";
+                    cin>>i;
+                }while(i>4||i<1);  
+                switch (i)
+                {
+                case 1:
+                    for(unsigned int i=0;i<portefeuille.getTitre().size();i++){
+                        cout<<portefeuille.getTitre()[i];
+                   }
+                    break;
+                case 2:
+                    cout<<"Votre solde:\t"<<portefeuille.getSolde()<<endl;
+                    break;
+                case 3:
+                    do{
+                        cout<<"Donner le nom de l'action a vendre"<<endl;
+                        cin>>nom;
+                    }while(!appartientAction(nom,vs2));
+                    i=portefeuille.findTitre(nom);
+                    int qteMax=portefeuille.getTitre()[i].getQte();
+                    do{
+                      cout<<"Donner la quantite de l'action a vendre"<<endl;
+                      cin>>qte;   
+                    }while(qte<0||qte>qteMax);
+                    return Transaction(vente,nom,qte);
+                    break;                 
+                }
+            }while(i==1||i==2||i==3);
+            break;
+        case 3://rien a faire
+            return Transaction(rienAFaire,"",0);
+            break;
+        case 4://Acces a l'historique
+            do{
+                cout<<" 1 - Acceceder a l'historique d'une action"<<endl;
+                cout<<" 2 - Acceder a l'historique de toutes les actions"<<endl;
+                cout<<" 3 - Retour"<<endl;
+                do{
+                    cout<<"\n Votre choix:\t";
+                    cin>>j;
+                }while(j>3||j<1);
+
+                
+                switch (j)
+                {
+                    case 1:
+
+                        do{
+                            cout<<"Donner date du debut de l'historique (jour/mois/annee)\t";
+                            string dateDStr;
+                            do { 
+                                cin >> dateDStr;                             
+                                dateDebut=Date(dateDStr);
+                                if (dateDebut.getJour()==-1 || dateDebut.getMois()==-1) {
+                                    cout << "Date Invalide. Ressayer: ";
+                                }
+                            } while (dateDebut.getJour()==-1 || dateDebut.getMois()==-1);
+
+                        }while(dateDebut>bourse.getDateAujourdhui());
+                        do{
+                            cout<<"Donner date de la fin de l'historique (jour/mois/annee)\t";
+                            string dateFStr;
+                            do { 
+                                cin >> dateFStr;                             
+                                dateFin=Date(dateFStr);
+                                if (dateFin.getJour()==-1 || dateFin.getMois()==-1) {
+                                    cout << "Date Invalide. Ressayer: ";
+                                }
+                            } while (dateFin.getJour()==-1 || dateFin.getMois()==-1);                            
+                        }while((dateDebut>dateFin)&&(dateFin>bourse.getDateAujourdhui())&&dateDebut>Date(4,1,2010));
+                        cout<<"Donner le nom de l'action\t";
+                        cin>>nom;
+                        vs =bourse.getActionParPeriode(dateDebut,dateFin,nom);
+                        for( unsigned int i=0;i<vs.size();i++){
+                            cout<<vs[i]<<endl;
+                        }
+                        break;
+                    case 2:
+                        
+                        do{
+                            cout<<"Donner date du debut de l'historique (jour/mois/annee)\t";
+                            string dateDStr;
+                            do { 
+                                cin >> dateDStr;                             
+                                dateDebut=Date(dateDStr);
+                                if (dateDebut.getJour()==-1 || dateDebut.getMois()==-1) {
+                                    cout << "Date Invalide. Ressayer: ";
+                                }
+                            } while (dateDebut.getJour()==-1 || dateDebut.getMois()==-1);
+
+                        }while(dateDebut>bourse.getDateAujourdhui());
+                        do{
+                            cout<<"Donner date de la fin de l'historique (jour/mois/annee)\t";
+                            string dateFStr;
+                            do { 
+                                cin >> dateFStr;                             
+                                dateFin=Date(dateFStr);
+                                if (dateFin.getJour()==-1 || dateFin.getMois()==-1) {
+                                    cout << "Date Invalide. Ressayer: ";
+                                }
+                            } while (dateFin.getJour()==-1 || dateFin.getMois()==-1);                            
+                        }while((dateDebut>dateFin)&&(dateFin>bourse.getDateAujourdhui()));
+                        v2=bourse.getPrixJournalierParPeriode(dateDebut,dateFin);
+                        for( unsigned int i=0;i<v2.size();i++){
+                            cout<<v2[i]<<endl;
+                        }                                       
+                        break;
+                    case 3:
+                        break;                    
+
+                    }
+                    
+            }while(j==1||j==2);
+            break;
+
+           // break;
+        }
+        break;
+    }
+    
+}
 
 #endif
