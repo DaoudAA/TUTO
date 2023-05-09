@@ -48,6 +48,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		stats["Temps_GetActionDisponibleAujourdhui_µs"]+=duration.count();
 		// les choix de transactions dans une meme journee
 		int i=0;
+		Date dd=bourse.dateAujourdhui;
 		if(!Pj.empty()){
 			while(i<100)
 			{	
@@ -58,12 +59,11 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 				stop = chrono::high_resolution_clock::now();
 				duration =chrono::duration_cast<chrono::microseconds>(stop-start);
 				stats["Temps_ChoixTransaction_µs"]+=duration.count();
-				Date dd= bourse.dateAujourdhui;
-				dd.incrementerDate();
+				//dd.incrementerDate();//pourquoi incrementer la date est ici ona deja la ecrit ?
 				const string actionNom = T.getnomdAction();
 					if(T.getTypeTx()==rienAFaire){
-						stats["Nbr de Jours"]++;
-						cout<<"\t JOUR SUIVANT : "<<dd<<endl ; 
+						stats["Nbr_de_Jours"]++;
+						cout<<"\t JOUR SUIVANT : "<<dd<<endl ; //a verfier je pense qu'il a des jours ou il ne les ecrit pas
 						break;
 					}
 					else if ((T.getTypeTx()==achat)&&(T.getqtedAction()>0)){
@@ -84,12 +84,12 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 						
 						for(unsigned int i=0;i<(portefeuille.titres).size();i++){
 							if ((portefeuille.titres)[i].getNomAction() == actionNom){
-								stats["nombreDVente"]++;
 								action=T.getnomdAction();
 								qte=T.getqtedAction();
 								prix=bourse.getLastPrixAction(action);
 								stats["NombreDActionsPresentesLorsDuDernierJour"]++;
 								portefeuille.venteTitre(action,qte,prix);
+								stats["nombreDVente"]++;
 						cout<<"Vente de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ; 
 							}
 
@@ -98,6 +98,10 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 					i++;
 					cout<<"solde du portefeuille"<<portefeuille.getSolde();
 			}
+		}
+		else{
+			stats["Nbr_de_Jours"]++;
+			cout<<"\t JOUR SUIVANT : "<<dd<<endl ; 
 		}
 		(bourse.dateAujourdhui).incrementerDate();
 
@@ -110,12 +114,13 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 			prix=bourse.getLastPrixAction(action);
 			stats["NombreDActionsPresentesLorsDuDernierJour"]++;
 			portefeuille.venteTitre(action,qte,prix);
-			stats["nombreDVentes"]++;
+			stats["nombreDVente"]++;
 		}
 	}	
 	}
 	stats["soldeFinal"]=portefeuille.getSolde();
 	stats["Taux_du_gain_en_%"]=stats["soldeFinal"]/soldeInit*100-100;
+	stats["temps_moyen_transaction"]=stats["Temps_ChoixTransaction_µs"]/stats["NombreDeTransaction"];
 	return stats;
 
 }
