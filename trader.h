@@ -108,7 +108,7 @@ Transaction TraderAlgo1::choisirTransaction(const Bourse&bourse , const Portefeu
 
 class TraderBollin1 : public Trader {
 private:
-    unordered_map<string, pair<double, int>> moydAction;
+    map<string, pair<double, int>> moydAction;
 public:
     Transaction choisirTransaction(const Bourse&, const Portefeuille&);
 
@@ -144,7 +144,7 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
         }
 
         double qteDispo = portef.getSolde() / pluscher.getPrix();
-        int qte = min(3, static_cast<int>(qteDispo));
+        //int qte = min(3, static_cast<int>(qteDispo));
         return Transaction(TypeTransaction::achat, pluscher.getNomAction(), floor(qteDispo));
     }
     bool triedAll=false;
@@ -167,8 +167,8 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
         ++nbInstances;
 
         double ecartType = calculerEcartType(historique, moyenne);
-        double bornInf = calculerBornInf(moyenne, ecartType);
-        double bornSup = calculerBornSup(moyenne, ecartType);
+        //double bornInf = calculerBornInf(moyenne, ecartType);
+        //double bornSup = calculerBornSup(moyenne, ecartType);
 
         if (moyenne*1.05 <= dernierPrix || portef.getSolde()<1) {
             for (const Titre& titre : portef.getTitre()) {
@@ -212,7 +212,7 @@ double TraderBollin1::calculerBornSup(double moyenne, double ecartType) {
 
 class TraderReverseMean : public Trader {
 private:
-    unordered_map<string, pair<double, int>> moydAction;
+    map<string, pair<double, int> > moydAction;
 
 public:
     Transaction choisirTransaction(const Bourse&, const Portefeuille&);
