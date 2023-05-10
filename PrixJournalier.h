@@ -18,7 +18,9 @@ public:
     string getNomAction()const {return nomAction;}
     double getPrix()const{return prix;}
     PrixJournalier(Date  d, string  n , double  p):date(d),nomAction(n),prix(p){};
-    friend bool operator==(PrixJournalier&,PrixJournalier&);
+    friend  bool operator==(const PrixJournalier &pj1,const PrixJournalier&pj2);
+
+    friend bool operator<(const PrixJournalier& pj1, const PrixJournalier& pj2);
     friend ostream& operator<<(ostream& , const PrixJournalier&);
     friend istream& operator>>(istream& , PrixJournalier&);
 };
@@ -41,12 +43,14 @@ istream& operator>>(istream& flux , PrixJournalier& pj){
     return flux;
     
 }
-bool operator==(PrixJournalier &pj1,PrixJournalier &pj2)
+bool operator==(const PrixJournalier &pj1,const PrixJournalier&pj2)
 {
-	if((pj1.getDate()==pj2.getDate())&&(pj1.getNomAction()==pj2.getNomAction())&&(pj1.getPrix()==pj2.getPrix()))
-		return	true;
-	else
-		return false;
+    if ((pj1.getDate() == pj2.getDate()) && (pj1.getNomAction() == pj2.getNomAction()))
+        return true;
+    else
+        return false;
 }
-
+bool operator<(const PrixJournalier& pj1, const PrixJournalier& pj2) {
+    return (pj1.getDate() < pj2.getDate());
+}
 #endif // PRIXJOURNALIER_H_INCLUDED
