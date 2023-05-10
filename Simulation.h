@@ -40,6 +40,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		auto stop = chrono::high_resolution_clock::now();
 		auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
 		stats["Temps_GetPrixJournalierAujourdhui_µs"]+=duration.count();
+		stats["Nbr_fois_appelauPJA"]++;
 		//stats pour la fct getActionDisponibleAujourdhui
 		start = chrono::high_resolution_clock::now();
 		vector<string> Actions=bourse.getActionDisponibleAujourdhui();
@@ -86,7 +87,11 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 							if ((portefeuille.titres)[i].getNomAction() == actionNom){
 								action=T.getnomdAction();
 								qte=T.getqtedAction();
+								auto start = chrono::high_resolution_clock::now();
 								prix=bourse.getLastPrixAction(action);
+								 auto stop = chrono::high_resolution_clock::now();
+			auto duration =chrono::duration_cast<chrono::microseconds>(stop-start);
+			stats["Temps_getLPrixAction"]+=duration.count();
 								stats["NombreDActionsPresentesLorsDuDernierJour"]++;
 								portefeuille.venteTitre(action,qte,prix);
 								stats["nombreDVente"]++;
@@ -111,6 +116,12 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		if(portefeuille.getTitre()[i].getQte()>0){
 			action=portefeuille.getTitre()[i].getNomAction();
 			qte=portefeuille.getTitre()[i].getQte();
+			auto start = chrono::high_resolution_clock::now();
+			action=portefeuille.getTitre()[i].getNomAction();
+			 auto stop = chrono::high_resolution_clock::now();
+			auto duration =chrono::duration_cast<chrono::microseconds>(stop-start);
+			stats["Temps_getLPrixAction"]+=duration.count();
+
 			prix=bourse.getLastPrixAction(action);
 			stats["NombreDActionsPresentesLorsDuDernierJour"]++;
 			portefeuille.venteTitre(action,qte,prix);
@@ -121,6 +132,8 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 	stats["soldeFinal"]=portefeuille.getSolde();
 	stats["Taux_du_gain_en_%"]=stats["soldeFinal"]/soldeInit*100-100;
 	stats["temps_moyen_transaction"]=stats["Temps_ChoixTransaction_µs"]/stats["NombreDeTransaction"];
+	stats["temps_moyen_getPJparDate"]=stats["Temps_GetPrixJournalierAujourdhui_µs"]/stats["Nbr_fois_appelauPJA"];
+	stats["temps_moyen_de_getlastprix"]=stats["Temps_getLPrixAction"]/stats["nombreDVente"];
 	return stats;
 
 }
