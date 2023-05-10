@@ -424,14 +424,21 @@ BourseSet::BourseSet(const vector<PrixJournalier>& vpj){
 }
 vector<PrixJournalier>BourseSet::getPrixJournaliersParDate(const Date&date)const{
     vector<PrixJournalier>v;
-
-    for(auto it=historique.begin(); it!=historique.end();++it){
-        if(it->getDate()==date){
+    PrixJournalier p(date,"",0);
+    auto it=historique.find(p);
+    while(it->getDate()==date){
             v.push_back(*it);
-        }
-        if(it->getDate()>date)
-            break;
+            it++;
     }
     return v;
+}
+vector<PrixJournalier>BourseSet::getHistoriqueAction(string nom)const{
+    vector<PrixJournalier>v;
+    for(auto it= historique.begin();it!=historique.end();++it){
+        if(it->getNomAction()==nom)
+            v.push_back(*it);
+    }
+    return v;
+
 }
 #endif // BOURSE_H_INCLUDED
