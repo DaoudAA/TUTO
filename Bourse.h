@@ -407,7 +407,7 @@ vector<PrixJournalier>Bourse::getPrixJournalierParPeriode(Date &dateDebut,Date &
 //BoursSet
 class BourseSet : public Bourse {
 private:
-     set< PrixJournalier > historique;
+     multiset< PrixJournalier > historique;
 
 public:
     BourseSet(const vector<PrixJournalier>& vpj);
@@ -425,28 +425,20 @@ BourseSet::BourseSet(const vector<PrixJournalier>& vpj){
 vector<PrixJournalier>BourseSet::getPrixJournaliersParDate(const Date&date)const{
     vector<PrixJournalier>v;
     PrixJournalier p(date,"",0);
-    auto it=historique.find(p);
+    auto it=historique.lower_bound(p);
     while(it->getDate()==date){
             v.push_back(*it);
-            
+            it++;
         if(it->getDate()>date)
             break;
 		}
     return v;
 	}
-vector<PrixJournalier>BourseSet::getHistoriqueAction(string nom)const{
-    vector<PrixJournalier>v;
-    for(auto it= historique.begin();it!=historique.end();++it){
-        if(it->getNomAction()==nom)
-            v.push_back(*it);
-    }
-    return v;
 
-}
 vector<string> BourseSet::getActionDisponibleParDate(const Date& date)const{
     vector<string>v;
         auto it=lower_bound(historique.begin(),historique.end(),PrixJournalier(date,"",0));
-        while (!(it->getDate()>date)){
+        while ((it->getDate()==date)){
             v.push_back(it->getNomAction());
             it++;
         }

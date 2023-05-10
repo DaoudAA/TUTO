@@ -15,14 +15,17 @@ int main()
     PersistancePrixJournaliers ppj;
 	vPj=ppj.lirePrixJournaliersDUnFichier(ch1);
     Date date(1,04,2010);
-    Bourse * b1=new BourseVector(vPj);
+    Bourse * b1=new BourseSet(vPj);
     b1->setDateaujourdhui(date);
     cout << "0" <<endl;
     vector<PrixJournalier>PJAction=(*b1).getPrixJournaliersDispoAujourdhui(1000.0);
     cout <<"size = "<< PJAction.size() << endl; 
+     vector<string>PJActionen=(*b1).getActionDisponibleParDate(date);
+     cout << PJActionen.size()<<endl;
+    for (auto elt :PJActionen){cout << elt <<endl;}
             if(PJAction.size()!=0)
     {
-        cout<<endl<<"PJParAction: JCI"<<endl;
+       cout<<endl<<"PJParAction: JCI"<<endl;
         for(unsigned int i=0;i<PJAction.size();i++)
         cout<<PJAction[i]<<endl;
     }
