@@ -428,10 +428,28 @@ vector<PrixJournalier>BourseSet::getPrixJournaliersParDate(const Date&date)const
     for(auto it=historique.begin(); it!=historique.end();++it){
         if(it->getDate()==date){
             v.push_back(*it);
-        }
+            }
         if(it->getDate()>date)
             break;
+		}
+    return v;
+	}
+vector<string> BourseSet::getActionDisponibleParDate(const Date& date)const{
+    vector<string>v;
+        auto it=lower_bound(historique.begin(),historique.end(),PrixJournalier(date,"",0));
+        while (!(it->getDate()>date)){
+            v.push_back(it->getNomAction());
+            it++;
+        }
+    return v;
+}
+vector<PrixJournalier>BourseSet::getHistoriqueAction(string nom)const{
+    vector<PrixJournalier>v;
+    for(auto it= historique.begin();it!=historique.end();++it){
+        if(it->getNomAction()==nom)
+            v.push_back(*it);
     }
     return v;
+
 }
 #endif // BOURSE_H_INCLUDED
