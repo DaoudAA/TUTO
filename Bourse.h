@@ -407,13 +407,31 @@ vector<PrixJournalier>Bourse::getPrixJournalierParPeriode(Date &dateDebut,Date &
 //BoursSet
 class BourseSet : public Bourse {
 private:
-     set<const PrixJournalier > historique;
+     set< PrixJournalier > historique;
 
 public:
-    BourseSet(const vector<const PrixJournalier>vpj){
-        for(unsigned int i=0;i<vpj.size();i++){
-            historique.insert( vpj[i]);
-        }
-    }
+    BourseSet(const vector<PrixJournalier>& vpj);
+    vector<PrixJournalier> getPrixJournaliersParDate(const Date&)const;
+	vector<string> getActionDisponibleParDate(const Date&)const;
+	vector<PrixJournalier> getHistoriqueAction(string)const;
+    ~BourseSet(){}
+
 };
+BourseSet::BourseSet(const vector<PrixJournalier>& vpj){
+    for(unsigned int i=0;i<vpj.size();i++){
+        historique.insert( vpj[i]);
+    }
+}
+vector<PrixJournalier>BourseSet::getPrixJournaliersParDate(const Date&date)const{
+    vector<PrixJournalier>v;
+
+    for(auto it=historique.begin(); it!=historique.end();++it){
+        if(it->getDate()==date){
+            v.push_back(*it);
+        }
+        if(it->getDate()>date)
+            break;
+    }
+    return v;
+}
 #endif // BOURSE_H_INCLUDED
