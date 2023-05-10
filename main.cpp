@@ -147,8 +147,13 @@ int main(){
             tm* timeless=localtime(&time_now);
             char* strdate;
             strftime(strdate, 11, "%d/%m/%Y", timeless);
-            string strannee=ctime(&time_now);
-            flot<<strdate<<":\t"<<strader<<":\t"<<soldeInit<<":\t"<<dateDebut<<":\t"<<dateFin<<":\t"<<statiktiks["Nbr de Jours"]<<":\t"<<statiktiks["Taux_du_gain_en_%"]<< endl;
+            //string strannee=ctime(&time_now);
+            flot<<strdate<<":\t"<<strader<<":\t"<<dateDebut<<":\t"<<dateFin<<":\t"<<statiktiks["Nbr de Jours"]<<":\t"
+            <<statiktiks["Taux_du_gain_en_%"]<<":\t"<<-soldeInit+statiktiks["soldeFinal"]<<":\t"
+            <<soldeInit<<":\t"<<statiktiks["soldeFinal"]<<":\t"
+            <<statiktiks["NombreDeTransaction"]<<":\t"<<statiktiks["nombreDAchat"]<<":\t"<<statiktiks["nombreDVente"]
+            <<statiktiks["Nbr_fois_appelauPJA"]<<":\t"<<statiktiks["Temps_ChoixTransaction_µs"]
+            <<":\t"<<statiktiks["Temps_GetPrixJournalierAujourdhui_µs"]<<":\t"<<statiktiks["Temps_getLPrixAction"];
             flot.close(); 
             break;
         }
