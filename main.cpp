@@ -8,6 +8,7 @@
 int main(){
     string ch1;
     ch1="../prices_simple.csv";
+    srand(time(NULL));
 	vector<PrixJournalier> vPj;
     PersistancePrixJournaliers ppj;
 	vPj=ppj.lirePrixJournaliersDUnFichier(ch1);

@@ -73,7 +73,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 						double p=bourse.getPrixAujourdhui(T.getnomdAction(),Actions);
 						if ((portefeuille.getSolde()>=p)&& (p>0.5)) {
 							stats["nombreDAchat"]++;
-							cout <<portefeuille.getSolde() <<"\t" << p << endl; 
+							//cout <<portefeuille.getSolde() <<"\t" << p << endl; 
 							action=T.getnomdAction();
 							qte=T.getqtedAction();
 							prix=p;
@@ -90,18 +90,18 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 								auto start1 = chrono::high_resolution_clock::now();
 								prix=bourse.getLastPrixAction(action);
 								 auto stop1 = chrono::high_resolution_clock::now();
-			auto duration1 =chrono::duration_cast<chrono::microseconds>(stop1-start1);
-			stats["Temps_getLPrixAction"]+=duration1.count();
+								auto duration1 =chrono::duration_cast<chrono::microseconds>(stop1-start1);
+								stats["Temps_getLPrixAction"]+=duration1.count();
 								stats["NombreDActionsPresentesLorsDuDernierJour"]++;
 								portefeuille.venteTitre(action,qte,prix);
 								stats["nombreDVente"]++;
-						cout<<"Vente de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ; 
+								cout<<"Vente de "<<T.getqtedAction()<<" of "<<T.getnomdAction()<<endl ; 
 							}
 
 						}
 					}
 					i++;
-					cout<<"solde du portefeuille"<<portefeuille.getSolde();
+					cout<<"solde du portefeuille"<<portefeuille.getSolde()<<endl;
 			}
 		}
 		else{
@@ -118,7 +118,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 			qte=portefeuille.getTitre()[i].getQte();
 			auto start = chrono::high_resolution_clock::now();
 			action=portefeuille.getTitre()[i].getNomAction();
-			 auto stop = chrono::high_resolution_clock::now();
+			auto stop = chrono::high_resolution_clock::now();
 			auto duration =chrono::duration_cast<chrono::microseconds>(stop-start);
 			stats["Temps_getLPrixAction"]+=duration.count();
 

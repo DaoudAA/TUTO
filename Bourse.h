@@ -131,6 +131,7 @@ vector<PrixJournalier>recherchePrixJournalier(vector<PrixJournalier> liste,const
     for(int i=left;i<=right && left<=right ;i++){
         if(d==liste[i].getDate()){
             resultat.push_back(liste[i]);}
+        else if(d<liste[i].getDate())break;
 
     }
     return resultat;
