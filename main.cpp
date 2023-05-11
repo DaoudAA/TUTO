@@ -46,8 +46,9 @@ int main(){
                     cout << "2. \tTrader Bollinger" << endl;
                     cout << "3. \tTrader Algorithmique" << endl;
                     cout << "4. \tTrader Reverse Mean" << endl;
+                    cout << "5. \tTrader Manuel" << endl;
                     //cout << "5. \tRetour au menu précedent"<<endl;
-                    cout << "\t\tEnter your choice (1-4): ";
+                    //cout << "\t\tEnter your choice (1-5): ";
                     cin >> choixTrader;
 
                     switch (choixTrader) {
