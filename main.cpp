@@ -67,6 +67,10 @@ int main(){
                             trader= new TraderReverseMean;
                             strader="TraderReverseMean";
                             break;
+                        case 5:
+                            trader= new TraderManuel;
+                            strader="Trader Manuel";
+                            break;
                         default:
                             cout << "Choix Invalide. Ressayer!" << endl;
                             break;

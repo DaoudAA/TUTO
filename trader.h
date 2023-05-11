@@ -8,7 +8,7 @@
 #include<cmath>
 #include<cstdlib>
 #include <algorithm>
-#include <unordered_map>
+#include <map>
 using namespace std;
 enum TypeTransaction { achat, vente, rienAFaire };
 class Transaction {
@@ -163,14 +163,14 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
        // double  =moy;
         int& nbInstances = moydAction[nomAction].second;
 
-        moyenne = ((moyenne * nbInstances) + prixJournalier.getPrix()) / (nbInstances + 1);
+        moyenne = ((moyenne * nbInstances) + prixJournalier.getPrix()*2) / (nbInstances + 2);
         ++nbInstances;
 
         double ecartType = calculerEcartType(historique, moyenne);
-        //double bornInf = calculerBornInf(moyenne, ecartType);
-        //double bornSup = calculerBornSup(moyenne, ecartType);
+        double bornInf = calculerBornInf(moyenne, ecartType);
+        double bornSup = calculerBornSup(moyenne, ecartType);
 
-        if (moyenne*1.05 <= dernierPrix || portef.getSolde()<1) {
+        if (bornSup <= dernierPrix || portef.getSolde()<1) {
             for (const Titre& titre : portef.getTitre()) {
                 if (titre.getNomAction() == nomAction) {
                     int qte = titre.getQte();
@@ -178,7 +178,7 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
                 }
             }
         }
-        else if (moyenne*0.95 > dernierPrix && prixJournalier.getPrix() < portef.getSolde()){
+        else if (bornInf > dernierPrix && prixJournalier.getPrix() < portef.getSolde()){
             double qteDispo = portef.getSolde() / prixJournalier.getPrix();
             int qte = min(5, static_cast<int>(qteDispo));
             return Transaction(achat, nomAction, floor(qte));
@@ -193,7 +193,7 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
 double TraderBollin1::calculerEcartType(const vector<PrixJournalier>& historique, double moyenne) {
 double sommeDiffCarrees = 0.0;
 int n = historique.size();
-int nbValuesToConsider; //= min(n * 0.1, 10); // only consider 10% of the most recent data or 10 data points, whichever is smaller
+int nbValuesToConsider= min(static_cast<int>(floor(n * 0.1)), 10); // only consider 10% of the most recent data or 10 data points, whichever is smaller
 if (n>10) {nbValuesToConsider=10 ;}else {nbValuesToConsider=n;}
 int startIndex = n - nbValuesToConsider;
 for (int i = startIndex; i < n; i++) {
@@ -225,10 +225,8 @@ bool TraderReverseMean::comparePriceDescending(const PrixJournalier& pj1, const 
 }
 Transaction TraderReverseMean::choisirTransaction(const Bourse& bour, const Portefeuille& portef) {
     vector<PrixJournalier> PrixJournaliers = bour.getPrixJournaliersAujourdhui();
-    //sort(PrixJournaliers.begin(), PrixJournaliers.end(), comparePriceDescending);
     for (const PrixJournalier& prixJournalier : PrixJournaliers) {
         const string nomAction = prixJournalier.getNomAction();
-        // Get the historical prices and last price of the action
         const vector<PrixJournalier>& historique = bour.getHistoriqueAction(nomAction);
         double dernierPrix = bour.getLastPrixAction(nomAction);
 
@@ -237,8 +235,6 @@ Transaction TraderReverseMean::choisirTransaction(const Bourse& bour, const Port
 
         moyenne = ((moyenne * nbInstances) + prixJournalier.getPrix()) / (nbInstances + 1);
         ++nbInstances;
-        // If the last price of the action is greater than the mean price,
-        // and there are some shares of the action in the portfolio, sell them all.
         int qte=0;
         if (dernierPrix > moyenne ) {
             for (const Titre& titre : portef.getTitre()) {
@@ -249,9 +245,7 @@ Transaction TraderReverseMean::choisirTransaction(const Bourse& bour, const Port
             if (qte>0){return Transaction(TypeTransaction::vente, nomAction, qte);}
         }
 
-        // If the last price of the action is less than or equal to the mean price,
-        // and the price of the action is less than the available balance of the portfolio,
-        // buy as much shares of the action as possible.
+        
         if (dernierPrix <= moyenne && prixJournalier.getPrix() < portef.getSolde()) {
             double qteDispo = portef.getSolde() / prixJournalier.getPrix();
             int qte = min(5, static_cast<int>(qteDispo));
@@ -259,28 +253,11 @@ Transaction TraderReverseMean::choisirTransaction(const Bourse& bour, const Port
         }
     }
 
-    // If no transaction was made, return "rienAFaire"
     return Transaction(TypeTransaction::rienAFaire, "", 0);
 }
-/*double TraderReverseMean::calculerEcartType(const vector<PrixJournalier>& historique, double moyenne) {
-double sommeDiffCarrees = 0.0;
-int n = historique.size();
-int nbValuesToConsider; //= min(n * 0.1, 10); // only consider 10% of the most recent data or 10 data points, whichever is smaller
-if (n>10) {nbValuesToConsider=10 ;}else {nbValuesToConsider=n;}
-int startIndex = n - nbValuesToConsider;
-for (int i = startIndex; i < n; i++) {
-double diff = historique[i].getPrix() - moyenne;
-sommeDiffCarrees += diff * diff;
-}
-return sqrt(sommeDiffCarrees / nbValuesToConsider);
-}*/
-/*double TraderReverseMean::calculerBornInf(double moyenne, double ecartType) {
-    return moyenne - 2 * ecartType;
-}
 
-double TraderReverseMean::calculerBornSup(double moyenne, double ecartType) {
-    return moyenne + 2 * ecartType;
-}*/
+    
+
 
 class TraderManuel:public Trader{
     public:
@@ -365,7 +342,7 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                 case 1:
                     for(unsigned int i=0;i<portefeuille.getTitre().size();i++){
                         cout<<portefeuille.getTitre()[i];
-                   }
+}
                     break;
                 case 2:
                     cout<<"Votre solde:\t"<<portefeuille.getSolde()<<endl;
@@ -476,7 +453,7 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
         }
         break;
     }
-    
+
 }
 
 #endif
