@@ -438,10 +438,9 @@ vector<PrixJournalier>BourseSet::getPrixJournaliersParDate(const Date&date)const
 
 vector<string> BourseSet::getActionDisponibleParDate(const Date& date)const{
     vector<string>v;
-        auto it=lower_bound(historique.begin(),historique.end(),PrixJournalier(date,"",0));
-        while ((it->getDate()==date)){
-            v.push_back(it->getNomAction());
-            it++;
+    vector<PrixJournalier>vpj=getPrixJournaliersParDate(date)  ;
+        for(auto elt :vpj){
+            v.push_back(elt.getNomAction());
         }
     return v;
 }
