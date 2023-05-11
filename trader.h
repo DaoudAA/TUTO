@@ -63,6 +63,7 @@ public:
         int choixQte = 1 + rand() % x;
         return Transaction(vente, Pt[choixDAction].getNomAction(), choixQte);
     }
+    return Transaction(rienAFaire, "", 0);
 }
 };
 // trader algorithmique 1
@@ -189,6 +190,7 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
         }
     }
     if (triedAll){return Transaction(rienAFaire, "", 0);}
+    return Transaction(rienAFaire, "", 0);
 }
 double TraderBollin1::calculerEcartType(const vector<PrixJournalier>& historique, double moyenne) {
 double sommeDiffCarrees = 0.0;
@@ -266,7 +268,7 @@ class TraderManuel:public Trader{
 Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeuille&portefeuille){
     int choixType,i,j,qte;
     string nom;
-    TypeTransaction tx;
+    //TypeTransaction tx;
     vector<string>v=bourse.getActionDisponibleAujourdhui();  
     Date dateDebut;
     Date dateFin(1,1,2011);
@@ -285,8 +287,7 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
             cout<<"\n Choisir une trasaction:\t";
             cin>>choixType;
         }while(choixType>4||choixType<1);
-       switch (choixType)
-        {
+        switch (choixType){
         case 1://achat
             do{
                 cout<<" 1 - Liste des prix journaliers disponibles aujourd'hui "<<endl;
@@ -328,7 +329,7 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                 cout<<"Vous n'avez rien a vendre"<<endl;
                 break;
             }
-             do{
+            do{
                 cout<<" 1 - liste des titres de votre portefeuille "<<endl;
                 cout<<" 2 - Voir votre solde"<<endl;
                 cout<<" 3 - Confirmer la vente"<<endl;
@@ -342,7 +343,7 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                 case 1:
                     for(unsigned int i=0;i<portefeuille.getTitre().size();i++){
                         cout<<portefeuille.getTitre()[i];
-}
+                    }
                     break;
                 case 2:
                     cout<<"Votre solde:\t"<<portefeuille.getSolde()<<endl;
@@ -355,8 +356,8 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                     i=portefeuille.findTitre(nom);
                     int qteMax=portefeuille.getTitre()[i].getQte();
                     do{
-                      cout<<"Donner la quantite de l'action a vendre"<<endl;
-                      cin>>qte;   
+                    cout<<"Donner la quantite de l'action a vendre"<<endl;
+                    cin>>qte;   
                     }while(qte<0||qte>qteMax);
                     return Transaction(vente,nom,qte);
                     break;                 
@@ -453,7 +454,7 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
         }
         break;
     }
-
+    return Transaction(rienAFaire,"",0);
 }
 
 #endif

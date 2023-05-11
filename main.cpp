@@ -75,7 +75,7 @@ int main(){
                             cout << "Choix Invalide. Ressayer!" << endl;
                             break;
                     }
-                } while (choixTrader < 1 || choixTrader > 4);
+                } while (choixTrader < 1 || choixTrader > 5);
                 Bourse * bourse=NULL;
                 do{
                 cout << "\n--- BOURSES ---" << endl;
@@ -83,6 +83,7 @@ int main(){
                 cout << "2. BourseDictDate" << endl;
                 cout << "3. BourseVector" << endl;
                 cout << "4. BourseVector2" << endl;
+                cout << "5. BourseSet" << endl;
                 //cout << "5. Retour au menu précedent"<<endl;
                 //cout << "Entrer votre choix (1-4): ";
                 cin >> choixBourse;
@@ -100,11 +101,14 @@ int main(){
                     case 4:
                         bourse = new BourseVector2(vPj);
                         break;
+                    case 5:
+                        bourse = new BourseSet(vPj);
+                        break;
                     default:
                         cout << "Choix Invalid . Ressayer" << endl;
                         continue;
                 }
-                } while (choixTrader < 1 || choixTrader > 4);
+                } while (choixTrader < 1 || choixTrader > 5);
                 
             cout << "\nEntrer date debut de simulation (DD/MM/YYYY): ";
             string dateDStr;
@@ -146,10 +150,10 @@ int main(){
             if (!flot) {
                 flot.open("status.txt");
             }
+            char* strdate;
             auto now =  chrono::system_clock::now();
             time_t time_now = chrono::system_clock::to_time_t(now);
             tm* timeless=localtime(&time_now);
-            char* strdate;
             strftime(strdate, 11, "%d/%m/%Y", timeless);
             //string strannee=ctime(&time_now);
             flot<<strdate<<":\t"<<strader<<":\t"<<dateDebut<<":\t"<<dateFin<<":\t"<<statiktiks["Nbr de Jours"]<<":\t"
