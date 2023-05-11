@@ -87,11 +87,11 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 							if ((portefeuille.titres)[i].getNomAction() == actionNom){
 								action=T.getnomdAction();
 								qte=T.getqtedAction();
-								auto start = chrono::high_resolution_clock::now();
+								auto start1 = chrono::high_resolution_clock::now();
 								prix=bourse.getLastPrixAction(action);
-								 auto stop = chrono::high_resolution_clock::now();
-			auto duration =chrono::duration_cast<chrono::microseconds>(stop-start);
-			stats["Temps_getLPrixAction"]+=duration.count();
+								 auto stop1 = chrono::high_resolution_clock::now();
+			auto duration1 =chrono::duration_cast<chrono::microseconds>(stop1-start1);
+			stats["Temps_getLPrixAction"]+=duration1.count();
 								stats["NombreDActionsPresentesLorsDuDernierJour"]++;
 								portefeuille.venteTitre(action,qte,prix);
 								stats["nombreDVente"]++;

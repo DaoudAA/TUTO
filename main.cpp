@@ -139,30 +139,28 @@ int main(){
                 cout << "Budget initial doit etre superieur a 0. Reessayer!: ";
                 cin >> soldeInit;
             }
-           Simulation Sim(soldeInit);
-           statiktiks = Sim.executer(*bourse, *trader, dateDebut, dateFin, soldeInit);
+            Simulation Sim(soldeInit);
+            statiktiks = Sim.executer(*bourse, *trader, dateDebut, dateFin, soldeInit);
             cout << "\nStats:" << endl;
             for (auto it = statiktiks.begin(); it != statiktiks.end(); ++it) {
                 cout << it->first << ": " << it->second << endl;
             }
             //ecriture dans logs 
-            char* fileName="../status.txt";
+            string fileName="../status.txt";
             ofstream flot(fileName, ios::app); 
             if (!flot) {
                 flot.open("status.txt");
             }
-            char* strdate;
-            auto now =  chrono::system_clock::now();
-            time_t time_now = chrono::system_clock::to_time_t(now);
-            tm* timeless=localtime(&time_now);
-            strftime(strdate, 11, "%d/%m/%Y", timeless);
+            //flot<<"================ Stats ============================="<<endl;
+            //char* strdate;
             //string strannee=ctime(&time_now);
-            flot<<strdate<<":\t"<<strader<<":\t"<<dateDebut<<":\t"<<dateFin<<":\t"<<statiktiks["Nbr de Jours"]<<":\t"
-            <<statiktiks["Taux_du_gain_en_%"]<<":\t"<<-soldeInit+statiktiks["soldeFinal"]<<":\t"
-            <<soldeInit<<":\t"<<statiktiks["soldeFinal"]<<":\t"
-            <<statiktiks["NombreDeTransaction"]<<":\t"<<statiktiks["nombreDAchat"]<<":\t"<<statiktiks["nombreDVente"]
-            <<statiktiks["Nbr_fois_appelauPJA"]<<":\t"<<statiktiks["Temps_ChoixTransaction_µs"]
-            <<":\t"<<statiktiks["Temps_GetPrixJournalierAujourdhui_µs"]<<":\t"<<statiktiks["Temps_getLPrixAction"];
+            flot<<strader<<":\t"<<dateDebut<<":\t"<<dateFin<<":\t"<<statiktiks["Nbr_de_Jours"]<<
+            ":\t"<<statiktiks["Taux_du_gain_en_%"]<<":\t"<<(-soldeInit+statiktiks["soldeFinal"])<<
+            ":\t"<<soldeInit<<":\t"<<statiktiks["soldeFinal"]<<":\t"<<statiktiks["NombreDeTransaction"]<<
+            ":"<<statiktiks["nombreDAchat"]<<":"<<statiktiks["nombreDVente"]<<":"<<statiktiks["Nbr_fois_appelauPJA"]<<
+            ":\t"<<statiktiks["Temps_ChoixTransaction_µs"]<<":\t"<<statiktiks["Temps_GetPrixJournalierAujourdhui_µs"]<<
+            ":\t"<<statiktiks["Temps_getLPrixAction"]<<endl;
+            //<<":\t"<<statiktiks["Temps_ChoixTransaction_µs"]<<":\t"<<statiktiks["Temps_GetPrixJournalierAujourdhui_µs"]<<":\t"<<statiktiks["Temps_getLPrixAction"]<<endl;
             flot.close(); 
             break;
         }
