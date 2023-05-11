@@ -16,12 +16,12 @@ b1->setDateaujourdhui(date);
     cout<<portefeuille.getSolde() << endl;
  
     // Use TraderAlea
-    std::cout << "Using TraderAlea:" << std::endl;
-    TraderAlea traderAlea;
-    Transaction transactionAlea = traderAlea.choisirTransaction(*b1, portefeuille);
-    std::cout << "Transaction type: " << transactionAlea.getTypeTx() << std::endl;
+    std::cout << "Using TraderManuel:" << std::endl;
+    TraderManuel TraderManuel;
+    TraderManuel.choisirTransaction(*b1, portefeuille);
+   /* std::cout << "Transaction type: " << transactionAlea.getTypeTx() << std::endl;
     std::cout << "Transaction name: " << transactionAlea.getnomdAction() << std::endl;
-    std::cout << "Transaction quantity: " << transactionAlea.getqtedAction() << std::endl;
+    std::cout << "Transaction quantity: " << transactionAlea.getqtedAction() << std::endl;*/
 /*
     // Use TraderAlgo1
     std::cout << "Using TraderAlgo1:" << std::endl;

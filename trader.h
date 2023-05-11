@@ -348,10 +348,10 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
             break;
         case 2://vente
             if(portefeuille.getNomAction().empty()){
-                cout<<"Vous n'avez rien a vendre"<<endl;
-                break;
+                cout<<"\tVous n'avez rien a vendre"<<endl;
             }
              do{
+                cout<<endl;
                 cout<<" 1 - liste des titres de votre portefeuille "<<endl;
                 cout<<" 2 - Voir votre solde"<<endl;
                 cout<<" 3 - Confirmer la vente"<<endl;
@@ -382,10 +382,11 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                       cin>>qte;   
                     }while(qte<0||qte>qteMax);
                     return Transaction(vente,nom,qte);
-                    break;                 
+                                     
                 }
+                
             }while(i==1||i==2||i==3);
-            break;
+
         case 3://rien a faire
             return Transaction(rienAFaire,"",0);
             break;
