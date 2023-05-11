@@ -16,7 +16,8 @@
             ],
             "browse": {
                 "path": [
-                    "F:\\Program Files (x86)\\compile\\x86_64-w64-mingw32\\include"
+                    "F:\\Program Files (x86)\\compile\\x86_64-w64-mingw32\\include",
+                    "F:\\Cpp\\compilateur\\x86_64-w64-mingw32\\include"
                 ]
             }
         }
