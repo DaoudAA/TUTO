@@ -20,7 +20,7 @@ int main(){
     Date dateDebut(1,4,2013);
     Date dateFin(30,6,2013);
     
-   statiktiks=Sim.executer(*bourse,*trader,dateDebut,dateFin,soldeInit);
+    statiktiks=Sim.executer(*bourse,*trader,dateDebut,dateFin,soldeInit);
     cout<< "Stats : "<<endl;
     for(auto elt : statiktiks){
         cout << elt.first << " : \t" <<  elt .second << endl ; 

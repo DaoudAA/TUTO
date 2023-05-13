@@ -6,8 +6,7 @@
 #include "Date.h"
 using namespace std;
 
-class PrixJournalier
-{
+class PrixJournalier{
 private:
     Date  date;
     string nomAction;
@@ -19,7 +18,6 @@ public:
     double getPrix()const{return prix;}
     PrixJournalier(Date  d, string  n , double  p):date(d),nomAction(n),prix(p){};
     friend  bool operator==(const PrixJournalier &pj1,const PrixJournalier&pj2);
-
     friend bool operator<(const PrixJournalier& pj1, const PrixJournalier& pj2);
     friend ostream& operator<<(ostream& , const PrixJournalier&);
     friend istream& operator>>(istream& , PrixJournalier&);
@@ -43,8 +41,7 @@ istream& operator>>(istream& flux , PrixJournalier& pj){
     return flux;
     
 }
-bool operator==(const PrixJournalier &pj1,const PrixJournalier&pj2)
-{
+bool operator==(const PrixJournalier &pj1,const PrixJournalier&pj2){
     if ((pj1.getDate() == pj2.getDate()) && (pj1.getNomAction() == pj2.getNomAction()))
         return true;
     else
