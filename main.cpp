@@ -14,7 +14,6 @@ int main(){
 	vPj=ppj.lirePrixJournaliersDUnFichier(ch1);
     map <string , long > statiktiks;
     int choix;
-    
     do {
         cout << "\n--- MENU ---" << endl;
         cout << "1. \tDemarrer une simulation" << endl;
