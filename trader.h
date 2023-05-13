@@ -278,15 +278,16 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
     
 
     double prix;
-    while (1){
+    do{
         cout<<" 1 - Achat"<<endl;
         cout<<" 2 - vente"<<endl;
         cout<<" 3 - Rien a faire"<<endl;
         cout<<" 4 - Acces a l'historique"<<endl;
+        cout<<" 5 - Exit"<<endl;
         do{
             cout<<"\n Choisir une trasaction:\t";
             cin>>choixType;
-        }while(choixType>4||choixType<1);
+        }while(choixType>5||choixType<1);
         switch (choixType){
         case 1://achat
             do{
@@ -352,18 +353,18 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                     do{
                         cout<<"Donner le nom de l'action a vendre"<<endl;
                         cin>>nom;
-                    }while(!appartientAction(nom,vs2));
+                    }while(!appartientAction(nom,vs2)&&!vs2.empty());
                     i=portefeuille.findTitre(nom);
                     int qteMax=portefeuille.getTitre()[i].getQte();
                     do{
                     cout<<"Donner la quantite de l'action a vendre"<<endl;
                     cin>>qte;   
-                    }while(qte<0||qte>qteMax);
+                    }while((qte<0||qte>qteMax )&&(!vs2.empty()));
                     return Transaction(vente,nom,qte);
                                      
                 }
                 
-            }while(i==1||i==2||i==3);
+            }while(i!=4);
 
         case 3://rien a faire
             return Transaction(rienAFaire,"",0);
@@ -448,14 +449,12 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
 
                     }
                     
-            }while(j==1||j==2);
+            }while(j!=3);
             break;
-
-           // break;
         }
-        break;
-    }
+    }while(choixType!=5);
     return Transaction(rienAFaire,"",0);
+    cout<<"*********************trader kamel transction***********************"<<endl;
 }
 
 #endif
