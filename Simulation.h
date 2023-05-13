@@ -42,6 +42,8 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		stats["Temps_GetPrixJournalierAujourdhui_µs"]+=duration.count();
 		stats["Nbr_fois_appelauPJA"]++;
 		//stats pour la fct getActionDisponibleAujourdhui
+		Date dd=bourse.dateAujourdhui;
+		if(!Pj.empty()){
 		start = chrono::high_resolution_clock::now();
 		vector<string> Actions=bourse.getActionDisponibleAujourdhui();
 		stop = chrono::high_resolution_clock::now();
@@ -49,8 +51,6 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 		stats["Temps_GetActionDisponibleAujourdhui_µs"]+=duration.count();
 		// les choix de transactions dans une meme journee
 		int i=0;
-		Date dd=bourse.dateAujourdhui;
-		if(!Pj.empty()){
 			while(i<100)
 			{	
 				//stats pour la fct choisirTransaction
@@ -63,7 +63,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 				//dd.incrementerDate();//pourquoi incrementer la date est ici ona deja la ecrit ?
 				const string actionNom = T.getnomdAction();
 					if(T.getTypeTx()==rienAFaire){
-						stats["Nbr_de_Jours"]++;
+						stats["Nbr_de_Jours"]++;dd.incrementerDate();
 						cout<<"\t JOUR SUIVANT : "<<dd<<endl ; //a verfier je pense qu'il a des jours ou il ne les ecrit pas
 						break;
 					}
@@ -89,7 +89,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 								qte=T.getqtedAction();
 								auto start1 = chrono::high_resolution_clock::now();
 								prix=bourse.getLastPrixAction(action);
-								 auto stop1 = chrono::high_resolution_clock::now();
+								auto stop1 = chrono::high_resolution_clock::now();
 								auto duration1 =chrono::duration_cast<chrono::microseconds>(stop1-start1);
 								stats["Temps_getLPrixAction"]+=duration1.count();
 								stats["NombreDActionsPresentesLorsDuDernierJour"]++;
@@ -105,7 +105,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 			}
 		}
 		else{
-			stats["Nbr_de_Jours"]++;
+			stats["Nbr_de_Jours"]++;dd.incrementerDate();
 			cout<<"\t JOUR SUIVANT : "<<dd<<endl ; 
 		}
 		(bourse.dateAujourdhui).incrementerDate();
