@@ -306,7 +306,7 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                         cout<<v2[i]<<endl;
                     }
                     break;
-                case 2:        
+                case 2:      
                     do{
                         cout<<"Donner le nom de l'action:\t";
                         cin>>nom;    
@@ -323,7 +323,7 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                     break;
                 }
             
-            }while(i==1||i==2);
+            }while(i!=3);
             break;
         case 2://vente
             if(portefeuille.getNomAction().empty()){
@@ -366,8 +366,10 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                 
             }while(i!=4);
 
-        case 3://rien a faire
+        case 3:
+            //rien a faire
             return Transaction(rienAFaire,"",0);
+            
             break;
         case 4://Acces a l'historique
             do{
