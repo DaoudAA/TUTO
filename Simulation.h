@@ -24,7 +24,7 @@ public:
 map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date dateDebut, Date dateFin, double soldeInit)
 {
 	Portefeuille portefeuille(soldeInit);
-	bourse.setDateaujourdhui(dateDebut);
+	bourse.dateAujourdhui=dateDebut;
 	string action;
 	int qte;
 	double prix;
@@ -130,7 +130,7 @@ map <string , long > Simulation::executer(Bourse& bourse, Trader& trader, Date d
 	}	
 	}
 	stats["soldeFinal"]=portefeuille.getSolde();
-	stats["Taux_du_gain_en_%"]=stats["soldeFinal"]/soldeInit*100-100;
+	stats["Taux_du_gain_en_%"]=(stats["soldeFinal"]/soldeInit*100)-100;
 	stats["temps_moyen_transaction"]=stats["Temps_ChoixTransaction_µs"]/stats["NombreDeTransaction"];
 	stats["temps_moyen_getPJparDate"]=stats["Temps_GetPrixJournalierAujourdhui_µs"]/stats["Nbr_fois_appelauPJA"];
 	stats["temps_moyen_de_getlastprix"]=stats["Temps_getLPrixAction"]/stats["nombreDVente"];
