@@ -10,7 +10,7 @@
 using namespace std;
 int main()
 {
-    string ch1;
+    /*string ch1;
     ch1="../prices_simple.csv";
 	vector<PrixJournalier> vPj;
     PersistancePrixJournaliers ppj;
@@ -47,6 +47,6 @@ int main()
     }
     cout << "temps duree pour le get pj  " <<tempss << endl;
     //double p=(*b1).getPrixAujourdhui("NBL",b1->getActionDisponibleAujourdhui());
-    //cout << p << endl; 
+    //cout << p << endl; */
     return 0;
 }

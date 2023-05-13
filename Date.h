@@ -116,7 +116,6 @@ Date::Date(string ch){
         mois = -1;
     }
 }
-//fonction incrementerDate
 bool Date::anneeBissextile(){
     if (annee%4==0) return true;
     return false;
@@ -129,7 +128,7 @@ int Date::nbJourDuMois(){
     else if (anneeBissextile()) return 29;
     else return 28;
 }
-
+//fonction incrementerDate
 void Date::incrementerDate(){
     if(jour==nbJourDuMois()){
         if (mois ==12){

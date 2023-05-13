@@ -239,7 +239,7 @@ bool appartientPrixJournalier (PrixJournalier pj,vector<PrixJournalier>& vecteur
 	}
 	return false;
 }
-
+//BourseDictNom
 class BourseDictNom:public Bourse{
 private:
 	map<string, vector<PrixJournalier> >  historique;
@@ -251,7 +251,7 @@ public:
 	vector<PrixJournalier> getHistoriqueAction(string)const;
 };
 
-//BourseDictNom
+
 
 BourseDictNom::BourseDictNom(vector<PrixJournalier> &vPJ){	
 	unsigned int i=0;

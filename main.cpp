@@ -13,18 +13,6 @@ int main(){
     PersistancePrixJournaliers ppj;
 	vPj=ppj.lirePrixJournaliersDUnFichier(ch1);
     map <string , long > statiktiks;
-    /*Bourse * bourse=new BourseVector2(vPj);
-    Trader * trader=new TraderAlea;
-    
-    double soldeInit=800;Simulation Sim(soldeInit);
-    Date dateDebut(1,4,2013);
-    Date dateFin(30,6,2013);
-    
-   statiktiks=Sim.executer(*bourse,*trader,dateDebut,dateFin,soldeInit);
-    cout<< "Stats : "<<endl;
-    for(auto elt : statiktiks){
-        cout << elt.first << " : \t" <<  elt .second << endl ; 
-    }*/
     int choix;
     
     do {
@@ -32,7 +20,6 @@ int main(){
         cout << "1. \tDemarrer une simulation" << endl;
         cout << "2. \tLire les journaux des simulations precedentes a partir du logs.txt" << endl;
         cout << "3. \tExit" << endl;
-        //cout << "\t\tEnter your choice (1-3): ";
         cin >> choix;
         
         switch (choix) {
@@ -48,8 +35,6 @@ int main(){
                     cout << "3. \tTrader Algorithmique" << endl;
                     cout << "4. \tTrader Reverse Mean" << endl;
                     cout << "5. \tTrader Manuel" << endl;
-                    //cout << "5. \tRetour au menu précedent"<<endl;
-                    //cout << "\t\tEnter your choice (1-5): ";
                     cin >> choixTrader;
 
                     switch (choixTrader) {
@@ -86,8 +71,6 @@ int main(){
                 cout << "3. BourseVector" << endl;
                 cout << "4. BourseVector2" << endl;
                 cout << "5. BourseSet" << endl;
-                //cout << "5. Retour au menu précedent"<<endl;
-                //cout << "Entrer votre choix (1-4): ";
                 cin >> choixBourse;
                 
                 switch (choixBourse) {
@@ -131,8 +114,6 @@ int main(){
                     cout << "Date Invalide. Ressayer: ";
                 }
             } while (dateFin.getJour()==-1 || dateFin.getMois()==-1);
-            //dateDebut = Date(1,1,2010);    
-            //dateFin = Date(1,4,2010);    
             double soldeInit=0;
             cout << "Entrer Budget initial: ";
             cin >> soldeInit;
@@ -152,16 +133,12 @@ int main(){
             if (!flot) {
                 flot.open("status.txt");
             }
-            //flot<<"================ Stats ============================="<<endl;
-            //char* strdate;
-            //string strannee=ctime(&time_now);
             flot<<strader<<":\t"<<dateDebut<<":\t"<<dateFin<<":\t"<<statiktiks["Nbr_de_Jours"]<<
             ":\t"<<statiktiks["Taux_du_gain_en_%"]<<":\t"<<(-soldeInit+statiktiks["soldeFinal"])<<
             ":\t"<<soldeInit<<":\t"<<statiktiks["soldeFinal"]<<":\t"<<statiktiks["NombreDeTransaction"]<<
             ":"<<statiktiks["nombreDAchat"]<<":"<<statiktiks["nombreDVente"]<<":"<<statiktiks["Nbr_fois_appelauPJA"]<<
             ":\t"<<statiktiks["Temps_ChoixTransaction_µs"]<<":\t"<<statiktiks["Temps_GetPrixJournalierAujourdhui_µs"]<<
             ":\t"<<statiktiks["Temps_getLPrixAction"]<<endl;
-            //<<":\t"<<statiktiks["Temps_ChoixTransaction_µs"]<<":\t"<<statiktiks["Temps_GetPrixJournalierAujourdhui_µs"]<<":\t"<<statiktiks["Temps_getLPrixAction"]<<endl;
             flot.close(); 
             break;
         }
@@ -174,8 +151,8 @@ int main(){
             }
             break;
         }
-        case 3: {
-            // Exit
+        case 3:// Exit 
+        {
             cout << "Fin de programme. Goodbye!" << endl;
             break;
         }

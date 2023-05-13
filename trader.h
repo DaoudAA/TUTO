@@ -117,60 +117,39 @@ private:
     double calculerEcartType(const vector<PrixJournalier>& historique, double moyenne);
     double calculerBornInf(double moyenne, double ecartType);
     double calculerBornSup(double moyenne, double ecartType);
-    //double calculerMoyenne(const vector<PrixJournalier>& historique);
     bool comparePriceDescending(const PrixJournalier& pj1, const PrixJournalier& pj2);
 };
 bool TraderBollin1::comparePriceDescending(const PrixJournalier& pj1, const PrixJournalier& pj2){
     return pj1.getPrix() > pj2.getPrix();
 }
 Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeuille& portef) {
-    
     vector<PrixJournalier>PrixJournaliers=bour.getPrixJournaliersAujourdhui();
     vector<PrixJournalier>PrixJactionen=bour.getPrixJournaliersAujourdhui();
-    //cout<< "solde restant : " <<portef.getSolde() <<endl;
-    //cout<< "lmarchi fih pj  dispo :" <<PrixJournaliers.size() << endl;
-    //cout<< "lmarchi fih  pj khw  :" <<PrixJactionen.size() << endl;
-    //cout<< "portefill fih "<<portef.getTitre().size()<<endl;
-    //vector<PrixJournalier> PrixJournaliers = vPJ;
-    //double minPrice = PrixJournaliers.empty() ? 0:1; 
     if (portef.getTitre().size()==0){
-        //cout << "portef feragh "<<endl ; 
         vector<PrixJournalier>PJdispo=bour.getPrixJournaliersDispoAujourdhui(portef.getSolde());
         if (PJdispo.empty()){return Transaction(rienAFaire,"",0);}
         PrixJournalier pluscher=PJdispo[0];
         for (unsigned int i = 1; i < PJdispo.size(); i++) {
             if (PJdispo[i].getPrix() > pluscher.getPrix()) {
-                 pluscher = PJdispo[i]; // update most expensive
+                 pluscher = PJdispo[i]; 
             }
         }
-
         double qteDispo = portef.getSolde() / pluscher.getPrix();
-        //int qte = min(3, static_cast<int>(qteDispo));
         return Transaction(TypeTransaction::achat, pluscher.getNomAction(), floor(qteDispo));
     }
     bool triedAll=false;
-    //cout << "PJ size this time "<<PrixJournaliers.size()<<endl;
     for (const PrixJournalier& prixJournalier : PrixJournaliers) {
-        const string nomAction = prixJournalier.getNomAction();
-        
-        //|| find(bour.getActionDisponibleAujourdhui().begin(), bour.getActionDisponibleAujourdhui().end(), nomAction) == bour.getActionDisponibleAujourdhui().end()
-        
+        const string nomAction = prixJournalier.getNomAction();  
         //cout <<prixJournalier.getNomAction() << endl;
         const vector<PrixJournalier>& historique = bour.getHistoriqueAction(nomAction);
-        //cout<<"historique dyal l action "<<bour.getHistoriqueAction(nomAction).size() <<endl ;
         double dernierPrix = bour.getLastPrixAction(nomAction);
-
         double& moyenne = moydAction[nomAction].first;
-       // double  =moy;
         int& nbInstances = moydAction[nomAction].second;
-
         moyenne = ((moyenne * nbInstances) + prixJournalier.getPrix()*2) / (nbInstances + 2);
         ++nbInstances;
-
         double ecartType = calculerEcartType(historique, moyenne);
         double bornInf = calculerBornInf(moyenne, ecartType);
         double bornSup = calculerBornSup(moyenne, ecartType);
-
         if (bornSup <= dernierPrix || portef.getSolde()<1) {
             for (const Titre& titre : portef.getTitre()) {
                 if (titre.getNomAction() == nomAction) {
@@ -186,7 +165,6 @@ Transaction TraderBollin1::choisirTransaction(const Bourse& bour, const Portefeu
         }
         if (&prixJournalier == &PrixJournaliers.back()){
         triedAll = true;
-        //cout<<"ARRIVED"<<endl;
         }
     }
     if (triedAll){return Transaction(rienAFaire, "", 0);}
@@ -231,10 +209,8 @@ Transaction TraderReverseMean::choisirTransaction(const Bourse& bour, const Port
         const string nomAction = prixJournalier.getNomAction();
         const vector<PrixJournalier>& historique = bour.getHistoriqueAction(nomAction);
         double dernierPrix = bour.getLastPrixAction(nomAction);
-
         double& moyenne = moydAction[nomAction].first;
         int& nbInstances = moydAction[nomAction].second;
-
         moyenne = ((moyenne * nbInstances) + prixJournalier.getPrix()) / (nbInstances + 1);
         ++nbInstances;
         int qte=0;
@@ -246,15 +222,12 @@ Transaction TraderReverseMean::choisirTransaction(const Bourse& bour, const Port
             }   
             if (qte>0){return Transaction(TypeTransaction::vente, nomAction, qte);}
         }
-
-        
         if (dernierPrix <= moyenne && prixJournalier.getPrix() < portef.getSolde()) {
             double qteDispo = portef.getSolde() / prixJournalier.getPrix();
             int qte = min(5, static_cast<int>(qteDispo));
             return Transaction(TypeTransaction::achat, nomAction, floor(qte));
         }
     }
-
     return Transaction(TypeTransaction::rienAFaire, "", 0);
 }
 
@@ -268,15 +241,12 @@ class TraderManuel:public Trader{
 Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeuille&portefeuille){
     int choixType,i,j,qte;
     string nom;
-    //TypeTransaction tx;
     vector<string>v=bourse.getActionDisponibleAujourdhui();  
     Date dateDebut;
     Date dateFin(1,1,2011);
     vector<PrixJournalier>v2;
     vector<PrixJournalier> vs;
     vector<string> vs2 =portefeuille.getNomAction();
-    
-
     double prix;
     do{
         cout<<" 1 - Achat"<<endl;
@@ -321,8 +291,7 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                     break;
                 default:
                     break;
-                }
-            
+                }           
             }while(i!=3);
             break;
         case 2://vente
@@ -379,13 +348,10 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                 do{
                     cout<<"\n Votre choix:\t";
                     cin>>j;
-                }while(j>3||j<1);
-
-                
+                }while(j>3||j<1); 
                 switch (j)
                 {
                     case 1:
-
                         do{
                             cout<<"Donner date du debut de l'historique (jour/mois/annee)\t";
                             string dateDStr;
@@ -416,8 +382,7 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                             cout<<vs[i]<<endl;
                         }
                         break;
-                    case 2:
-                        
+                    case 2:                        
                         do{
                             cout<<"Donner date du debut de l'historique (jour/mois/annee)\t";
                             string dateDStr;
@@ -447,16 +412,13 @@ Transaction TraderManuel::choisirTransaction(const Bourse&bourse,const Portefeui
                         }                                       
                         break;
                     case 3:
-                        break;                    
-
-                    }
-                    
+                        break;                   
+                    }                  
             }while(j!=3);
             break;
         }
     }while(choixType!=5);
     return Transaction(rienAFaire,"",0);
-    cout<<"*********************trader kamel transction***********************"<<endl;
 }
 
 #endif

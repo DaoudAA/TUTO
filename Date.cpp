@@ -9,13 +9,13 @@ Date d2("29/2/2012");
 Date d3("29/2/2013");
 Date d4(40,1,2016);
 Date d5(11,10,2012);
-cout<<"Affichage :"<<endl;
-cout<<"31/4/2015\t---->\t"<< d1 << endl ;
-cout<<"29/2/2012\t---->\t"<< d2 << endl ;
-cout<<"29/2/2013\t---->\t" << d3 << endl ;
-cout<<"40/1/2016\t---->\t" << d4 << endl ;
-cout<<"11/10/2012\t---->\t" << d5 << endl ;
-cout<<"Test Date"<<endl;
+//cout<<"Affichage :"<<endl;
+//cout<<"31/4/2015\t---->\t"<< d1 << endl ;
+//cout<<"29/2/2012\t---->\t"<< d2 << endl ;
+//cout<<"29/2/2013\t---->\t" << d3 << endl ;
+//cout<<"40/1/2016\t---->\t" << d4 << endl ;
+//cout<<"11/10/2012\t---->\t" << d5 << endl ;
+//cout<<"Test Date"<<endl;
 
 
 
